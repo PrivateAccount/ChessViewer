@@ -21,24 +21,13 @@ window.onload = function() {
     ];
     const figureIndexes = [3, 2, 4, 0, 1, 4, 2, 3, 5, 5, 5, 5, 5, 5, 5, 5, 11, 11, 11, 11, 11, 11, 11, 11, 9, 8, 10, 6, 7, 10, 8, 9];
 
-    const sequences = [
-        { figure: 19, origin: 51, field: 35, kill: null },
-        { figure: 6, origin: 6, field: 21, kill: null },
-        { figure: 17, origin: 49, field: 41, kill: null },
-        { figure: 12, origin: 12, field: 20, kill: null },
-        { figure: 27, origin: 59, field: 43, kill: null },
-        { figure: 1, origin: 1, field: 18, kill: null },
-        { figure: 26, origin: 58, field: 30, kill: null },
-        { figure: 15, origin: 15, field: 23, kill: null },
-        { figure: 26, origin: 30, field: 39, kill: null },
-        { figure: 5, origin: 5, field: 33, kill: null },
-        { figure: 26, origin: 39, field: 21, kill: 6 },
-        { figure: 14, origin: 14, field: 21, kill: 26 },
-    ];
+    const sequences = [];
 
     var fieldPositions = [];
     var moveSequence = [];
     var sequenceId = 0;
+    var source = false;
+    var destination = false;
 
     for (var i = 0; i < sequences.length; i++) {
         moveSequence.push(sequences[i]);
@@ -57,7 +46,11 @@ window.onload = function() {
         if (swap) field.classList.add(i % 2 ? 'dark' : 'light');
         else field.classList.add(i % 2 ? 'light' : 'dark');
         field.addEventListener('click', function() {
-            console.log('Field id:', field.id);
+            const originId = document.getElementById('origin-id');
+            const fieldId = document.getElementById('field-id');
+            destination = !destination;
+            if (destination) originId.innerText = field.id.replace('field-', '');
+            else fieldId.innerText = field.id.replace('field-', '');
         });
         fields.appendChild(field);
         const x = Math.floor(i % BOARD_SIZE) * FIELD_SIZE + BORDER_WIDTH;
@@ -111,7 +104,11 @@ window.onload = function() {
             figure.style.top = fieldPositions[i + 4 * BOARD_SIZE].y + 'px';    
         }
         figure.addEventListener('click', function() {
-            console.log('Figure id:', figure.id);
+            const figureId = document.getElementById('figure-id');
+            const killId = document.getElementById('kill-id');
+            source = !source;
+            if (source) figureId.innerText = figure.id.replace('figure-', '');
+            else killId.innerText = figure.id.replace('figure-', '');
         });
         figures.appendChild(figure);
     }
@@ -179,7 +176,30 @@ window.onload = function() {
 
     function updateCounter() {
         const stepId = document.getElementById('step-id');
-        stepId.innerText = sequenceId.toString() + ' of ' + sequences.length.toString();
+        stepId.innerText = sequenceId.toString() + ' of ' + moveSequence.length.toString();
     }
+
+    const buttonSend = document.getElementById('send');
+    buttonSend.addEventListener('click', function() {
+        const figure = document.getElementById('figure-id').innerText;
+        const origin = document.getElementById('origin-id').innerText;
+        const field = document.getElementById('field-id').innerText;
+        const kill = document.getElementById('kill-id').innerText;
+        const moveParams = { figure: parseInt(figure), origin: parseInt(origin), field: parseInt(field), kill: parseInt(kill) };
+        moveSequence.push(moveParams);
+        runForwardButton.disabled = false;
+        runForwardButton.click();
+        buttonReset.click();
+    });
+
+    const buttonReset = document.getElementById('reset');
+    buttonReset.addEventListener('click', function() {
+        source = false;
+        destination = false;
+        document.getElementById('figure-id').innerText = '--';
+        document.getElementById('origin-id').innerText = '--';
+        document.getElementById('field-id').innerText = '--';
+        document.getElementById('kill-id').innerText = '--';
+    });
 
 };
