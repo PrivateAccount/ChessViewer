@@ -1,0 +1,105 @@
+body {
+    font-family: monospace;
+    color: #666;
+    padding: 0;
+}
+#title {
+    text-align: center;
+    margin: 1em;
+    font-size: large;
+    color: brown;
+}
+#board {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    width: 840px;
+    height: auto;
+    border: 1px solid grey;
+}
+#fields {
+    margin: 20px;
+    padding: 4px 0 0 4px;
+    border: 1px solid grey;
+}
+.field {
+    width: 96px;
+    height: 96px;
+    padding: 0px;
+    margin: 0 2px 0 1px;
+    display: inline-block;
+    position: relative;
+}
+.field.light {
+    background-color: bisque;
+}
+.field.dark {
+    background-color: chocolate;
+}
+.field.light:hover, .field.dark:hover {
+    cursor: pointer;
+}
+#labels-top {
+    position: relative;
+    width: auto;
+    height: 0;
+    left: 20px;
+    top: -840px;
+}
+#labels-bottom {
+    position: relative;
+    width: auto;
+    height: 0;
+    left: 20px;
+    top: -15px;
+}
+#labels-left {
+    position: relative;
+    width: 0;
+    height: 0;
+    left: 2px;
+    top: -780px;
+}
+#labels-right {
+    position: relative;
+    width: 0;
+    height: 0;
+    left: 830px;
+    top: -780px;
+}
+span.horizontal {
+    display: inline-block;
+    width: 100px;
+    height: auto;
+    text-align: center;
+}
+span.vertical {
+    display: block;
+    width: 10px;
+    height: 100px;
+}
+#figures {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    left: -400px;
+    top: -830px;
+    width: 0px;
+    height: 0px;
+}
+.figure {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+}
+.figure:hover {
+    cursor: pointer;
+}
+#actions {
+    text-align: center;
+    margin-top: 1em;
+}
+#step-id {
+    margin-top: 1em;
+    font-weight: bold;
+}
