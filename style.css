@@ -120,5 +120,6 @@ span.vertical {
     text-align: right;
 }
 #send, #reset {
+    width: 75px;
     margin: 5px 0;
 }

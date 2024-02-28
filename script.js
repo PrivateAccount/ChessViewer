@@ -123,6 +123,8 @@ window.onload = function() {
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
+                buttonSend.disabled = sequenceId != moveSequence.length;
+                buttonReset.click();
             });
         }
     });
@@ -137,6 +139,8 @@ window.onload = function() {
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
+                buttonSend.disabled = sequenceId != moveSequence.length;
+                buttonReset.click();
             });
         }
     });
@@ -185,6 +189,7 @@ window.onload = function() {
         const origin = document.getElementById('origin-id').innerText;
         const field = document.getElementById('field-id').innerText;
         const kill = document.getElementById('kill-id').innerText;
+        if (figure == '--' || origin == '--' || field == '--') return;
         const moveParams = { figure: parseInt(figure), origin: parseInt(origin), field: parseInt(field), kill: parseInt(kill) };
         moveSequence.push(moveParams);
         runForwardButton.disabled = false;
