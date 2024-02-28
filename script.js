@@ -24,10 +24,10 @@ window.onload = function() {
     const sequences = [];
 
     var fieldPositions = [];
+    var figurePositions = [];
     var moveSequence = [];
     var sequenceId = 0;
-    var source = false;
-    var destination = false;
+    var selection = [];
 
     for (var i = 0; i < sequences.length; i++) {
         moveSequence.push(sequences[i]);
@@ -46,11 +46,7 @@ window.onload = function() {
         if (swap) field.classList.add(i % 2 ? 'dark' : 'light');
         else field.classList.add(i % 2 ? 'light' : 'dark');
         field.addEventListener('click', function() {
-            const originId = document.getElementById('origin-id');
-            const fieldId = document.getElementById('field-id');
-            destination = !destination;
-            if (destination) originId.innerText = field.id.replace('field-', '');
-            else fieldId.innerText = field.id.replace('field-', '');
+            markSelection(field.id, 'field');
         });
         fields.appendChild(field);
         const x = Math.floor(i % BOARD_SIZE) * FIELD_SIZE + BORDER_WIDTH;
@@ -97,18 +93,16 @@ window.onload = function() {
         figure.src = 'img/' + figureImages[figureIndexes[i]] + '.png';
         if (i < 2 * BOARD_SIZE) {
             figure.style.left = fieldPositions[i].x + 'px';
-            figure.style.top = fieldPositions[i].y + 'px';    
+            figure.style.top = fieldPositions[i].y + 'px';
+            figurePositions[i] = i;
         }
         else {
             figure.style.left = fieldPositions[i + 4 * BOARD_SIZE].x + 'px';
-            figure.style.top = fieldPositions[i + 4 * BOARD_SIZE].y + 'px';    
+            figure.style.top = fieldPositions[i + 4 * BOARD_SIZE].y + 'px';
+            figurePositions[i] = i + 4 * BOARD_SIZE;
         }
         figure.addEventListener('click', function() {
-            const figureId = document.getElementById('figure-id');
-            const killId = document.getElementById('kill-id');
-            source = !source;
-            if (source) figureId.innerText = figure.id.replace('figure-', '');
-            else killId.innerText = figure.id.replace('figure-', '');
+            markSelection(figure.id, 'figure');
         });
         figures.appendChild(figure);
     }
@@ -125,7 +119,9 @@ window.onload = function() {
                 runBackwardButton.disabled = sequenceId == 0;
                 buttonSend.disabled = sequenceId != moveSequence.length;
                 buttonReset.click();
+                clearSelection();
             });
+            figurePositions[moveSequence[sequenceId].figure] = moveSequence[sequenceId].field;
         }
     });
 
@@ -141,7 +137,9 @@ window.onload = function() {
                 runBackwardButton.disabled = sequenceId == 0;
                 buttonSend.disabled = sequenceId != moveSequence.length;
                 buttonReset.click();
+                clearSelection();
             });
+            figurePositions[moveSequence[sequenceId - 1].figure] = moveSequence[sequenceId - 1].origin;
         }
     });
 
@@ -183,8 +181,58 @@ window.onload = function() {
         stepId.innerText = sequenceId.toString() + ' of ' + moveSequence.length.toString();
     }
 
-    const buttonSend = document.getElementById('send');
-    buttonSend.addEventListener('click', function() {
+    function markSelection(ownerId, kind) {
+        const figureId = document.getElementById('figure-id');
+        const originId = document.getElementById('origin-id');
+        const fieldId = document.getElementById('field-id');
+        const killId = document.getElementById('kill-id');
+        var pieceId, placeId;
+        if (kind == 'field') {
+            const id = parseInt(ownerId.replace('field-', ''));
+            pieceId = '--';
+            for (var i = 0; i < figurePositions.length; i++) {
+                if (figurePositions[i] == id) {
+                    pieceId = 'figure-' + i.toString();
+                }
+            }
+            placeId = ownerId;
+        }
+        if (kind == 'figure') {
+            const id = parseInt(ownerId.replace('figure-', ''));
+            pieceId = 'figure-' + id.toString();
+            placeId = 'field-' + figurePositions[id].toString();
+        }
+        if (sequenceId == moveSequence.length) {
+            if (selection.length == 0) {
+                if (pieceId != '--') {
+                    document.getElementById(placeId).classList.add('selected');
+                    selection.push(placeId);
+                    figureId.innerText = pieceId.replace('figure-', '');
+                    originId.innerText = placeId.replace('field-', '');
+                }
+            }
+            else if (selection.length == 1) {
+                if (placeId != selection[0]) {
+                    document.getElementById(placeId).classList.add('selected');
+                    selection.push(placeId);
+                    fieldId.innerText = placeId.replace('field-', '');
+                    killId.innerText = pieceId.replace('figure-', '');
+                    registerMove();
+                }
+            }    
+        }
+    }
+
+    function clearSelection() {
+        for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
+            const field = 'field-' + i.toString();
+            document.getElementById(field).classList.remove('selected');
+        }
+        selection = [];
+    }
+
+    function registerMove() {
+        const delay = 500;
         const figure = document.getElementById('figure-id').innerText;
         const origin = document.getElementById('origin-id').innerText;
         const field = document.getElementById('field-id').innerText;
@@ -192,19 +240,24 @@ window.onload = function() {
         if (figure == '--' || origin == '--' || field == '--') return;
         const moveParams = { figure: parseInt(figure), origin: parseInt(origin), field: parseInt(field), kill: parseInt(kill) };
         moveSequence.push(moveParams);
-        runForwardButton.disabled = false;
-        runForwardButton.click();
-        buttonReset.click();
+        setTimeout(function() {
+            runForwardButton.disabled = false;
+            runForwardButton.click();
+            buttonReset.click();
+        }, delay);
+    }
+
+    const buttonSend = document.getElementById('send');
+    buttonSend.addEventListener('click', function() {
     });
 
     const buttonReset = document.getElementById('reset');
     buttonReset.addEventListener('click', function() {
-        source = false;
-        destination = false;
         document.getElementById('figure-id').innerText = '--';
         document.getElementById('origin-id').innerText = '--';
         document.getElementById('field-id').innerText = '--';
         document.getElementById('kill-id').innerText = '--';
+        clearSelection();
     });
 
 };

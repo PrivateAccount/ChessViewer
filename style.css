@@ -39,6 +39,9 @@ body {
 .field.light:hover, .field.dark:hover {
     cursor: pointer;
 }
+.field.light.selected, .field.dark.selected {
+    background-color: forestgreen;
+}
 #labels-top {
     position: relative;
     width: auto;
@@ -89,8 +92,8 @@ span.vertical {
 }
 .figure {
     position: absolute;
-    width: 70px;
-    height: 70px;
+    width: 90px;
+    height: 90px;
 }
 .figure:hover {
     cursor: pointer;
@@ -107,17 +110,22 @@ span.vertical {
     position: absolute;
     right: 100px;
     bottom: 100px;
-    width: 100px;
-    height: 120px;
+    width: 130px;
+    height: 130px;
     padding: 1em;
     text-align: center;
     border: 1px solid grey;
+    display: none;
 }
 #params {
     padding: 1em 0;
     font-size: large;
     font-weight: bold;
     text-align: right;
+}
+#params span {
+    display: inline-block;
+    width: 25px;
 }
 #send, #reset {
     width: 75px;
