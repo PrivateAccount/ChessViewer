@@ -92,8 +92,8 @@ span.vertical {
 }
 .figure {
     position: absolute;
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
 }
 .figure:hover {
     cursor: pointer;

@@ -2,7 +2,7 @@ window.onload = function() {
     
     const BOARD_SIZE = 8;
     const FIELD_SIZE = 100;
-    const BORDER_WIDTH = 5;
+    const BORDER_WIDTH = 10;
     const labelsHorizontal = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
     const labelsVertical = ['1', '2', '3', '4', '5', '6', '7', '8'];
     const figureImages = [
@@ -24,6 +24,7 @@ window.onload = function() {
     const sequences = [];
 
     var fieldPositions = [];
+    var fieldOccupancy = [];
     var figurePositions = [];
     var moveSequence = [];
     var sequenceId = 0;
@@ -48,6 +49,12 @@ window.onload = function() {
         field.addEventListener('click', function() {
             markSelection(field.id, 'field');
         });
+        if (i < 2 * BOARD_SIZE) {
+            fieldOccupancy[i] = i;
+        }
+        if (i >= 6 * BOARD_SIZE) {
+            fieldOccupancy[i] = i - 4 * BOARD_SIZE;
+        }
         fields.appendChild(field);
         const x = Math.floor(i % BOARD_SIZE) * FIELD_SIZE + BORDER_WIDTH;
         const y = Math.floor(i / BOARD_SIZE) * FIELD_SIZE + BORDER_WIDTH;
@@ -121,6 +128,8 @@ window.onload = function() {
                 buttonReset.click();
                 clearSelection();
             });
+            fieldOccupancy[moveSequence[sequenceId].origin] = -1;
+            fieldOccupancy[moveSequence[sequenceId].field] = moveSequence[sequenceId].figure;
             figurePositions[moveSequence[sequenceId].figure] = moveSequence[sequenceId].field;
         }
     });
@@ -139,6 +148,8 @@ window.onload = function() {
                 buttonReset.click();
                 clearSelection();
             });
+            fieldOccupancy[moveSequence[sequenceId - 1].field] = moveSequence[sequenceId - 1].kill;
+            fieldOccupancy[moveSequence[sequenceId - 1].origin] = moveSequence[sequenceId - 1].figure;
             figurePositions[moveSequence[sequenceId - 1].figure] = moveSequence[sequenceId - 1].origin;
         }
     });
@@ -190,10 +201,8 @@ window.onload = function() {
         if (kind == 'field') {
             const id = parseInt(ownerId.replace('field-', ''));
             pieceId = '--';
-            for (var i = 0; i < figurePositions.length; i++) {
-                if (figurePositions[i] == id) {
-                    pieceId = 'figure-' + i.toString();
-                }
+            if (fieldOccupancy[id] != undefined) {
+                pieceId = 'figure-' + fieldOccupancy[id].toString();
             }
             placeId = ownerId;
         }
