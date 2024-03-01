@@ -117,7 +117,6 @@ window.onload = function() {
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
-                buttonReset.click();
                 clearSelection();
             });
             fieldOccupancy[moveSequence[sequenceId].origin] = -1;
@@ -136,7 +135,6 @@ window.onload = function() {
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
-                buttonReset.click();
                 clearSelection();
             });
             fieldOccupancy[moveSequence[sequenceId - 1].origin] = moveSequence[sequenceId - 1].figure;
