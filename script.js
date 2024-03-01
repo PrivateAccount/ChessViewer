@@ -20,8 +20,7 @@ window.onload = function() {
         'white-pawn',
     ];
     const figureIndexes = [3, 2, 4, 0, 1, 4, 2, 3, 5, 5, 5, 5, 5, 5, 5, 5, 11, 11, 11, 11, 11, 11, 11, 11, 9, 8, 10, 6, 7, 10, 8, 9];
-
-    const sequences = [];
+    const steps = 20;
 
     var fieldPositions = [];
     var fieldOccupancy = [];
@@ -29,13 +28,6 @@ window.onload = function() {
     var moveSequence = [];
     var sequenceId = 0;
     var selection = [];
-
-    for (var i = 0; i < sequences.length; i++) {
-        moveSequence.push(sequences[i]);
-    }
-    updateCounter();
-
-    const steps = 20;
 
     const fields = document.getElementById('fields');
 
@@ -148,8 +140,8 @@ window.onload = function() {
                 buttonReset.click();
                 clearSelection();
             });
-            fieldOccupancy[moveSequence[sequenceId - 1].field] = moveSequence[sequenceId - 1].kill;
             fieldOccupancy[moveSequence[sequenceId - 1].origin] = moveSequence[sequenceId - 1].figure;
+            fieldOccupancy[moveSequence[sequenceId - 1].field] = moveSequence[sequenceId - 1].kill;
             figurePositions[moveSequence[sequenceId - 1].figure] = moveSequence[sequenceId - 1].origin;
         }
     });
@@ -200,10 +192,7 @@ window.onload = function() {
         var pieceId, placeId;
         if (kind == 'field') {
             const id = parseInt(ownerId.replace('field-', ''));
-            pieceId = '--';
-            if (fieldOccupancy[id] != undefined) {
-                pieceId = 'figure-' + fieldOccupancy[id].toString();
-            }
+            pieceId = fieldOccupancy[id] != undefined ? 'figure-' + fieldOccupancy[id].toString() : '--';
             placeId = ownerId;
         }
         if (kind == 'figure') {
