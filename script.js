@@ -247,6 +247,7 @@ window.onload = function() {
     buttonNew.addEventListener('click', function() {
         const msg = document.getElementById('msg');
         msg.innerText = 'Inicjalizacja nowej gry.';
+        fieldOccupancy = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             if (i < 2 * BOARD_SIZE) {
                 fieldOccupancy[i] = i;
