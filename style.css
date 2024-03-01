@@ -109,25 +109,47 @@ span.vertical {
 #tools {
     position: absolute;
     right: 100px;
-    bottom: 100px;
-    width: 130px;
-    height: 130px;
+    top: 82px;
+    width: 300px;
+    height: 600px;
     padding: 1em;
     text-align: center;
     border: 1px solid grey;
-    display: none;
+    background-color: white;
+    display: block;
 }
 #params {
     padding: 1em 0;
     font-size: large;
     font-weight: bold;
-    text-align: right;
 }
 #params span {
     display: inline-block;
     width: 25px;
 }
-#send, #reset {
-    width: 75px;
+#new, #open, #send, #reset {
+    width: 80px;
     margin: 5px 0;
+}
+#games {
+    margin-top: 2em;
+    border: 1px solid grey;
+    width: 300px;
+    height: 460px;
+    overflow-y: scroll;
+}
+#games div {
+    margin-top: 1em;
+}
+#games div:hover {
+    background-color: bisque;
+    cursor: pointer;
+}
+#games a {
+    text-decoration: none;
+}
+#msg {
+    text-align: center;
+    color: darkgreen;
+    margin-top: 2em;
 }

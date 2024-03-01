@@ -28,6 +28,7 @@ window.onload = function() {
     var moveSequence = [];
     var sequenceId = 0;
     var selection = [];
+    var readOnlyMode = false;
 
     const fields = document.getElementById('fields');
 
@@ -116,7 +117,6 @@ window.onload = function() {
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
-                buttonSend.disabled = sequenceId != moveSequence.length;
                 buttonReset.click();
                 clearSelection();
             });
@@ -136,7 +136,6 @@ window.onload = function() {
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
-                buttonSend.disabled = sequenceId != moveSequence.length;
                 buttonReset.click();
                 clearSelection();
             });
@@ -243,11 +242,111 @@ window.onload = function() {
             runForwardButton.click();
             buttonReset.click();
         }, delay);
+        buttonSend.disabled = readOnlyMode;
     }
+
+    const buttonNew = document.getElementById('new');
+    buttonNew.addEventListener('click', function() {
+        const msg = document.getElementById('msg');
+        msg.innerText = 'Inicjalizacja nowej gry.';
+        for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
+            if (i < 2 * BOARD_SIZE) {
+                fieldOccupancy[i] = i;
+            }
+            if (i >= 6 * BOARD_SIZE) {
+                fieldOccupancy[i] = i - 4 * BOARD_SIZE;
+            }
+            const x = Math.floor(i % BOARD_SIZE) * FIELD_SIZE + BORDER_WIDTH;
+            const y = Math.floor(i / BOARD_SIZE) * FIELD_SIZE + BORDER_WIDTH;
+            fieldPositions.push({ x: x, y: y });
+        }
+        for (var i = 0; i < 4 * BOARD_SIZE; i++) {
+            const figure = document.getElementById('figure-' + i.toString());
+            if (i < 2 * BOARD_SIZE) {
+                figure.style.left = fieldPositions[i].x + 'px';
+                figure.style.top = fieldPositions[i].y + 'px';
+                figurePositions[i] = i;
+            }
+            else {
+                figure.style.left = fieldPositions[i + 4 * BOARD_SIZE].x + 'px';
+                figure.style.top = fieldPositions[i + 4 * BOARD_SIZE].y + 'px';
+                figurePositions[i] = i + 4 * BOARD_SIZE;
+            }
+            figure.style.display = 'inline';
+        }
+        moveSequence = [];
+        sequenceId = 0;
+        updateCounter();
+        buttonReset.click();
+        runForwardButton.disabled = true;
+        runBackwardButton.disabled = true;
+        buttonSend.disabled = true;
+        readOnlyMode = false;
+    });
+
+    const buttonOpen = document.getElementById('open');
+    buttonOpen.addEventListener('click', function() {
+        const msg = document.getElementById('msg');
+        msg.innerText = 'Ładowanie...';
+        fetch('http://my-notes.pl/api/get_games.php', {
+            method: "GET",
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        }).then((response) => response.json()).then((response) => {
+            msg.innerText = response.message;
+            const items = response.data;
+            var parentElement = document.getElementById('games');
+            while (parentElement.firstChild) {
+                parentElement.removeChild(parentElement.firstChild);
+            }
+            for (var i = 0; i < items.length; i++) {
+                const item = document.createElement('div');
+                item.id = 'game-' + items[i].id;
+                item.innerHTML = '<a>' + items[i].email + ' : ' + items[i].modified + ' : [' + items[i].sequences + ']</a>';
+                const gameId = items[i].id;
+                item.addEventListener('click', function() {
+                    buttonNew.click();
+                    fetch('http://my-notes.pl/api/get_game.php?id=' + gameId, {
+                        method: "GET",
+                        headers: { "Content-type": "application/json; charset=UTF-8" }
+                    }).then((response) => response.json()).then((response) => {
+                        msg.innerText = response.message;
+                        const data = response.data;
+                        for (var i = 0; i < data.length; i++) {
+                            const moveParams = { figure: parseInt(data[i].figure), origin: parseInt(data[i].origin), field: parseInt(data[i].field), kill: parseInt(data[i].killed) };
+                            moveSequence.push(moveParams);
+                        }
+                        updateCounter();
+                        runForwardButton.disabled = false;
+                        runBackwardButton.disabled = true;
+                        readOnlyMode = true;
+                    });
+                });
+                parentElement.appendChild(item);
+            }
+        });
+    });
 
     const buttonSend = document.getElementById('send');
     buttonSend.addEventListener('click', function() {
+        const msg = document.getElementById('msg');
+        msg.innerText = 'Zapisywanie...';
+        fetch('http://my-notes.pl/api/store_game.php', {
+            method: "POST",
+            body: JSON.stringify({
+                user: "author",
+                email: "player@chess.com",
+                sequences: moveSequence.length,
+                details: moveSequence,
+            }),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        }).then((response) => response.json()).then((response) => {
+            msg.innerText = response.message;
+            readOnlyMode = true;
+            buttonSend.disabled = true;
+            buttonOpen.click();
+        });
     });
+    buttonSend.disabled = true;
 
     const buttonReset = document.getElementById('reset');
     buttonReset.addEventListener('click', function() {
