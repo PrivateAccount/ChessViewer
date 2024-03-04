@@ -248,6 +248,10 @@ window.onload = function() {
     buttonNew.addEventListener('click', function() {
         const msg = document.getElementById('msg');
         msg.innerText = 'Inicjalizacja nowej gry.';
+        const item = document.getElementById(selectedGame);
+        if (item) {
+            item.classList.remove('selected');
+        }
         fieldOccupancy = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             if (i < 2 * BOARD_SIZE) {
@@ -305,15 +309,15 @@ window.onload = function() {
                 item.innerHTML = '<a>' + items[i].email + '<br>' + items[i].modified + ' : [' + items[i].sequences + ']</a>';
                 const gameId = items[i].id;
                 item.addEventListener('click', function() {
+                    buttonNew.click();
                     if (item.id != selectedGame) {
                         selectedGame = item.id;
                         const childrenElements = parentElement.children;
                         for (var i = 0; i < childrenElements.length; i++) {
                             const childElement = childrenElements[i];
-                            childElement.classList.remove('selected')
+                            childElement.classList.remove('selected');
                         }
                         item.classList.add('selected');
-                        buttonNew.click();
                         fetch('http://my-notes.pl/api/get_game.php?id=' + gameId, {
                             method: "GET",
                             headers: { "Content-type": "application/json; charset=UTF-8" }
