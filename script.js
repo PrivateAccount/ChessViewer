@@ -213,7 +213,17 @@ window.onload = function() {
                     selection.push(placeId);
                     fieldId.innerText = placeId.replace('field-', '');
                     killId.innerText = pieceId.replace('figure-', '');
-                    registerMove();
+                    if (rules.checkLegalMove(figureId, originId, fieldId, killId)) {
+                        registerMove();
+                        currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
+                    }
+                    else {
+                        for (var i = 0; i < selection.length; i++) {
+                            document.getElementById(selection[i]).classList.add('failed');
+                        }
+                        const msg = document.getElementById('msg');
+                        msg.innerText = 'Niedozwolony ruch.';
+                    }
                 }
             }    
         }
@@ -222,9 +232,11 @@ window.onload = function() {
     function clearSelection() {
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             const field = 'field-' + i.toString();
-            document.getElementById(field).classList.remove('selected');
+            document.getElementById(field).classList.remove('selected', 'failed');
         }
         selection = [];
+        const msg = document.getElementById('msg');
+        msg.innerText = '';
     }
 
     function registerMove() {
@@ -250,7 +262,7 @@ window.onload = function() {
         msg.innerText = 'Inicjalizacja nowej gry.';
         const item = document.getElementById(selectedGame);
         if (item) {
-            item.classList.remove('selected');
+            item.classList.remove('selected', 'failed');
         }
         fieldOccupancy = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
@@ -287,6 +299,7 @@ window.onload = function() {
         runBackwardButton.disabled = true;
         buttonSend.disabled = true;
         readOnlyMode = false;
+        rules.init();
     });
 
     const buttonOpen = document.getElementById('open');
@@ -316,7 +329,7 @@ window.onload = function() {
                         const childrenElements = parentElement.children;
                         for (var i = 0; i < childrenElements.length; i++) {
                             const childElement = childrenElements[i];
-                            childElement.classList.remove('selected');
+                            childElement.classList.remove('selected', 'failed');
                         }
                         item.classList.add('selected');
                         fetch('https://my-notes.pl/api/get_game.php?id=' + gameId, {

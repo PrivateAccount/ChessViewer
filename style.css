@@ -42,6 +42,9 @@ body {
 .field.light.selected, .field.dark.selected {
     background-color: forestgreen;
 }
+.field.light.failed, .field.dark.failed {
+    background-color: red;
+}
 #labels-top {
     position: relative;
     width: auto;
