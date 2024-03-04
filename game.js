@@ -13,6 +13,8 @@ const rules = {
         const fieldId = field.innerText;
         const killId = kill.innerText;
         result = this.checkMoveOrder(figureId);
+        if (!result) return false;
+        result = this.checkMoveCorrectness(figureId, originId, fieldId, killId);
         return result;
     },
     checkMoveOrder: function(owner) {
@@ -23,8 +25,45 @@ const rules = {
                 break;
             case player.BLACK:
                 result = owner < 16;
-                break;    
+                break;
         }
         return result;
-    }
+    },
+    checkMoveCorrectness: function(owner, source, destination, kill) {
+        var result = false;
+        if (owner >= 16 && owner < 24) { // white pawn
+            if (kill == '--') {
+                if (source >= 48 && source < 56) {
+                    result = source - destination == 8 || source - destination == 16;
+                }
+                else {
+                    result = source - destination == 8;
+                }    
+            }
+            else {
+                if (kill < 16) {
+                    result = source - destination == 7 || source - destination == 9;
+                }
+            }
+        }
+        else if (owner >= 8 && owner < 16) { // black pawn
+            if (kill == '--') {
+                if (source >= 8 && source < 16) {
+                    result = destination - source == 8 || destination - source == 16;
+                }
+                else {
+                    result = destination - source == 8;
+                }    
+            }
+            else {
+                if (kill >= 16) {
+                    result = destination - source == 7 || destination - source == 9;
+                }
+            }
+        }
+        else {
+            result = true;
+        }
+        return result;
+    },
 };
