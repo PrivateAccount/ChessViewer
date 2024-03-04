@@ -306,7 +306,7 @@ window.onload = function() {
             for (var i = 0; i < items.length; i++) {
                 const item = document.createElement('div');
                 item.id = 'game-' + items[i].id;
-                item.innerHTML = '<a>' + items[i].email + '<br>' + items[i].modified + ' : [' + items[i].sequences + ']</a>';
+                item.innerHTML = '<a>' + items[i].ip + ' : ' + items[i].email + '<br>' + items[i].modified + ' : [' + items[i].sequences + ']</a>';
                 const gameId = items[i].id;
                 item.addEventListener('click', function() {
                     buttonNew.click();
