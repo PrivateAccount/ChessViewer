@@ -282,6 +282,7 @@ window.onload = function() {
         sequenceId = 0;
         updateCounter();
         buttonReset.click();
+        buttonCancel.click();
         runForwardButton.disabled = true;
         runBackwardButton.disabled = true;
         buttonSend.disabled = true;
@@ -338,29 +339,49 @@ window.onload = function() {
                 parentElement.appendChild(item);
             }
         });
+        buttonSend.disabled = true;
+        buttonCancel.click();
     });
 
     const buttonSend = document.getElementById('send');
     buttonSend.addEventListener('click', function() {
-        const msg = document.getElementById('msg');
-        msg.innerText = 'Zapisywanie...';
-        fetch('https://my-notes.pl/api/store_game.php', {
-            method: "POST",
-            body: JSON.stringify({
-                user: "author",
-                email: "player@chess.com",
-                sequences: moveSequence.length,
-                details: moveSequence,
-            }),
-            headers: { "Content-type": "application/json; charset=UTF-8" }
-        }).then((response) => response.json()).then((response) => {
-            msg.innerText = response.message;
-            readOnlyMode = true;
-            buttonSend.disabled = true;
-            buttonOpen.click();
-        });
+        const userDetails = document.getElementById('user');
+        userDetails.style.display = 'block';
     });
     buttonSend.disabled = true;
+
+    const buttonSave = document.getElementById('ok');
+    buttonSave.addEventListener('click', function() {
+        const msg = document.getElementById('msg');
+        msg.innerText = 'Wpisz swoje dane...';
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        if (username.length && email.length) {
+            const msg = document.getElementById('msg');
+            msg.innerText = 'Zapisywanie...';
+            fetch('https://my-notes.pl/api/store_game.php', {
+                method: "POST",
+                body: JSON.stringify({
+                    user: username,
+                    email: email,
+                    sequences: moveSequence.length,
+                    details: moveSequence,
+                }),
+                headers: { "Content-type": "application/json; charset=UTF-8" }
+            }).then((response) => response.json()).then((response) => {
+                msg.innerText = response.message;
+                readOnlyMode = true;
+                buttonSend.disabled = true;
+                buttonOpen.click();
+            });    
+        }
+    });
+
+    const buttonCancel = document.getElementById('cancel');
+    buttonCancel.addEventListener('click', function() {
+        const userDetails = document.getElementById('user');
+        userDetails.style.display = 'none';
+    });
 
     const buttonReset = document.getElementById('reset');
     buttonReset.addEventListener('click', function() {
