@@ -32,7 +32,7 @@ const rules = {
     checkMoveCorrectness: function(owner, source, destination, kill) {
         var result = false;
         if (owner >= 16 && owner < 24) { // white pawn
-            if (kill == '--') {
+            if (kill == '--' || kill == '-1') {
                 if (source >= 48 && source < 56) {
                     result = source - destination == 8 || source - destination == 16;
                 }
@@ -47,7 +47,7 @@ const rules = {
             }
         }
         else if (owner >= 8 && owner < 16) { // black pawn
-            if (kill == '--') {
+            if (kill == '--' || kill == '-1') {
                 if (source >= 8 && source < 16) {
                     result = destination - source == 8 || destination - source == 16;
                 }
