@@ -292,7 +292,7 @@ window.onload = function() {
     buttonOpen.addEventListener('click', function() {
         const msg = document.getElementById('msg');
         msg.innerText = 'Ładowanie...';
-        fetch('http://my-notes.pl/api/get_games.php', {
+        fetch('https://my-notes.pl/api/get_games.php', {
             method: "GET",
             headers: { "Content-type": "application/json; charset=UTF-8" }
         }).then((response) => response.json()).then((response) => {
@@ -318,7 +318,7 @@ window.onload = function() {
                             childElement.classList.remove('selected');
                         }
                         item.classList.add('selected');
-                        fetch('http://my-notes.pl/api/get_game.php?id=' + gameId, {
+                        fetch('https://my-notes.pl/api/get_game.php?id=' + gameId, {
                             method: "GET",
                             headers: { "Content-type": "application/json; charset=UTF-8" }
                         }).then((response) => response.json()).then((response) => {
@@ -344,7 +344,7 @@ window.onload = function() {
     buttonSend.addEventListener('click', function() {
         const msg = document.getElementById('msg');
         msg.innerText = 'Zapisywanie...';
-        fetch('http://my-notes.pl/api/store_game.php', {
+        fetch('https://my-notes.pl/api/store_game.php', {
             method: "POST",
             body: JSON.stringify({
                 user: "author",
