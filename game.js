@@ -196,6 +196,16 @@ const rules = {
                 }
             }
         }
+        else if (owner == 28) { // white king
+            if (kill == '--' || kill == '-1' || kill < 16) {
+                result = Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1;
+            }
+        }
+        else if (owner == 4) { // black king
+            if (kill == '--' || kill == '-1' || kill >= 16) {
+                result = Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1;
+            }
+        }
         else {
             result = true;
         }
