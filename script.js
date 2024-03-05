@@ -213,7 +213,7 @@ window.onload = function() {
                     selection.push(placeId);
                     fieldId.innerText = placeId.replace('field-', '');
                     killId.innerText = pieceId.replace('figure-', '');
-                    if (rules.checkLegalMove(figureId, originId, fieldId, killId)) {
+                    if (rules.checkLegalMove(figureId, originId, fieldId, killId, fieldOccupancy)) {
                         registerMove();
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
                     }
@@ -223,6 +223,9 @@ window.onload = function() {
                         }
                         const msg = document.getElementById('msg');
                         msg.innerText = 'Niedozwolony ruch.';
+                        setTimeout(function() {
+                            buttonReset.click();
+                        }, 2000);
                     }
                 }
             }    
@@ -404,5 +407,7 @@ window.onload = function() {
         document.getElementById('kill-id').innerText = '--';
         clearSelection();
     });
+
+    rules.init();
 
 };

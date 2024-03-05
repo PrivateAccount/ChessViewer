@@ -1,17 +1,59 @@
 const player = { WHITE: 1, BLACK: 2 };
 
-var currentMove = player.WHITE;
+var currentMove = null;
 
 const rules = {
+    fieldOccupancy: [],
     init: function() {
         currentMove = player.WHITE;
     },
-    checkLegalMove: function(figure, origin, field, kill) {
+    getPosition: function(origin) {
+        return { row: Math.floor(origin / 8), column: Math.floor(origin % 8) };
+    },
+    getField: function(row, column) {
+        return row * 8 + column;
+    },
+    checkFreeFields: function(from, to) {
+        var result = true;
+        const source = this.getPosition(from);
+        const destination = this.getPosition(to);
+        if (source.row == destination.row) {
+            for (var i = source.column + 1; i < destination.column; i++) {
+                const id = this.getField(source.row, i);
+                if (this.fieldOccupancy[id] != undefined && this.fieldOccupancy[id] != -1) {
+                    result = false;
+                }
+            }
+            for (var i = destination.column + 1; i < source.column; i++) {
+                const id = this.getField(source.row, i);
+                if (this.fieldOccupancy[id] != undefined && this.fieldOccupancy[id] != -1) {
+                    result = false;
+                }
+            }
+        }
+        else if (source.column == destination.column) {
+            for (var i = source.row + 1; i < destination.row; i++) {
+                const id = this.getField(i, source.column);
+                if (this.fieldOccupancy[id] != undefined && this.fieldOccupancy[id] != -1) {
+                    result = false;
+                }
+            }
+            for (var i = destination.row + 1; i < source.row; i++) {
+                const id = this.getField(i, source.column);
+                if (this.fieldOccupancy[id] != undefined && this.fieldOccupancy[id] != -1) {
+                    result = false;
+                }
+            }
+        }
+        return result;
+    },
+    checkLegalMove: function(figure, origin, field, kill, fieldOccupancy) {
         var result = false;
         const figureId = figure.innerText;
         const originId = origin.innerText;
         const fieldId = field.innerText;
         const killId = kill.innerText;
+        this.fieldOccupancy = fieldOccupancy;
         result = this.checkMoveOrder(figureId);
         if (!result) return false;
         result = this.checkMoveCorrectness(figureId, originId, fieldId, killId);
@@ -58,6 +100,34 @@ const rules = {
             else {
                 if (kill >= 16) {
                     result = destination - source == 7 || destination - source == 9;
+                }
+            }
+        }
+        else if (owner == 24 || owner == 31) { // white rook
+            if (kill == '--' || kill == '-1') {
+                if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
+                    result = this.checkFreeFields(source, destination);
+                }
+            }
+            else {
+                if (kill < 16) {
+                    if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
+                        result = this.checkFreeFields(source, destination);
+                    }
+                }
+            }
+        }
+        else if (owner == 0 || owner == 7) { // black rook
+            if (kill == '--' || kill == '-1') {
+                if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
+                    result = this.checkFreeFields(source, destination);
+                }
+            }
+            else {
+                if (kill >= 16) {
+                    if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
+                        result = this.checkFreeFields(source, destination);
+                    }
                 }
             }
         }
