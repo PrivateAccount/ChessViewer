@@ -135,83 +135,45 @@ const rules = {
             }
         }
         else if (owner == 24 || owner == 31) { // white rook
-            if (kill == '--' || kill == '-1') {
+            if (kill == '--' || kill == '-1' || kill < 16) {
                 if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
-                }
-            }
-            else {
-                if (kill < 16) {
-                    if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
-                        result = this.checkFreeFields(source, destination);
-                    }
                 }
             }
         }
         else if (owner == 0 || owner == 7) { // black rook
-            if (kill == '--' || kill == '-1') {
+            if (kill == '--' || kill == '-1' || kill >= 16) {
                 if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
                 }
             }
-            else {
-                if (kill >= 16) {
-                    if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
-                        result = this.checkFreeFields(source, destination);
-                    }
-                }
-            }
         }
         else if (owner == 26 || owner == 29) { // white bishop
-            if (kill == '--' || kill == '-1') {
+            if (kill == '--' || kill == '-1' || kill < 16) {
                 if (this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
-                }
-            }
-            else {
-                if (kill < 16) {
-                    if (this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
-                        result = this.checkFreeFields(source, destination);
-                    }
                 }
             }
         }
         else if (owner == 2 || owner == 5) { // black bishop
-            if (kill == '--' || kill == '-1') {
+            if (kill == '--' || kill == '-1' || kill >= 16) {
                 if (this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
                 }
             }
-            else {
-                if (kill >= 16) {
-                    if (this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
-                        result = this.checkFreeFields(source, destination);
-                    }
-                }
-            }
         }
         else if (owner == 25 || owner == 30) { // white knight
-            if (kill == '--' || kill == '-1') {
+            if (kill == '--' || kill == '-1' || kill < 16) {
                 if (Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 2 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 2 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1) {
                     result = true;
                 }
                 else {
                     result = false;
-                }
-            }
-            else {
-                if (kill < 16) {
-                    if (Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 2 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 2 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1) {
-                        result = true;
-                    }
-                    else {
-                        result = false;
-                    }
                 }
             }
         }
         else if (owner == 1 || owner == 6) { // black knight
-            if (kill == '--' || kill == '-1') {
+            if (kill == '--' || kill == '-1' || kill >= 16) {
                 if (Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 2 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 2 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1) {
                     result = true;
                 }
@@ -219,14 +181,18 @@ const rules = {
                     result = false;
                 }
             }
-            else {
-                if (kill >= 16) {
-                    if (Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 2 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 2 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1) {
-                        result = true;
-                    }
-                    else {
-                        result = false;
-                    }
+        }
+        else if (owner == 27) { // white queen
+            if (kill == '--' || kill == '-1' || kill < 16) {
+                if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row || this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
+                    result = this.checkFreeFields(source, destination);
+                }
+            }
+        }
+        else if (owner == 3) { // black queen
+            if (kill == '--' || kill == '-1' || kill >= 16) {
+                if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row || this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
+                    result = this.checkFreeFields(source, destination);
                 }
             }
         }
