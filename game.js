@@ -107,7 +107,7 @@ const rules = {
         if (owner >= 16 && owner < 24) { // white pawn
             if (kill == '--' || kill == '-1') {
                 if (source >= 48 && source < 56) {
-                    result = source - destination == 8 || source - destination == 16;
+                    result = source - destination == 8 || source - destination == 16 && this.checkFreeFields(source, destination);
                 }
                 else {
                     result = source - destination == 8;
@@ -122,7 +122,7 @@ const rules = {
         else if (owner >= 8 && owner < 16) { // black pawn
             if (kill == '--' || kill == '-1') {
                 if (source >= 8 && source < 16) {
-                    result = destination - source == 8 || destination - source == 16;
+                    result = destination - source == 8 || destination - source == 16 && this.checkFreeFields(source, destination);
                 }
                 else {
                     result = destination - source == 8;
