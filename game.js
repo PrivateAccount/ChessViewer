@@ -45,9 +45,40 @@ const rules = {
                 }
             }
         }
+        else {
+            if (Math.abs(source.row - destination.row) == Math.abs(source.column - destination.column)) {
+                for (var i = source.row + 1, j = source.column + 1; i < destination.row && j < destination.column; i++, j++) {
+                    const id = this.getField(i, j);
+                    if (this.fieldOccupancy[id] != undefined && this.fieldOccupancy[id] != -1) {
+                        result = false;
+                    }
+                }
+                for (var i = destination.row + 1, j = destination.column + 1; i < source.row && j < source.column; i++, j++) {
+                    const id = this.getField(i, j);
+                    if (this.fieldOccupancy[id] != undefined && this.fieldOccupancy[id] != -1) {
+                        result = false;
+                    }
+                }
+                for (var i = destination.row + 1, j = destination.column - 1; i < source.row && j > source.column; i++, j--) {
+                    const id = this.getField(i, j);
+                    if (this.fieldOccupancy[id] != undefined && this.fieldOccupancy[id] != -1) {
+                        result = false;
+                    }
+                }
+                for (var i = destination.row - 1, j = destination.column + 1; i > source.row && j < source.column; i--, j++) {
+                    const id = this.getField(i, j);
+                    if (this.fieldOccupancy[id] != undefined && this.fieldOccupancy[id] != -1) {
+                        result = false;
+                    }
+                }
+            }
+            else {
+                result = false;
+            }
+        }
         return result;
     },
-    checkLegalMove: function(figure, origin, field, kill, fieldOccupancy) {
+    checkIsLegalMove: function(figure, origin, field, kill, fieldOccupancy) {
         var result = false;
         const figureId = figure.innerText;
         const originId = origin.innerText;
@@ -126,6 +157,34 @@ const rules = {
             else {
                 if (kill >= 16) {
                     if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
+                        result = this.checkFreeFields(source, destination);
+                    }
+                }
+            }
+        }
+        else if (owner == 26 || owner == 29) { // white bishop
+            if (kill == '--' || kill == '-1') {
+                if (this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
+                    result = this.checkFreeFields(source, destination);
+                }
+            }
+            else {
+                if (kill < 16) {
+                    if (this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
+                        result = this.checkFreeFields(source, destination);
+                    }
+                }
+            }
+        }
+        else if (owner == 2 || owner == 5) { // black bishop
+            if (kill == '--' || kill == '-1') {
+                if (this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
+                    result = this.checkFreeFields(source, destination);
+                }
+            }
+            else {
+                if (kill >= 16) {
+                    if (this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
                         result = this.checkFreeFields(source, destination);
                     }
                 }

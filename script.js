@@ -213,7 +213,7 @@ window.onload = function() {
                     selection.push(placeId);
                     fieldId.innerText = placeId.replace('field-', '');
                     killId.innerText = pieceId.replace('figure-', '');
-                    if (rules.checkLegalMove(figureId, originId, fieldId, killId, fieldOccupancy)) {
+                    if (rules.checkIsLegalMove(figureId, originId, fieldId, killId, fieldOccupancy)) {
                         registerMove();
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
                     }
@@ -225,7 +225,7 @@ window.onload = function() {
                         msg.innerText = 'Niedozwolony ruch.';
                         setTimeout(function() {
                             buttonReset.click();
-                        }, 2000);
+                        }, 1000);
                     }
                 }
             }    
