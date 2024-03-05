@@ -208,10 +208,12 @@ window.onload = function() {
         if (sequenceId == moveSequence.length) {
             if (selection.length == 0) {
                 if (pieceId != '--') {
-                    document.getElementById(placeId).classList.add('selected');
-                    selection.push(placeId);
                     figureId.innerText = pieceId.replace('figure-', '');
                     originId.innerText = placeId.replace('field-', '');
+                    if (rules.checkMoveOrder(parseInt(figureId.innerText))) {
+                        document.getElementById(placeId).classList.add('selected');
+                        selection.push(placeId);
+                    }
                 }
             }
             else if (selection.length == 1) {
