@@ -190,6 +190,46 @@ const rules = {
                 }
             }
         }
+        else if (owner == 25 || owner == 30) { // white knight
+            if (kill == '--' || kill == '-1') {
+                if (Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 2 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 2 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1) {
+                    result = true;
+                }
+                else {
+                    result = false;
+                }
+            }
+            else {
+                if (kill < 16) {
+                    if (Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 2 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 2 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1) {
+                        result = true;
+                    }
+                    else {
+                        result = false;
+                    }
+                }
+            }
+        }
+        else if (owner == 1 || owner == 6) { // black knight
+            if (kill == '--' || kill == '-1') {
+                if (Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 2 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 2 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1) {
+                    result = true;
+                }
+                else {
+                    result = false;
+                }
+            }
+            else {
+                if (kill >= 16) {
+                    if (Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 2 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 2 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1) {
+                        result = true;
+                    }
+                    else {
+                        result = false;
+                    }
+                }
+            }
+        }
         else {
             result = true;
         }
