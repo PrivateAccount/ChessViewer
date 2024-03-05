@@ -182,7 +182,14 @@ window.onload = function() {
         stepId.innerText = sequenceId.toString() + ' of ' + moveSequence.length.toString();
     }
 
+    function updateColor() {
+        const move = document.getElementById('move');
+        move.classList.remove('white', 'black');
+        move.classList.add(currentMove == player.WHITE ? 'white' : 'black');
+    }
+
     function markSelection(ownerId, kind) {
+        const delay = 1000;
         const figureId = document.getElementById('figure-id');
         const originId = document.getElementById('origin-id');
         const fieldId = document.getElementById('field-id');
@@ -225,7 +232,7 @@ window.onload = function() {
                         msg.innerText = 'Niedozwolony ruch.';
                         setTimeout(function() {
                             buttonReset.click();
-                        }, 1000);
+                        }, delay);
                     }
                 }
             }    
@@ -255,6 +262,7 @@ window.onload = function() {
             runForwardButton.disabled = false;
             runForwardButton.click();
             buttonReset.click();
+            updateColor();
         }, delay);
         buttonSend.disabled = readOnlyMode;
     }
@@ -303,6 +311,7 @@ window.onload = function() {
         buttonSend.disabled = true;
         readOnlyMode = false;
         rules.init();
+        updateColor();
     });
 
     const buttonOpen = document.getElementById('open');
