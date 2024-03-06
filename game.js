@@ -4,6 +4,7 @@ var currentMove = null;
 
 const rules = {
     fieldOccupancy: [],
+    attackedFields: [],
     init: function() {
         currentMove = player.WHITE;
     },
@@ -12,6 +13,29 @@ const rules = {
     },
     getField: function(row, column) {
         return row * 8 + column;
+    },
+    getFigureField: function(figureId) {
+        var result = null;
+        for (var i = 0; i < this.fieldOccupancy.length; i++) {
+            if (this.fieldOccupancy[i] == figureId) {
+                result = i;
+            }
+        }
+        return result;
+    },
+    checkIsLegalMove: function(figure, origin, field, kill, fieldOccupancy) {
+        var result = false;
+        const figureId = figure.innerText;
+        const originId = origin.innerText;
+        const fieldId = field.innerText;
+        const killId = kill.innerText;
+        this.fieldOccupancy = fieldOccupancy;
+        result = this.checkMoveOrder(figureId);
+        if (!result) return false;
+        result = this.checkMoveCorrectness(figureId, originId, fieldId, killId);
+        if (!result) return false;
+        result = this.checkIsKingSafe(figureId, originId, fieldId, killId);
+        return result;
     },
     checkFreeFields: function(from, to) {
         var result = true;
@@ -76,18 +100,6 @@ const rules = {
                 result = false;
             }
         }
-        return result;
-    },
-    checkIsLegalMove: function(figure, origin, field, kill, fieldOccupancy) {
-        var result = false;
-        const figureId = figure.innerText;
-        const originId = origin.innerText;
-        const fieldId = field.innerText;
-        const killId = kill.innerText;
-        this.fieldOccupancy = fieldOccupancy;
-        result = this.checkMoveOrder(figureId);
-        if (!result) return false;
-        result = this.checkMoveCorrectness(figureId, originId, fieldId, killId);
         return result;
     },
     checkMoveOrder: function(owner) {
@@ -196,8 +208,72 @@ const rules = {
                 result = Math.abs(this.getPosition(source).column - this.getPosition(destination).column) < 2 && Math.abs(this.getPosition(source).row - this.getPosition(destination).row) < 2;
             }
         }
-        else {
-            result = true;
+        return result;
+    },
+    getAttackedFields: function(figure) {
+        const field = this.getFigureField(figure);
+        const position = this.getPosition(field);
+        if (figure >= 16 && figure < 24) { // white pawn
+            if (position.column == 0) {
+                this.attackedFields.push(field - 7);
+            }
+            else if (position.column == 7) {
+                this.attackedFields.push(field - 9);
+            }
+            else {
+                this.attackedFields.push(field - 7);
+                this.attackedFields.push(field - 9);
+            }
+        }
+        if (figure >= 8 && figure < 16) { // black pawn
+            if (position.column == 0) {
+                this.attackedFields.push(field + 9);
+            }
+            else if (position.column == 7) {
+                this.attackedFields.push(field + 7);
+            }
+            else {
+                this.attackedFields.push(field + 7);
+                this.attackedFields.push(field + 9);
+            }
+        }
+    },
+    isAttacked: function(fieldId) {
+        return this.attackedFields.includes(parseInt(fieldId));
+    },
+    checkIsKingSafe: function(figureId, originId, fieldId, killId) {
+        result = true;
+        var kingId, kingFieldId, kingPosition;
+        switch (currentMove) {
+            case player.WHITE:
+                kingId = 28;
+                break;
+            case player.BLACK:
+                kingId = 4;
+                break;
+        }
+        kingFieldId = this.getFigureField(kingId);
+        kingPosition = this.getPosition(kingFieldId);
+        if (killId == 4 || killId == 28) { // try to kill a king
+            return false;
+        }
+        this.attackedFields = [];
+        if (figureId == kingId) { // king is moving
+            for (var i = 0; i < this.fieldOccupancy.length; i++) {
+                if (currentMove == player.WHITE) {
+                    if (this.fieldOccupancy[i] < 16 && this.fieldOccupancy[i] != -1) {
+                        this.getAttackedFields(this.fieldOccupancy[i]);
+                    }
+                }
+                if (currentMove == player.BLACK) {
+                    if (this.fieldOccupancy[i] >= 16 && this.fieldOccupancy[i] != -1) {
+                        this.getAttackedFields(this.fieldOccupancy[i]);
+                    }
+                }
+            }
+            if (this.isAttacked(fieldId)) {
+                return false;
+            }
         }
         return result;
     },

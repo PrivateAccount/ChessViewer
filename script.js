@@ -207,7 +207,7 @@ window.onload = function() {
         }
         if (sequenceId == moveSequence.length) {
             if (selection.length == 0) {
-                if (pieceId != '--') {
+                if (pieceId != '--' && pieceId != '-1') {
                     figureId.innerText = pieceId.replace('figure-', '');
                     originId.innerText = placeId.replace('field-', '');
                     if (rules.checkMoveOrder(parseInt(figureId.innerText))) {
