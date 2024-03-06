@@ -428,6 +428,83 @@ const rules = {
     isAttacked: function(fieldId) {
         return this.attackedFields.includes(parseInt(fieldId));
     },
+    getPotentialFields: function(figure, fieldId) {
+        const field = this.getFigureField(figure);
+        const position = this.getPosition(field);
+        const color = figure < 16 ? 'B' : 'W';
+        for (var i = position.column - 1; i >= 0; i--) {
+            const field = this.getField(position.row, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28 || field == fieldId) {
+                this.attackedFields.push(field);
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.column + 1; i < 8; i++) {
+            const field = this.getField(position.row, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28 || field == fieldId) {
+                this.attackedFields.push(field);
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.row - 1; i >= 0; i--) {
+            const field = this.getField(i, position.column);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28 || field == fieldId) {
+                this.attackedFields.push(field);
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.row + 1; i < 8; i++) {
+            const field = this.getField(i, position.column);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28 || field == fieldId) {
+                this.attackedFields.push(field);
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.column - 1, j = position.row - 1; i >= 0 && j >= 0; i--, j--) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28 || field == fieldId) {
+                this.attackedFields.push(field);
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.column + 1, j = position.row + 1; i < 8 && j < 8; i++, j++) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28 || field == fieldId) {
+                this.attackedFields.push(field);
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.column + 1, j = position.row - 1; i < 8 && j >= 0; i++, j--) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28 || field == fieldId) {
+                this.attackedFields.push(field);
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.column - 1, j = position.row + 1; i >= 0 && j < 8; i--, j++) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28 || field == fieldId) {
+                this.attackedFields.push(field);
+            }
+            else {
+                break;
+            }
+        }
+    },
     checkIsKingSafe: function(figureId, originId, fieldId, killId) {
         result = true;
         var kingId, kingFieldId, kingPosition;
@@ -459,6 +536,29 @@ const rules = {
                 }
             }
             if (this.isAttacked(fieldId)) {
+                return false;
+            }
+        }
+        else { // any other is moving
+            if (currentMove == player.WHITE) {
+                this.getPotentialFields(0, originId);
+                this.getPotentialFields(7, originId);
+                this.getPotentialFields(1, originId);
+                this.getPotentialFields(6, originId);
+                this.getPotentialFields(2, originId);
+                this.getPotentialFields(5, originId);
+                this.getPotentialFields(3, originId);
+            }
+            if (currentMove == player.BLACK) {
+                this.getPotentialFields(24, originId);
+                this.getPotentialFields(31, originId);
+                this.getPotentialFields(25, originId);
+                this.getPotentialFields(30, originId);
+                this.getPotentialFields(26, originId);
+                this.getPotentialFields(29, originId);
+                this.getPotentialFields(27, originId);
+            }
+            if (this.isAttacked(kingFieldId)) {
                 return false;
             }
         }
