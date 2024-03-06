@@ -414,6 +414,16 @@ const rules = {
                 }
             }
         }
+        if (figure == 1 || figure == 6 || figure == 25 || figure == 30) { // white or black knight
+            this.attackedFields.push(this.getField(position.row - 2, position.column - 1));
+            this.attackedFields.push(this.getField(position.row - 2, position.column + 1));
+            this.attackedFields.push(this.getField(position.row - 1, position.column - 2));
+            this.attackedFields.push(this.getField(position.row - 1, position.column + 2));
+            this.attackedFields.push(this.getField(position.row + 1, position.column - 2));
+            this.attackedFields.push(this.getField(position.row + 1, position.column + 2));
+            this.attackedFields.push(this.getField(position.row + 2, position.column - 1));
+            this.attackedFields.push(this.getField(position.row + 2, position.column + 1));
+        }
     },
     isAttacked: function(fieldId) {
         return this.attackedFields.includes(parseInt(fieldId));
