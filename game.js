@@ -237,6 +237,70 @@ const rules = {
                 this.attackedFields.push(field + 9);
             }
         }
+        if (figure == 4 || figure == 28) { // white or black king
+            if (position.column == 0) {
+                this.attackedFields.push(field - 8);
+                this.attackedFields.push(field - 7);
+                this.attackedFields.push(field + 1);
+                this.attackedFields.push(field + 8);
+                this.attackedFields.push(field + 9);
+            }
+            else if (position.column == 7) {
+                this.attackedFields.push(field - 9);
+                this.attackedFields.push(field - 8);
+                this.attackedFields.push(field - 1);
+                this.attackedFields.push(field + 7);
+                this.attackedFields.push(field + 8);
+            }
+            else {
+                this.attackedFields.push(field - 9);
+                this.attackedFields.push(field - 8);
+                this.attackedFields.push(field - 7);
+                this.attackedFields.push(field - 1);
+                this.attackedFields.push(field + 1);
+                this.attackedFields.push(field + 7);
+                this.attackedFields.push(field + 8);
+                this.attackedFields.push(field + 9);
+            }
+        }
+        if (figure == 0 || figure == 7 || figure == 24 || figure == 31) { // white or black rook
+            for (var i = position.column - 1; i >= 0; i--) {
+                const field = this.getField(position.row, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || this.fieldOccupancy[field] == 4 || this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    break;
+                }
+            }
+            for (var i = position.column + 1; i < 8; i++) {
+                const field = this.getField(position.row, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || this.fieldOccupancy[field] == 4 || this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    break;
+                }
+            }
+            for (var i = position.row - 1; i >= 0; i--) {
+                const field = this.getField(i, position.column);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || this.fieldOccupancy[field] == 4 || this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    break;
+                }
+            }
+            for (var i = position.row + 1; i < 8; i++) {
+                const field = this.getField(i, position.column);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || this.fieldOccupancy[field] == 4 || this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    break;
+                }
+            }
+        }
     },
     isAttacked: function(fieldId) {
         return this.attackedFields.includes(parseInt(fieldId));
