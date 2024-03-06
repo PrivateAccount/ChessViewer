@@ -301,6 +301,44 @@ const rules = {
                 }
             }
         }
+        if (figure == 2 || figure == 5 || figure == 26 || figure == 29) { // white or black bishop
+            for (var i = position.column - 1, j = position.row - 1; i >= 0 && j >= 0; i--, j--) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || this.fieldOccupancy[field] == 4 || this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    break;
+                }
+            }
+            for (var i = position.column + 1, j = position.row + 1; i < 8 && j < 8; i++, j++) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || this.fieldOccupancy[field] == 4 || this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    break;
+                }
+            }
+            for (var i = position.column + 1, j = position.row - 1; i < 8 && j >= 0; i++, j--) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || this.fieldOccupancy[field] == 4 || this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    break;
+                }
+            }
+            for (var i = position.column - 1, j = position.row + 1; i >= 0 && j < 8; i--, j++) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || this.fieldOccupancy[field] == 4 || this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    break;
+                }
+            }
+        }
     },
     isAttacked: function(fieldId) {
         return this.attackedFields.includes(parseInt(fieldId));
