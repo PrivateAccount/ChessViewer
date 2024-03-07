@@ -415,14 +415,30 @@ const rules = {
             }
         }
         if (figure == 1 || figure == 6 || figure == 25 || figure == 30) { // white or black knight
-            this.attackedFields.push(this.getField(position.row - 2, position.column - 1));
-            this.attackedFields.push(this.getField(position.row - 2, position.column + 1));
-            this.attackedFields.push(this.getField(position.row - 1, position.column - 2));
-            this.attackedFields.push(this.getField(position.row - 1, position.column + 2));
-            this.attackedFields.push(this.getField(position.row + 1, position.column - 2));
-            this.attackedFields.push(this.getField(position.row + 1, position.column + 2));
-            this.attackedFields.push(this.getField(position.row + 2, position.column - 1));
-            this.attackedFields.push(this.getField(position.row + 2, position.column + 1));
+            if (position.row >= 2 && position.column >= 1) {
+                this.attackedFields.push(this.getField(position.row - 2, position.column - 1));
+            }
+            if (position.row >= 2 && position.column < 7) {
+                this.attackedFields.push(this.getField(position.row - 2, position.column + 1));
+            }
+            if (position.row >= 1 && position.column >= 2) {
+                this.attackedFields.push(this.getField(position.row - 1, position.column - 2));
+            }
+            if (position.row >= 1 && position.column < 6) {
+                this.attackedFields.push(this.getField(position.row - 1, position.column + 2));
+            }
+            if (position.row < 7 && position.column >= 2) {
+                this.attackedFields.push(this.getField(position.row + 1, position.column - 2));
+            }
+            if (position.row < 7 && position.column < 6) {
+                this.attackedFields.push(this.getField(position.row + 1, position.column + 2));
+            }
+            if (position.row < 6 && position.column >= 1) {
+                this.attackedFields.push(this.getField(position.row + 2, position.column - 1));
+            }
+            if (position.row < 6 && position.column < 7) {
+                this.attackedFields.push(this.getField(position.row + 2, position.column + 1));
+            }
         }
     },
     isAttacked: function(fieldId) {
@@ -507,7 +523,7 @@ const rules = {
     },
     checkIsKingSafe: function(figureId, originId, fieldId, killId) {
         result = true;
-        var kingId, kingFieldId, kingPosition;
+        var kingId, kingFieldId;
         switch (currentMove) {
             case player.WHITE:
                 kingId = 28;
@@ -517,7 +533,6 @@ const rules = {
                 break;
         }
         kingFieldId = this.getFigureField(kingId);
-        kingPosition = this.getPosition(kingFieldId);
         if (killId == 4 || killId == 28) { // try to kill a king
             return false;
         }
@@ -540,6 +555,9 @@ const rules = {
             }
         }
         else { // any other is moving
+            const orig = { from: this.fieldOccupancy[originId], to: this.fieldOccupancy[fieldId] };
+            this.fieldOccupancy[originId] = -1;
+            this.fieldOccupancy[fieldId] = figureId;
             if (currentMove == player.WHITE) {
                 this.getPotentialFields(0, originId);
                 this.getPotentialFields(7, originId);
@@ -558,10 +576,49 @@ const rules = {
                 this.getPotentialFields(29, originId);
                 this.getPotentialFields(27, originId);
             }
+            this.fieldOccupancy[originId] = orig.from;
+            this.fieldOccupancy[fieldId] = orig.to;
             if (this.isAttacked(kingFieldId)) {
                 return false;
             }
         }
         return result;
+    },
+    checkIsKingAttacked: function(origin, field) {
+        const originId = parseInt(origin);
+        const fieldId = parseInt(field);
+        const figureId = this.fieldOccupancy[originId];
+        var kingId, kingFieldId;
+        switch (currentMove) {
+            case player.WHITE:
+                kingId = 4;
+                break;
+            case player.BLACK:
+                kingId = 28;
+                break;
+        }
+        kingFieldId = this.getFigureField(kingId);
+        this.attackedFields = [];
+        const orig = { from: this.fieldOccupancy[originId], to: this.fieldOccupancy[fieldId] };
+        this.fieldOccupancy[originId] = -1;
+        this.fieldOccupancy[fieldId] = figureId;
+        for (var i = 0; i < this.fieldOccupancy.length; i++) {
+            if (currentMove == player.WHITE) {
+                if (this.fieldOccupancy[i] >= 16 && this.fieldOccupancy[i] != -1) {
+                    this.getAttackedFields(this.fieldOccupancy[i]);
+                }
+            }
+            if (currentMove == player.BLACK) {
+                if (this.fieldOccupancy[i] < 16 && this.fieldOccupancy[i] != -1) {
+                    this.getAttackedFields(this.fieldOccupancy[i]);
+                }
+            }
+        }
+        this.fieldOccupancy[originId] = orig.from;
+        this.fieldOccupancy[fieldId] = orig.to;
+        if (this.isAttacked(kingFieldId)) {
+            return kingFieldId;
+        }
+        return null;
     },
 };

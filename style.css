@@ -45,6 +45,9 @@ body {
 .field.light.failed, .field.dark.failed {
     background-color: red;
 }
+.field.light.check, .field.dark.check {
+    background-color: gold;
+}
 #labels-top {
     position: relative;
     width: auto;

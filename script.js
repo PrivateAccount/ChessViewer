@@ -244,7 +244,7 @@ window.onload = function() {
     function clearSelection() {
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             const field = 'field-' + i.toString();
-            document.getElementById(field).classList.remove('selected', 'failed');
+            document.getElementById(field).classList.remove('selected', 'failed', 'check');
         }
         selection = [];
         const msg = document.getElementById('msg');
@@ -267,6 +267,10 @@ window.onload = function() {
             updateColor();
         }, delay);
         buttonSend.disabled = readOnlyMode;
+        const kingId = rules.checkIsKingAttacked(origin, field);
+        if (kingId) {
+            document.getElementById('field-' + kingId.toString()).classList.add('check');
+        }
     }
 
     const buttonNew = document.getElementById('new');
@@ -275,7 +279,7 @@ window.onload = function() {
         msg.innerText = 'Inicjalizacja nowej gry.';
         const item = document.getElementById(selectedGame);
         if (item) {
-            item.classList.remove('selected', 'failed');
+            item.classList.remove('selected', 'failed', 'check');
         }
         fieldOccupancy = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
@@ -343,7 +347,7 @@ window.onload = function() {
                         const childrenElements = parentElement.children;
                         for (var i = 0; i < childrenElements.length; i++) {
                             const childElement = childrenElements[i];
-                            childElement.classList.remove('selected', 'failed');
+                            childElement.classList.remove('selected', 'failed', 'check');
                         }
                         item.classList.add('selected');
                         fetch('https://my-notes.pl/api/get_game.php?id=' + gameId, {
