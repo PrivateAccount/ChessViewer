@@ -5,6 +5,7 @@ var currentMove = null;
 const rules = {
     fieldOccupancy: [],
     attackedFields: [],
+    protectedFields: [],
     init: function() {
         currentMove = player.WHITE;
     },
@@ -444,6 +445,148 @@ const rules = {
     isAttacked: function(fieldId) {
         return this.attackedFields.includes(parseInt(fieldId));
     },
+    getProtectedFields: function(fieldId) {
+        const position = this.getPosition(fieldId);
+        for (var i = position.column - 1; i >= 0; i--) {
+            const field = this.getField(position.row, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.column + 1; i < 8; i++) {
+            const field = this.getField(position.row, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.row - 1; i >= 0; i--) {
+            const field = this.getField(i, position.column);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.row + 1; i < 8; i++) {
+            const field = this.getField(i, position.column);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.column - 1, j = position.row - 1; i >= 0 && j >= 0; i--, j--) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.column + 1, j = position.row + 1; i < 8 && j < 8; i++, j++) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.column + 1, j = position.row - 1; i < 8 && j >= 0; i++, j--) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else {
+                break;
+            }
+        }
+        for (var i = position.column - 1, j = position.row + 1; i >= 0 && j < 8; i--, j++) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27)) {
+                this.protectedFields.push(fieldId);
+                break;
+            }
+            else {
+                break;
+            }
+        }
+    },
+    isProtected: function(fieldId) {
+        return this.protectedFields.includes(fieldId);
+    },
     getPotentialFields: function(figure) {
         const field = this.getFigureField(figure);
         const position = this.getPosition(field);
@@ -591,6 +734,7 @@ const rules = {
             return false;
         }
         this.attackedFields = [];
+        this.protectedFields = [];
         if (figureId == kingId) { // king is moving
             for (var i = 0; i < this.fieldOccupancy.length; i++) {
                 if (currentMove == player.WHITE) {
@@ -605,6 +749,10 @@ const rules = {
                 }
             }
             if (this.isAttacked(fieldId)) {
+                return false;
+            }
+            this.getProtectedFields(fieldId);
+            if (this.isProtected(fieldId)) {
                 return false;
             }
         }
