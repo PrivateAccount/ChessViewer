@@ -157,12 +157,24 @@ const rules = {
                     result = this.checkFreeFields(source, destination);
                 }
             }
+            if (owner == 24) {
+                this.castlingBreak.push('58');
+            }
+            if (owner == 31) {
+                this.castlingBreak.push('62');
+            }
         }
         else if (owner == 0 || owner == 7) { // black rook
             if (kill == '--' || kill == '-1' || kill >= 16) {
                 if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
                 }
+            }
+            if (owner == 0) {
+                this.castlingBreak.push('2');
+            }
+            if (owner == 7) {
+                this.castlingBreak.push('6');
             }
         }
         else if (owner == 26 || owner == 29) { // white bishop
@@ -210,6 +222,10 @@ const rules = {
             else if (kill == '--' || kill == '-1' || kill < 16) {
                 result = Math.abs(this.getPosition(source).column - this.getPosition(destination).column) < 2 && Math.abs(this.getPosition(source).row - this.getPosition(destination).row) < 2;
             }
+            if (result) {
+                this.castlingBreak.push('58');
+                this.castlingBreak.push('62');
+            }
         }
         else if (owner == 4) { // black king
             if (this.isCastling(owner, source, destination)) {
@@ -217,6 +233,10 @@ const rules = {
             }
             else if (kill == '--' || kill == '-1' || kill >= 16) {
                 result = Math.abs(this.getPosition(source).column - this.getPosition(destination).column) < 2 && Math.abs(this.getPosition(source).row - this.getPosition(destination).row) < 2;
+            }
+            if (result) {
+                this.castlingBreak.push('2');
+                this.castlingBreak.push('6');
             }
         }
         return result;
@@ -859,17 +879,21 @@ const rules = {
     },
     castlingAllowable: function(owner, source, destination) {
         var result = false;
-        if (owner == 28) { // white
-            if (source == 60) {
-                result = !this.castlingBreak.includes(destination);
-                this.castlingBreak.push(destination);
-            }
+        const field = parseInt(source) < parseInt(destination) ? parseInt(source) + 1 : parseInt(destination) + 1;
+        if (owner == 28 && source == 60 || owner == 4 && source == 4) {
+            result = !this.castlingBreak.includes(destination);
         }
-        if (owner == 4) { // black
-            if (source == 4) {
-                result = !this.castlingBreak.includes(destination);
-                this.castlingBreak.push(destination);
-            }
+        if (this.isAttacked(source)) {
+            result = false;
+        }
+        if (this.isAttacked(destination)) {
+            result = false;
+        }
+        if (this.isAttacked(field)) {
+            result = false;
+        }
+        if (result) {
+            this.castlingBreak.push(destination);
         }
         return result;
     },
