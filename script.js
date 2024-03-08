@@ -224,6 +224,9 @@ window.onload = function() {
                     killId.innerText = pieceId.replace('figure-', '');
                     if (rules.checkIsLegalMove(figureId, originId, fieldId, killId, fieldOccupancy)) {
                         registerMove();
+                        if (rules.isCastling(figureId.innerText, originId.innerText, fieldId.innerText)) {
+                            registerCastling();
+                        }
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
                     }
                     else {
@@ -271,6 +274,19 @@ window.onload = function() {
         if (kingId) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
         }
+    }
+
+    function registerCastling() {
+        const delay = 1000;
+        const castlingParams = { figure: rules.castling.figure, origin: rules.castling.origin, field: rules.castling.field, kill: null };
+        moveSequence.push(castlingParams);
+        setTimeout(function() {
+            markSelection('figure-' + rules.castling.figure, 'figure');
+            markSelection('field-' + rules.castling.field, 'field');
+            runForwardButton.disabled = false;
+            runForwardButton.click();
+            buttonReset.click();
+        }, delay);
     }
 
     const buttonNew = document.getElementById('new');

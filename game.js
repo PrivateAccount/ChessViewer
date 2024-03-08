@@ -6,8 +6,12 @@ const rules = {
     fieldOccupancy: [],
     attackedFields: [],
     protectedFields: [],
+    castlingBreak: [],
+    castling: {},
     init: function() {
         currentMove = player.WHITE;
+        this.castlingBreak = [];
+        this.castling = { figure: null, origin: null, field: null };
     },
     getPosition: function(origin) {
         return { row: Math.floor(origin / 8), column: Math.floor(origin % 8) };
@@ -200,12 +204,18 @@ const rules = {
             }
         }
         else if (owner == 28) { // white king
-            if (kill == '--' || kill == '-1' || kill < 16) {
+            if (this.isCastling(owner, source, destination)) {
+                result = this.castlingAllowable(owner, source, destination);
+            }
+            else if (kill == '--' || kill == '-1' || kill < 16) {
                 result = Math.abs(this.getPosition(source).column - this.getPosition(destination).column) < 2 && Math.abs(this.getPosition(source).row - this.getPosition(destination).row) < 2;
             }
         }
         else if (owner == 4) { // black king
-            if (kill == '--' || kill == '-1' || kill >= 16) {
+            if (this.isCastling(owner, source, destination)) {
+                result = this.castlingAllowable(owner, source, destination);
+            }
+            else if (kill == '--' || kill == '-1' || kill >= 16) {
                 result = Math.abs(this.getPosition(source).column - this.getPosition(destination).column) < 2 && Math.abs(this.getPosition(source).row - this.getPosition(destination).row) < 2;
             }
         }
@@ -814,5 +824,53 @@ const rules = {
             return kingFieldId;
         }
         return null;
+    },
+    isCastling: function(owner, source, destination) {
+        var result = false;
+        if (owner == 28) { // white
+            if (source == 60 && destination == 62) { // short castling
+                if (this.fieldOccupancy[61] == -1 && this.fieldOccupancy[62] == -1 && this.fieldOccupancy[63] == 31) {
+                    this.castling = { figure: 31, origin: 63, field: 61 };
+                    result = true;
+                }
+            }
+            if (source == 60 && destination == 58) { // long castling
+                if (this.fieldOccupancy[59] == -1 && this.fieldOccupancy[58] == -1 && this.fieldOccupancy[57] == -1 && this.fieldOccupancy[56] == 24) {
+                    this.castling = { figure: 24, origin: 56, field: 59 };
+                    result = true;
+                }
+            }
+        }
+        if (owner == 4) { // black
+            if (source == 4 && destination == 6) { // short castling
+                if (this.fieldOccupancy[5] == -1 && this.fieldOccupancy[6] == -1 && this.fieldOccupancy[7] == 7) {
+                    this.castling = { figure: 7, origin: 7, field: 5 };
+                    result = true;
+                }
+            }
+            if (source == 4 && destination == 2) { // long castling
+                if (this.fieldOccupancy[3] == -1 && this.fieldOccupancy[2] == -1 && this.fieldOccupancy[1] == -1 && this.fieldOccupancy[0] == 0) {
+                    this.castling = { figure: 0, origin: 0, field: 3 };
+                    result = true;
+                }
+            }
+        }
+        return result;
+    },
+    castlingAllowable: function(owner, source, destination) {
+        var result = false;
+        if (owner == 28) { // white
+            if (source == 60) {
+                result = !this.castlingBreak.includes(destination);
+                this.castlingBreak.push(destination);
+            }
+        }
+        if (owner == 4) { // black
+            if (source == 4) {
+                result = !this.castlingBreak.includes(destination);
+                this.castlingBreak.push(destination);
+            }
+        }
+        return result;
     },
 };
