@@ -8,10 +8,12 @@ const rules = {
     protectedFields: [],
     castlingBreak: [],
     castling: {},
+    promotion: {},
     init: function() {
         currentMove = player.WHITE;
         this.castlingBreak = [];
         this.castling = { figure: null, origin: null, field: null };
+        this.promotion = { figure: null, origin: null, field: null, kill: null };
     },
     getPosition: function(origin) {
         return { row: Math.floor(origin / 8), column: Math.floor(origin % 8) };
@@ -111,10 +113,10 @@ const rules = {
         var result = false;
         switch (currentMove) {
             case player.WHITE:
-                result = owner > 15;
+                result = owner >= 16 && owner < 32 || owner >= 40 && owner < 48 ;
                 break;
             case player.BLACK:
-                result = owner < 16;
+                result = owner >= 0 && owner < 16 || owner >= 32 && owner < 40;
                 break;
         }
         return result;
@@ -131,7 +133,7 @@ const rules = {
                 }    
             }
             else {
-                if (kill < 16) {
+                if (kill < 16 || kill >= 32 && kill < 40) {
                     result = source - destination == 7 || source - destination == 9;
                 }
             }
@@ -146,13 +148,13 @@ const rules = {
                 }    
             }
             else {
-                if (kill >= 16) {
+                if (kill >= 16 || kill >= 40 && kill < 48) {
                     result = destination - source == 7 || destination - source == 9;
                 }
             }
         }
         else if (owner == 24 || owner == 31) { // white rook
-            if (kill == '--' || kill == '-1' || kill < 16) {
+            if (kill == '--' || kill == '-1' || kill < 16 || kill >= 32 && kill < 40) {
                 if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
                 }
@@ -165,7 +167,7 @@ const rules = {
             }
         }
         else if (owner == 0 || owner == 7) { // black rook
-            if (kill == '--' || kill == '-1' || kill >= 16) {
+            if (kill == '--' || kill == '-1' || kill >= 16 || kill >= 40 && kill < 48) {
                 if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
                 }
@@ -178,38 +180,38 @@ const rules = {
             }
         }
         else if (owner == 26 || owner == 29) { // white bishop
-            if (kill == '--' || kill == '-1' || kill < 16) {
+            if (kill == '--' || kill == '-1' || kill < 16 || kill >= 32 && kill < 40) {
                 if (this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
                 }
             }
         }
         else if (owner == 2 || owner == 5) { // black bishop
-            if (kill == '--' || kill == '-1' || kill >= 16) {
+            if (kill == '--' || kill == '-1' || kill >= 16 || kill >= 40 && kill < 48) {
                 if (this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
                 }
             }
         }
         else if (owner == 25 || owner == 30) { // white knight
-            if (kill == '--' || kill == '-1' || kill < 16) {
+            if (kill == '--' || kill == '-1' || kill < 16 || kill >= 32 && kill < 40) {
                 result = Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 2 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 2 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1;
             }
         }
         else if (owner == 1 || owner == 6) { // black knight
-            if (kill == '--' || kill == '-1' || kill >= 16) {
+            if (kill == '--' || kill == '-1' || kill >= 16 || kill >= 40 && kill < 48) {
                 result = Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 1 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 2 || Math.abs(this.getPosition(source).row - this.getPosition(destination).row) == 2 && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1;
             }
         }
-        else if (owner == 27) { // white queen
-            if (kill == '--' || kill == '-1' || kill < 16) {
+        else if (owner == 27 || owner >= 40 && owner < 48) { // white queen
+            if (kill == '--' || kill == '-1' || kill < 16 || kill >= 32 && kill < 40) {
                 if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row || this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
                 }
             }
         }
-        else if (owner == 3) { // black queen
-            if (kill == '--' || kill == '-1' || kill >= 16) {
+        else if (owner == 3 || owner >= 32 && owner < 40) { // black queen
+            if (kill == '--' || kill == '-1' || kill >= 16 || kill >= 40 && kill < 48) {
                 if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row || this.getPosition(source).column != this.getPosition(destination).column && this.getPosition(source).row != this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
                 }
@@ -219,7 +221,7 @@ const rules = {
             if (this.isCastling(owner, source, destination)) {
                 result = this.castlingAllowable(owner, source, destination);
             }
-            else if (kill == '--' || kill == '-1' || kill < 16) {
+            else if (kill == '--' || kill == '-1' || kill < 16 || kill >= 32 && kill < 40) {
                 result = Math.abs(this.getPosition(source).column - this.getPosition(destination).column) < 2 && Math.abs(this.getPosition(source).row - this.getPosition(destination).row) < 2;
             }
             if (result) {
@@ -231,7 +233,7 @@ const rules = {
             if (this.isCastling(owner, source, destination)) {
                 result = this.castlingAllowable(owner, source, destination);
             }
-            else if (kill == '--' || kill == '-1' || kill >= 16) {
+            else if (kill == '--' || kill == '-1' || kill >= 16 || kill >= 40 && kill < 48) {
                 result = Math.abs(this.getPosition(source).column - this.getPosition(destination).column) < 2 && Math.abs(this.getPosition(source).row - this.getPosition(destination).row) < 2;
             }
             if (result) {
@@ -371,7 +373,7 @@ const rules = {
                 }
             }
         }
-        if (figure == 3 || figure == 27) { // white or black queen
+        if (figure == 3 || figure == 27 || figure >= 32 && figure < 48) { // white or black queen
             for (var i = position.column - 1; i >= 0; i--) {
                 const field = this.getField(position.row, i);
                 if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
@@ -482,11 +484,11 @@ const rules = {
             if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
                 continue;
             }
-            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3)) {
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
-            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27)) {
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
@@ -499,11 +501,11 @@ const rules = {
             if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
                 continue;
             }
-            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3)) {
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
-            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27)) {
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
@@ -516,11 +518,11 @@ const rules = {
             if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
                 continue;
             }
-            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3)) {
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
-            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27)) {
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
@@ -533,11 +535,11 @@ const rules = {
             if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
                 continue;
             }
-            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3)) {
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
-            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27)) {
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
@@ -550,11 +552,11 @@ const rules = {
             if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
                 continue;
             }
-            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3)) {
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
-            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27)) {
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
@@ -567,11 +569,11 @@ const rules = {
             if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
                 continue;
             }
-            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3)) {
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
-            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27)) {
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
@@ -584,11 +586,11 @@ const rules = {
             if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
                 continue;
             }
-            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3)) {
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
-            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27)) {
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
@@ -601,11 +603,11 @@ const rules = {
             if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
                 continue;
             }
-            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3)) {
+            else if (currentMove == player.WHITE && (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
-            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27)) {
+            else if (currentMove == player.BLACK && (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48)) {
                 this.protectedFields.push(fieldId);
                 break;
             }
@@ -621,7 +623,7 @@ const rules = {
         const field = this.getFigureField(figure);
         const position = this.getPosition(field);
         const color = figure < 16 ? 'B' : 'W';
-        if (figure == 0 || figure == 7 || figure == 24 || figure == 31 || figure == 3 || figure == 27) { // white or black rook and queen
+        if (figure == 0 || figure == 7 || figure == 24 || figure == 31 || figure == 3 || figure == 27 || figure >= 32 && figure < 48) { // white or black rook and queen
             for (var i = position.column - 1; i >= 0; i--) {
                 const field = this.getField(position.row, i);
                 if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
@@ -659,7 +661,7 @@ const rules = {
                 }
             }
         }
-        if (figure == 2 || figure == 5 || figure == 26 || figure == 29 || figure == 3 || figure == 27) { // white or black bishop and queen
+        if (figure == 2 || figure == 5 || figure == 26 || figure == 29 || figure == 3 || figure == 27 || figure >= 32 && figure < 48) { // white or black bishop and queen
             for (var i = position.column - 1, j = position.row - 1; i >= 0 && j >= 0; i--, j--) {
                 const field = this.getField(j, i);
                 if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
@@ -768,12 +770,12 @@ const rules = {
         if (figureId == kingId) { // king is moving
             for (var i = 0; i < this.fieldOccupancy.length; i++) {
                 if (currentMove == player.WHITE) {
-                    if (this.fieldOccupancy[i] < 16 && this.fieldOccupancy[i] != -1) {
+                    if ((this.fieldOccupancy[i] < 16 || this.fieldOccupancy[i] >= 32 && this.fieldOccupancy[i] < 40) && this.fieldOccupancy[i] != -1) {
                         this.getAttackedFields(this.fieldOccupancy[i]);
                     }
                 }
                 if (currentMove == player.BLACK) {
-                    if (this.fieldOccupancy[i] >= 16 && this.fieldOccupancy[i] != -1) {
+                    if ((this.fieldOccupancy[i] >= 16 || this.fieldOccupancy[i] >= 40 && this.fieldOccupancy[i] < 48) && this.fieldOccupancy[i] != -1) {
                         this.getAttackedFields(this.fieldOccupancy[i]);
                     }
                 }
@@ -794,9 +796,15 @@ const rules = {
                 for (var i = 0; i < 16; i++) {
                     this.getPotentialFields(i);
                 }
+                for (var i = 32; i < 40; i++) {
+                    this.getPotentialFields(i);
+                }
             }
             if (currentMove == player.BLACK) {
                 for (var i = 16; i < 32; i++) {
+                    this.getPotentialFields(i);
+                }
+                for (var i = 40; i < 48; i++) {
                     this.getPotentialFields(i);
                 }
             }
@@ -808,7 +816,8 @@ const rules = {
         }
         return result;
     },
-    checkIsKingAttacked: function(origin, field) {
+    checkIsKingAttacked: function(origin, field, fieldOccupancy) {
+        this.fieldOccupancy = fieldOccupancy;
         const originId = parseInt(origin);
         const fieldId = parseInt(field);
         const figureId = this.fieldOccupancy[originId];
@@ -828,12 +837,12 @@ const rules = {
         this.fieldOccupancy[fieldId] = figureId;
         for (var i = 0; i < this.fieldOccupancy.length; i++) {
             if (currentMove == player.WHITE) {
-                if (this.fieldOccupancy[i] >= 16 && this.fieldOccupancy[i] != -1) {
+                if ((this.fieldOccupancy[i] >= 16 || this.fieldOccupancy[i] >= 40 && this.fieldOccupancy[i] < 48) && this.fieldOccupancy[i] != -1) {
                     this.getAttackedFields(this.fieldOccupancy[i]);
                 }
             }
             if (currentMove == player.BLACK) {
-                if (this.fieldOccupancy[i] < 16 && this.fieldOccupancy[i] != -1) {
+                if ((this.fieldOccupancy[i] < 16 || this.fieldOccupancy[i] >= 32 && this.fieldOccupancy[i] < 40) && this.fieldOccupancy[i] != -1) {
                     this.getAttackedFields(this.fieldOccupancy[i]);
                 }
             }
@@ -894,6 +903,22 @@ const rules = {
         }
         if (result) {
             this.castlingBreak.push(destination);
+        }
+        return result;
+    },
+    isPromotion: function(owner, destination) {
+        var result = false;
+        if (owner >= 8 && owner < 16) { // black pawn
+            if (destination >= 56 && destination < 64) {
+                this.promotion = { figure: parseInt(owner - 8) + 32, origin: parseInt(destination), field: parseInt(destination), kill: parseInt(owner) };
+                result = true;
+            }
+        }
+        if (owner >= 16 && owner < 24) { // white pawn
+            if (destination >= 0 && destination < 8) {
+                this.promotion = { figure: parseInt(owner - 8) + 32, origin: parseInt(destination), field: parseInt(destination), kill: parseInt(owner) };
+                result = true;
+            }
         }
         return result;
     },

@@ -108,6 +108,21 @@ window.onload = function() {
         figures.appendChild(figure);
     }
 
+    for (var i = 0; i < 2 * BOARD_SIZE; i++) {
+        const figure = document.createElement('img');
+        figure.id = 'figure-' + (i + 32).toString();
+        figure.classList.add('figure');
+        figure.src = 'img/' + figureImages[i < BOARD_SIZE ? 0 : 6] + '.png';
+        figure.style.left = fieldPositions[i + 3 * BOARD_SIZE].x + 'px';
+        figure.style.top = fieldPositions[i + 3 * BOARD_SIZE].y + 'px';
+        figure.style.display = 'none';
+        figurePositions[i + 4 * BOARD_SIZE] = i + 3 * BOARD_SIZE;
+        figure.addEventListener('click', function() {
+            markSelection(figure.id, 'figure');
+        });
+        figures.appendChild(figure);
+    }
+
     const runForwardButton = document.getElementById('run-forward');
     runForwardButton.addEventListener('click', function() {
         runForwardButton.disabled = true;
@@ -227,6 +242,9 @@ window.onload = function() {
                         if (rules.isCastling(figureId.innerText, originId.innerText, fieldId.innerText)) {
                             registerCastling();
                         }
+                        if (rules.isPromotion(figureId.innerText, fieldId.innerText)) {
+                            registerPromotion();
+                        }
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
                     }
                     else {
@@ -270,7 +288,7 @@ window.onload = function() {
             updateColor();
         }, delay);
         buttonSend.disabled = readOnlyMode;
-        const kingId = rules.checkIsKingAttacked(origin, field);
+        const kingId = rules.checkIsKingAttacked(origin, field, fieldOccupancy);
         if (kingId) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
         }
@@ -287,6 +305,31 @@ window.onload = function() {
             runForwardButton.click();
             buttonReset.click();
         }, delay);
+    }
+
+    function registerPromotion() {
+        const delay = 1000;
+        const origin = document.getElementById('origin-id').innerText;
+        const field = document.getElementById('field-id').innerText;
+        const orig = document.getElementById('figure-' + rules.promotion.kill);
+        const figure = document.getElementById('figure-' + rules.promotion.figure);
+        const promotionParams = { figure: rules.promotion.figure, origin: rules.promotion.origin, field: rules.promotion.field, kill: rules.promotion.kill };
+        moveSequence.push(promotionParams);
+        setTimeout(function() {
+            removeFigure(rules.promotion.kill);
+            figure.style.left = orig.style.left;
+            figure.style.top = orig.style.top;    
+            restoreFigure(rules.promotion.figure);
+            runForwardButton.disabled = false;
+            runForwardButton.click();
+            buttonReset.click();
+        }, delay);
+        buttonSend.disabled = readOnlyMode;
+        fieldOccupancy[origin] = parseInt(rules.promotion.kill - 8) + 32;
+        const kingId = rules.checkIsKingAttacked(origin, field, fieldOccupancy);
+        if (kingId) {
+            document.getElementById('field-' + kingId.toString()).classList.add('check');
+        }
     }
 
     const buttonNew = document.getElementById('new');
