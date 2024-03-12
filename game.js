@@ -246,7 +246,8 @@ const rules = {
     getAttackedFields: function(figure) {
         const field = this.getFigureField(figure);
         const position = this.getPosition(field);
-        const color = figure < 16 ? 'B' : 'W';
+        const color = figure >= 0 && figure < 16 || figure >= 32 && figure < 40 ? 'B' : 'W';
+        
         if (figure >= 16 && figure < 24) { // white pawn
             if (position.column == 0) {
                 this.attackedFields.push(field - 7);
@@ -622,7 +623,7 @@ const rules = {
     getPotentialFields: function(figure) {
         const field = this.getFigureField(figure);
         const position = this.getPosition(field);
-        const color = figure < 16 ? 'B' : 'W';
+        const color = figure >= 0 && figure < 16 || figure >= 32 && figure < 40 ? 'B' : 'W';
         if (figure == 0 || figure == 7 || figure == 24 || figure == 31 || figure == 3 || figure == 27 || figure >= 32 && figure < 48) { // white or black rook and queen
             for (var i = position.column - 1; i >= 0; i--) {
                 const field = this.getField(position.row, i);
