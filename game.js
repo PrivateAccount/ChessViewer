@@ -113,7 +113,7 @@ const rules = {
         var result = false;
         switch (currentMove) {
             case player.WHITE:
-                result = owner >= 16 && owner < 32 || owner >= 40 && owner < 48 ;
+                result = owner >= 16 && owner < 32 || owner >= 40 && owner < 48;
                 break;
             case player.BLACK:
                 result = owner >= 0 && owner < 16 || owner >= 32 && owner < 40;
@@ -796,15 +796,9 @@ const rules = {
                 for (var i = 0; i < 16; i++) {
                     this.getPotentialFields(i);
                 }
-                for (var i = 32; i < 40; i++) {
-                    this.getPotentialFields(i);
-                }
             }
             if (currentMove == player.BLACK) {
                 for (var i = 16; i < 32; i++) {
-                    this.getPotentialFields(i);
-                }
-                for (var i = 40; i < 48; i++) {
                     this.getPotentialFields(i);
                 }
             }

@@ -318,7 +318,7 @@ window.onload = function() {
         setTimeout(function() {
             removeFigure(rules.promotion.kill);
             figure.style.left = orig.style.left;
-            figure.style.top = orig.style.top;    
+            figure.style.top = orig.style.top;
             restoreFigure(rules.promotion.figure);
             runForwardButton.disabled = false;
             runForwardButton.click();
