@@ -770,12 +770,12 @@ const rules = {
         if (figureId == kingId) { // king is moving
             for (var i = 0; i < this.fieldOccupancy.length; i++) {
                 if (currentMove == player.WHITE) {
-                    if ((this.fieldOccupancy[i] < 16 || this.fieldOccupancy[i] >= 32 && this.fieldOccupancy[i] < 40) && this.fieldOccupancy[i] != -1) {
+                    if ((this.fieldOccupancy[i] >= 0 && this.fieldOccupancy[i] < 16 || this.fieldOccupancy[i] >= 32 && this.fieldOccupancy[i] < 40) && this.fieldOccupancy[i] != -1) {
                         this.getAttackedFields(this.fieldOccupancy[i]);
                     }
                 }
                 if (currentMove == player.BLACK) {
-                    if ((this.fieldOccupancy[i] >= 16 || this.fieldOccupancy[i] >= 40 && this.fieldOccupancy[i] < 48) && this.fieldOccupancy[i] != -1) {
+                    if ((this.fieldOccupancy[i] >= 16 && this.fieldOccupancy[i] < 32 || this.fieldOccupancy[i] >= 40 && this.fieldOccupancy[i] < 48) && this.fieldOccupancy[i] != -1) {
                         this.getAttackedFields(this.fieldOccupancy[i]);
                     }
                 }
@@ -836,12 +836,12 @@ const rules = {
         this.fieldOccupancy[fieldId] = figureId;
         for (var i = 0; i < this.fieldOccupancy.length; i++) {
             if (currentMove == player.WHITE) {
-                if ((this.fieldOccupancy[i] >= 16 || this.fieldOccupancy[i] >= 40 && this.fieldOccupancy[i] < 48) && this.fieldOccupancy[i] != -1) {
+                if ((this.fieldOccupancy[i] >= 16 && this.fieldOccupancy[i] < 32 || this.fieldOccupancy[i] >= 40 && this.fieldOccupancy[i] < 48) && this.fieldOccupancy[i] != -1) {
                     this.getAttackedFields(this.fieldOccupancy[i]);
                 }
             }
             if (currentMove == player.BLACK) {
-                if ((this.fieldOccupancy[i] < 16 || this.fieldOccupancy[i] >= 32 && this.fieldOccupancy[i] < 40) && this.fieldOccupancy[i] != -1) {
+                if ((this.fieldOccupancy[i] >= 0 && this.fieldOccupancy[i] < 16 || this.fieldOccupancy[i] >= 32 && this.fieldOccupancy[i] < 40) && this.fieldOccupancy[i] != -1) {
                     this.getAttackedFields(this.fieldOccupancy[i]);
                 }
             }
