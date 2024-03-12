@@ -288,7 +288,7 @@ window.onload = function() {
             updateColor();
         }, delay);
         buttonSend.disabled = readOnlyMode;
-        const kingId = rules.checkIsKingAttacked(origin, field);
+        const kingId = rules.checkIsKingAttacked(origin, field, true);
         if (kingId) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
         }
@@ -325,7 +325,7 @@ window.onload = function() {
             buttonReset.click();
         }, delay);
         buttonSend.disabled = readOnlyMode;
-        const kingId = rules.checkIsKingAttacked(origin, field);
+        const kingId = rules.checkIsKingAttacked(origin, field, false);
         if (kingId) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
         }

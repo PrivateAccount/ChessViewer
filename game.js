@@ -247,7 +247,6 @@ const rules = {
         const field = this.getFigureField(figure);
         const position = this.getPosition(field);
         const color = figure >= 0 && figure < 16 || figure >= 32 && figure < 40 ? 'B' : 'W';
-        
         if (figure >= 16 && figure < 24) { // white pawn
             if (position.column == 0) {
                 this.attackedFields.push(field - 7);
@@ -698,7 +697,7 @@ const rules = {
                 else {
                     break;
                 }
-            }    
+            }
         }
         if (figure == 1 || figure == 6 || figure == 25 || figure == 30) { // white or black knight
             if (position.row >= 2 && position.column >= 1) {
@@ -817,7 +816,7 @@ const rules = {
         }
         return result;
     },
-    checkIsKingAttacked: function(origin, field) {
+    checkIsKingAttacked: function(origin, field, swap) {
         const originId = parseInt(origin);
         const fieldId = parseInt(field);
         const figureId = this.fieldOccupancy[originId];
@@ -833,8 +832,10 @@ const rules = {
         kingFieldId = this.getFigureField(kingId);
         this.attackedFields = [];
         const orig = { from: this.fieldOccupancy[originId], to: this.fieldOccupancy[fieldId] };
-        this.fieldOccupancy[originId] = -1;
-        this.fieldOccupancy[fieldId] = figureId;
+        if (swap) {
+            this.fieldOccupancy[originId] = -1;
+            this.fieldOccupancy[fieldId] = figureId;
+        }
         for (var i = 0; i < this.fieldOccupancy.length; i++) {
             if (currentMove == player.WHITE) {
                 if ((this.fieldOccupancy[i] >= 16 && this.fieldOccupancy[i] < 32 || this.fieldOccupancy[i] >= 40 && this.fieldOccupancy[i] < 48) && this.fieldOccupancy[i] != -1) {
@@ -919,6 +920,9 @@ const rules = {
                 this.promotion = { figure: parseInt(owner - 8) + 32, origin: parseInt(destination), field: parseInt(destination), kill: parseInt(owner) };
                 result = true;
             }
+        }
+        if (result) {
+            this.fieldOccupancy[destination] = parseInt(owner - 8) + 32;
         }
         return result;
     },
