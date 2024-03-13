@@ -365,6 +365,9 @@ window.onload = function() {
             }
             figure.style.display = 'inline';
         }
+        for (var i = 0; i < 2 * BOARD_SIZE; i++) {
+            removeFigure(i + 32);
+        }    
         moveSequence = [];
         sequenceId = 0;
         updateCounter();

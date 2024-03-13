@@ -815,6 +815,44 @@ const rules = {
                 }
             }
         }
+        const places = [
+            { row: position.row - 2, column: position.column - 1 },
+            { row: position.row - 2, column: position.column + 1 },
+            { row: position.row - 1, column: position.column - 2 },
+            { row: position.row - 1, column: position.column + 2 },
+            { row: position.row + 1, column: position.column - 2 },
+            { row: position.row + 1, column: position.column + 2 },
+            { row: position.row + 2, column: position.column - 1 },
+            { row: position.row + 2, column: position.column + 1 },
+        ];
+        for (var i = 0; i < places.length; i++) {
+            const field = this.getField(places[i].row, places[i].column);
+            if (color == 'B' && (this.fieldOccupancy[field] == 25 || this.fieldOccupancy[field] == 30)) { // white knight
+                this.attackedFields.push(figure);
+                break;
+            }
+            if (color == 'W' && (this.fieldOccupancy[field] == 1 || this.fieldOccupancy[field] == 6)) { // black knight
+                this.attackedFields.push(figure);
+                break;
+            }
+        }
+        const pawns = [
+            { row: position.row + 1, column: position.column - 1 },
+            { row: position.row + 1, column: position.column + 1 },
+            { row: position.row - 1, column: position.column - 1 },
+            { row: position.row - 1, column: position.column + 1 },
+        ];
+        for (var i = 0; i < pawns.length; i++) {
+            const field = this.getField(pawns[i].row, pawns[i].column);
+            if (color == 'B' && i < 2 && this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 24) { // white pawn
+                this.attackedFields.push(figure);
+                break;
+            }
+            if (color == 'W' && i >= 2 && this.fieldOccupancy[field] >= 8 && this.fieldOccupancy[field] < 16) { // black pawn
+                this.attackedFields.push(figure);
+                break;
+            }
+        }
     },
     checkIsKingSafe: function(figureId, originId, fieldId, killId) {
         result = true;
