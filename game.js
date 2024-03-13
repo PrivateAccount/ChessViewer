@@ -623,130 +623,196 @@ const rules = {
         const field = this.getFigureField(figure);
         const position = this.getPosition(field);
         const color = figure >= 0 && figure < 16 || figure >= 32 && figure < 40 ? 'B' : 'W';
-        if (figure == 0 || figure == 7 || figure == 24 || figure == 31 || figure == 3 || figure == 27 || figure >= 32 && figure < 48) { // white or black rook and queen
-            for (var i = position.column - 1; i >= 0; i--) {
-                const field = this.getField(position.row, i);
-                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
-                    this.attackedFields.push(field);
+        for (var i = position.column - 1; i >= 0; i--) {
+            const field = this.getField(position.row, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (color == 'B') {
+                if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
+                    break;
                 }
-                else {
+                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27) { // enemy rook and queen
+                    this.attackedFields.push(figure);
                     break;
                 }
             }
-            for (var i = position.column + 1; i < 8; i++) {
-                const field = this.getField(position.row, i);
-                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
-                    this.attackedFields.push(field);
-                }
-                else {
+            else if (color == 'W') {
+                if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
                     break;
                 }
-            }
-            for (var i = position.row - 1; i >= 0; i--) {
-                const field = this.getField(i, position.column);
-                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
-                    this.attackedFields.push(field);
-                }
-                else {
-                    break;
-                }
-            }
-            for (var i = position.row + 1; i < 8; i++) {
-                const field = this.getField(i, position.column);
-                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
-                    this.attackedFields.push(field);
-                }
-                else {
+                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3) { // enemy rook and queen
+                    this.attackedFields.push(figure);
                     break;
                 }
             }
         }
-        if (figure == 2 || figure == 5 || figure == 26 || figure == 29 || figure == 3 || figure == 27 || figure >= 32 && figure < 48) { // white or black bishop and queen
-            for (var i = position.column - 1, j = position.row - 1; i >= 0 && j >= 0; i--, j--) {
-                const field = this.getField(j, i);
-                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
-                    this.attackedFields.push(field);
+        for (var i = position.column + 1; i < 8; i++) {
+            const field = this.getField(position.row, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (color == 'B') {
+                if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
+                    break;
                 }
-                else {
+                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27) { // enemy rook and queen
+                    this.attackedFields.push(figure);
                     break;
                 }
             }
-            for (var i = position.column + 1, j = position.row + 1; i < 8 && j < 8; i++, j++) {
-                const field = this.getField(j, i);
-                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
-                    this.attackedFields.push(field);
-                }
-                else {
+            else if (color == 'W') {
+                if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
                     break;
                 }
-            }
-            for (var i = position.column + 1, j = position.row - 1; i < 8 && j >= 0; i++, j--) {
-                const field = this.getField(j, i);
-                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
-                    this.attackedFields.push(field);
-                }
-                else {
-                    break;
-                }
-            }
-            for (var i = position.column - 1, j = position.row + 1; i >= 0 && j < 8; i--, j++) {
-                const field = this.getField(j, i);
-                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
-                    this.attackedFields.push(field);
-                }
-                else {
+                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3) { // enemy rook and queen
+                    this.attackedFields.push(figure);
                     break;
                 }
             }
         }
-        if (figure == 1 || figure == 6 || figure == 25 || figure == 30) { // white or black knight
-            if (position.row >= 2 && position.column >= 1) {
-                this.attackedFields.push(this.getField(position.row - 2, position.column - 1));
+        for (var i = position.row - 1; i >= 0; i--) {
+            const field = this.getField(i, position.column);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
             }
-            if (position.row >= 2 && position.column < 7) {
-                this.attackedFields.push(this.getField(position.row - 2, position.column + 1));
+            else if (color == 'B') {
+                if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27) { // enemy rook and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
             }
-            if (position.row >= 1 && position.column >= 2) {
-                this.attackedFields.push(this.getField(position.row - 1, position.column - 2));
-            }
-            if (position.row >= 1 && position.column < 6) {
-                this.attackedFields.push(this.getField(position.row - 1, position.column + 2));
-            }
-            if (position.row < 7 && position.column >= 2) {
-                this.attackedFields.push(this.getField(position.row + 1, position.column - 2));
-            }
-            if (position.row < 7 && position.column < 6) {
-                this.attackedFields.push(this.getField(position.row + 1, position.column + 2));
-            }
-            if (position.row < 6 && position.column >= 1) {
-                this.attackedFields.push(this.getField(position.row + 2, position.column - 1));
-            }
-            if (position.row < 6 && position.column < 7) {
-                this.attackedFields.push(this.getField(position.row + 2, position.column + 1));
+            else if (color == 'W') {
+                if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3) { // enemy rook and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
             }
         }
-        if (figure >= 16 && figure < 24) { // white pawn
-            if (position.column == 0) {
-                this.attackedFields.push(field - 7);
+        for (var i = position.row + 1; i < 8; i++) {
+            const field = this.getField(i, position.column);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
             }
-            else if (position.column == 7) {
-                this.attackedFields.push(field - 9);
+            else if (color == 'B') {
+                if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27) { // enemy rook and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
             }
-            else {
-                this.attackedFields.push(field - 7);
-                this.attackedFields.push(field - 9);
+            else if (color == 'W') {
+                if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3) { // enemy rook and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
             }
         }
-        if (figure >= 8 && figure < 16) { // black pawn
-            if (position.column == 0) {
-                this.attackedFields.push(field + 9);
+        for (var i = position.column - 1, j = position.row - 1; i >= 0 && j >= 0; i--, j--) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
             }
-            else if (position.column == 7) {
-                this.attackedFields.push(field + 7);
+            else if (color == 'B') {
+                if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27) { // enemy bishop and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
             }
-            else {
-                this.attackedFields.push(field + 7);
-                this.attackedFields.push(field + 9);
+            else if (color == 'W') {
+                if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3) { // enemy bishop and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
+            }
+        }
+        for (var i = position.column + 1, j = position.row + 1; i < 8 && j < 8; i++, j++) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (color == 'B') {
+                if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27) { // enemy bishop and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
+            }
+            else if (color == 'W') {
+                if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3) { // enemy bishop and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
+            }
+        }
+        for (var i = position.column + 1, j = position.row - 1; i < 8 && j >= 0; i++, j--) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (color == 'B') {
+                if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27) { // enemy bishop and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
+            }
+            else if (color == 'W') {
+                if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3) { // enemy bishop and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
+            }
+        }
+        for (var i = position.column - 1, j = position.row + 1; i >= 0 && j < 8; i--, j++) {
+            const field = this.getField(j, i);
+            if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1) {
+                continue;
+            }
+            else if (color == 'B') {
+                if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27) { // enemy bishop and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
+            }
+            else if (color == 'W') {
+                if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
+                    break;
+                }
+                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3) { // enemy bishop and queen
+                    this.attackedFields.push(figure);
+                    break;
+                }
             }
         }
     },
@@ -792,19 +858,10 @@ const rules = {
             const orig = { from: this.fieldOccupancy[originId], to: this.fieldOccupancy[fieldId] };
             this.fieldOccupancy[originId] = -1;
             this.fieldOccupancy[fieldId] = figureId;
-            if (currentMove == player.WHITE) {
-                for (var i = 0; i < 16; i++) {
-                    this.getPotentialFields(i);
-                }
-            }
-            if (currentMove == player.BLACK) {
-                for (var i = 16; i < 32; i++) {
-                    this.getPotentialFields(i);
-                }
-            }
+            this.getPotentialFields(kingId);
             this.fieldOccupancy[originId] = orig.from;
             this.fieldOccupancy[fieldId] = orig.to;
-            if (this.isAttacked(kingFieldId)) {
+            if (this.isAttacked(kingId)) {
                 return false;
             }
         }
