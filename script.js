@@ -288,6 +288,17 @@ window.onload = function() {
         }
     }
 
+    function loadPromotions() {
+        promotions = [];
+        for (var i = 0; i < moveSequence.length; i++) {
+            if (moveSequence[i].figure >= 32 && moveSequence[i].figure < 48) {
+                if (!promotions.includes(moveSequence[i].figure)) {
+                    promotions[i - 1] = moveSequence[i].figure;
+                }
+            }
+        }
+    }
+
     function registerMove() {
         const delay = 500;
         const figure = document.getElementById('figure-id').innerText;
@@ -440,6 +451,7 @@ window.onload = function() {
                                 moveSequence.push(moveParams);
                             }
                             updateCounter();
+                            loadPromotions();
                             runForwardButton.disabled = false;
                             runBackwardButton.disabled = true;
                             readOnlyMode = true;
