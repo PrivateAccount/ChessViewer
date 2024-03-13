@@ -28,6 +28,7 @@ window.onload = function() {
     var moveSequence = [];
     var sequenceId = 0;
     var selection = [];
+    var promotions = [];
     var readOnlyMode = false;
     var selectedGame = null;
 
@@ -134,6 +135,7 @@ window.onload = function() {
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
                 clearSelection();
+                updatePromotions('show');
             });
             fieldOccupancy[moveSequence[sequenceId].origin] = -1;
             fieldOccupancy[moveSequence[sequenceId].field] = moveSequence[sequenceId].figure;
@@ -152,6 +154,7 @@ window.onload = function() {
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
                 clearSelection();
+                updatePromotions('hide');
             });
             fieldOccupancy[moveSequence[sequenceId - 1].origin] = moveSequence[sequenceId - 1].figure;
             fieldOccupancy[moveSequence[sequenceId - 1].field] = moveSequence[sequenceId - 1].kill;
@@ -272,6 +275,19 @@ window.onload = function() {
         msg.innerText = '';
     }
 
+    function updatePromotions(mode) {
+        if (mode == 'hide') {
+            if (promotions[sequenceId - 1]) {
+                removeFigure(promotions[sequenceId - 1]);
+            }
+        }
+        if (mode == 'show') {
+            if (promotions[sequenceId - 2]) {
+                restoreFigure(promotions[sequenceId - 2]);
+            }
+        }
+    }
+
     function registerMove() {
         const delay = 500;
         const figure = document.getElementById('figure-id').innerText;
@@ -315,6 +331,7 @@ window.onload = function() {
         const figure = document.getElementById('figure-' + rules.promotion.figure);
         const promotionParams = { figure: rules.promotion.figure, origin: rules.promotion.origin, field: rules.promotion.field, kill: rules.promotion.kill };
         moveSequence.push(promotionParams);
+        promotions[sequenceId] = rules.promotion.figure;
         setTimeout(function() {
             removeFigure(rules.promotion.kill);
             figure.style.left = orig.style.left;
@@ -367,7 +384,8 @@ window.onload = function() {
         }
         for (var i = 0; i < 2 * BOARD_SIZE; i++) {
             removeFigure(i + 32);
-        }    
+        }
+        promotions = [];
         moveSequence = [];
         sequenceId = 0;
         updateCounter();
