@@ -632,7 +632,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27) { // enemy rook and queen
+                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // enemy rook and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -641,7 +641,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3) { // enemy rook and queen
+                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // enemy rook and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -656,7 +656,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27) { // enemy rook and queen
+                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // enemy rook and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -665,7 +665,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3) { // enemy rook and queen
+                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // enemy rook and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -680,7 +680,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27) { // enemy rook and queen
+                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // enemy rook and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -689,7 +689,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3) { // enemy rook and queen
+                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // enemy rook and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -704,7 +704,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27) { // enemy rook and queen
+                else if (this.fieldOccupancy[field] == 24 || this.fieldOccupancy[field] == 31 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // enemy rook and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -713,7 +713,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3) { // enemy rook and queen
+                else if (this.fieldOccupancy[field] == 0 || this.fieldOccupancy[field] == 7 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // enemy rook and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -728,7 +728,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27) { // enemy bishop and queen
+                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // enemy bishop and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -737,7 +737,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3) { // enemy bishop and queen
+                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // enemy bishop and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -752,7 +752,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27) { // enemy bishop and queen
+                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // enemy bishop and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -761,7 +761,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3) { // enemy bishop and queen
+                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // enemy bishop and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -776,7 +776,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27) { // enemy bishop and queen
+                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // enemy bishop and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -785,7 +785,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3) { // enemy bishop and queen
+                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // enemy bishop and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -800,7 +800,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 0 && this.fieldOccupancy[field] < 16 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27) { // enemy bishop and queen
+                else if (this.fieldOccupancy[field] == 26 || this.fieldOccupancy[field] == 29 || this.fieldOccupancy[field] == 27 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // enemy bishop and queen
                     this.attackedFields.push(figure);
                     break;
                 }
@@ -809,7 +809,7 @@ const rules = {
                 if (this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 32 || this.fieldOccupancy[field] >= 40 && this.fieldOccupancy[field] < 48) { // own
                     break;
                 }
-                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3) { // enemy bishop and queen
+                else if (this.fieldOccupancy[field] == 2 || this.fieldOccupancy[field] == 5 || this.fieldOccupancy[field] == 3 || this.fieldOccupancy[field] >= 32 && this.fieldOccupancy[field] < 40) { // enemy bishop and queen
                     this.attackedFields.push(figure);
                     break;
                 }
