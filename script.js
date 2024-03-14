@@ -261,7 +261,7 @@ window.onload = function() {
                         }, delay);
                     }
                 }
-            }    
+            }
         }
     }
 
@@ -315,7 +315,7 @@ window.onload = function() {
             updateColor();
         }, delay);
         buttonSend.disabled = readOnlyMode;
-        const kingId = rules.checkIsKingAttacked(origin, field, true);
+        const kingId = rules.checkIsKingAttacked(origin, field, null);
         if (kingId) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
         }
@@ -353,7 +353,7 @@ window.onload = function() {
             buttonReset.click();
         }, delay);
         buttonSend.disabled = readOnlyMode;
-        const kingId = rules.checkIsKingAttacked(origin, field, false);
+        const kingId = rules.checkIsKingAttacked(origin, field, rules.promotion.figure);
         if (kingId) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
         }
@@ -455,7 +455,7 @@ window.onload = function() {
                             runForwardButton.disabled = false;
                             runBackwardButton.disabled = true;
                             readOnlyMode = true;
-                        });    
+                        });
                     }
                 });
                 parentElement.appendChild(item);
@@ -495,7 +495,7 @@ window.onload = function() {
                 readOnlyMode = true;
                 buttonSend.disabled = true;
                 buttonOpen.click();
-            });    
+            });
         }
     });
 

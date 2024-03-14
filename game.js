@@ -953,9 +953,12 @@ const rules = {
         }
         return result;
     },
-    checkIsKingAttacked: function(origin, field, swap) {
+    checkIsKingAttacked: function(origin, field, figure) {
         const originId = parseInt(origin);
         const fieldId = parseInt(field);
+        if (figure) {
+            this.fieldOccupancy[originId] = figure;
+        }
         const figureId = this.fieldOccupancy[originId];
         var kingId, kingFieldId;
         switch (currentMove) {
@@ -969,10 +972,8 @@ const rules = {
         kingFieldId = this.getFigureField(kingId);
         this.attackedFields = [];
         const orig = { from: this.fieldOccupancy[originId], to: this.fieldOccupancy[fieldId] };
-        if (swap) {
-            this.fieldOccupancy[originId] = -1;
-            this.fieldOccupancy[fieldId] = figureId;
-        }
+        this.fieldOccupancy[originId] = -1;
+        this.fieldOccupancy[fieldId] = figureId;
         for (var i = 0; i < this.fieldOccupancy.length; i++) {
             if (currentMove == player.WHITE) {
                 if ((this.fieldOccupancy[i] >= 16 && this.fieldOccupancy[i] < 32 || this.fieldOccupancy[i] >= 40 && this.fieldOccupancy[i] < 48) && this.fieldOccupancy[i] != -1) {
