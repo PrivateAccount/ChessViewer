@@ -996,10 +996,7 @@ const rules = {
     checkMyKing: function(origin, field, figure) {
         const originId = parseInt(origin);
         const fieldId = parseInt(field);
-        if (figure) {
-            this.fieldOccupancy[originId] = figure;
-        }
-        const figureId = this.fieldOccupancy[originId];
+        const figureId = parseInt(figure);
         var kingId, kingFieldId;
         switch (currentMove) {
             case player.WHITE:
@@ -1011,6 +1008,7 @@ const rules = {
         }
         kingFieldId = this.getFigureField(kingId);
         this.attackedFields = [];
+        this.fieldOccupancy[originId] = figureId;
         const orig = { from: this.fieldOccupancy[originId], to: this.fieldOccupancy[fieldId] };
         this.fieldOccupancy[originId] = -1;
         this.fieldOccupancy[fieldId] = figureId;

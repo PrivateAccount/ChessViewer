@@ -257,7 +257,7 @@ window.onload = function() {
                         const kingId = rules.checkMyKing(originId.innerText, fieldId.innerText, figureId.innerText);
                         if (kingId) {
                             document.getElementById('field-' + kingId.toString()).classList.add('check');
-                        }                
+                        }
                         const msg = document.getElementById('msg');
                         msg.innerText = 'Niedozwolony ruch.';
                         setTimeout(function() {
