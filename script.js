@@ -134,6 +134,8 @@ window.onload = function() {
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
+                runFirstButton.disabled = false;
+                runLastButton.disabled = false;
                 clearSelection();
                 updatePromotions('show');
             });
@@ -153,6 +155,8 @@ window.onload = function() {
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
+                runFirstButton.disabled = false;
+                runLastButton.disabled = false;
                 clearSelection();
                 updatePromotions('hide');
             });
@@ -164,49 +168,53 @@ window.onload = function() {
 
     const runLastButton = document.getElementById('run-last');
     runLastButton.addEventListener('click', function() {
-		runFirstButton.disabled = true;
-		runLastButton.disabled = true;
-		goForward(sequenceId, moveSequence.length, function() {
-			runFirstButton.disabled = false;
-			runLastButton.disabled = false;
-		});
+        runFirstButton.disabled = true;
+        runLastButton.disabled = true;
+        goForward(sequenceId, moveSequence.length, function() {
+            runFirstButton.disabled = false;
+            runLastButton.disabled = false;
+            currentMove = rules.getCurrentMove(moveSequence, sequenceId);
+            updateColor();
+        });
     });
 
-	function goForward(step, steps, callback) {
-		const delay = 500;
-		if (step < steps) {
-			runForwardButton.click();
-			setTimeout(function() {
-				goForward(step + 1, steps, callback);
-			}, delay);
-		}
-		else {
-			callback();
-		}
-	}
+    function goForward(step, steps, callback) {
+        const delay = 500;
+        if (step < steps) {
+            runForwardButton.click();
+            setTimeout(function() {
+                goForward(step + 1, steps, callback);
+            }, delay);
+        }
+        else {
+            callback();
+        }
+    }
 
     const runFirstButton = document.getElementById('run-first');
     runFirstButton.addEventListener('click', function() {
-		runFirstButton.disabled = true;
-		runLastButton.disabled = true;
-		goBackward(sequenceId, moveSequence.length, function() {
-			runFirstButton.disabled = false;
-			runLastButton.disabled = false;
-		});
+        runFirstButton.disabled = true;
+        runLastButton.disabled = true;
+        goBackward(sequenceId, moveSequence.length, function() {
+            runFirstButton.disabled = false;
+            runLastButton.disabled = false;
+            currentMove = rules.getCurrentMove(moveSequence, sequenceId);
+            updateColor();
+        });
     });
 
-	function goBackward(step, steps, callback) {
-		const delay = 500;
-		if (step > 0) {
-			runBackwardButton.click();
-			setTimeout(function() {
-				goBackward(step - 1, steps, callback);
-			}, delay);
-		}
-		else {
-			callback();
-		}
-	}
+    function goBackward(step, steps, callback) {
+        const delay = 500;
+        if (step > 0) {
+            runBackwardButton.click();
+            setTimeout(function() {
+                goBackward(step - 1, steps, callback);
+            }, delay);
+        }
+        else {
+            callback();
+        }
+    }
 
     function moveFigure(idx, position, steps, step, callback) {
         const dt = 10;
@@ -309,7 +317,6 @@ window.onload = function() {
                         setTimeout(function() {
                             buttonReset.click();
                         }, delay);
-
                     }
                 }
             }
@@ -455,6 +462,8 @@ window.onload = function() {
         buttonCancel.click();
         runForwardButton.disabled = true;
         runBackwardButton.disabled = true;
+        runFirstButton.disabled = true;
+        runLastButton.disabled = true;
         buttonSend.disabled = true;
         readOnlyMode = false;
         rules.init();
@@ -505,6 +514,8 @@ window.onload = function() {
                             loadPromotions();
                             runForwardButton.disabled = false;
                             runBackwardButton.disabled = true;
+                            runFirstButton.disabled = true;
+                            runLastButton.disabled = false;
                             readOnlyMode = true;
                         });
                     }

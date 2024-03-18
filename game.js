@@ -1102,4 +1102,13 @@ const rules = {
         }
         return result;
     },
+    getCurrentMove: function(moveSequence, sequenceId) {
+        const owner = moveSequence[sequenceId - 1] ? moveSequence[sequenceId - 1].figure : null;
+        if (owner >= 16 && owner < 32 || owner >= 40 && owner < 48) {
+            return player.BLACK;
+        }
+        else {
+            return player.WHITE;
+        }
+    },
 };
