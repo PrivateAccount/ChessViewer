@@ -993,6 +993,46 @@ const rules = {
         }
         return null;
     },
+    checkMyKing: function(origin, field, figure) {
+        const originId = parseInt(origin);
+        const fieldId = parseInt(field);
+        if (figure) {
+            this.fieldOccupancy[originId] = figure;
+        }
+        const figureId = this.fieldOccupancy[originId];
+        var kingId, kingFieldId;
+        switch (currentMove) {
+            case player.WHITE:
+                kingId = 28;
+                break;
+            case player.BLACK:
+                kingId = 4;
+                break;
+        }
+        kingFieldId = this.getFigureField(kingId);
+        this.attackedFields = [];
+        const orig = { from: this.fieldOccupancy[originId], to: this.fieldOccupancy[fieldId] };
+        this.fieldOccupancy[originId] = -1;
+        this.fieldOccupancy[fieldId] = figureId;
+        for (var i = 0; i < this.fieldOccupancy.length; i++) {
+            if (currentMove == player.BLACK) {
+                if ((this.fieldOccupancy[i] >= 16 && this.fieldOccupancy[i] < 32 || this.fieldOccupancy[i] >= 40 && this.fieldOccupancy[i] < 48) && this.fieldOccupancy[i] != -1) {
+                    this.getAttackedFields(this.fieldOccupancy[i]);
+                }
+            }
+            if (currentMove == player.WHITE) {
+                if ((this.fieldOccupancy[i] >= 0 && this.fieldOccupancy[i] < 16 || this.fieldOccupancy[i] >= 32 && this.fieldOccupancy[i] < 40) && this.fieldOccupancy[i] != -1) {
+                    this.getAttackedFields(this.fieldOccupancy[i]);
+                }
+            }
+        }
+        this.fieldOccupancy[originId] = orig.from;
+        this.fieldOccupancy[fieldId] = orig.to;
+        if (this.isAttacked(kingFieldId)) {
+            return kingFieldId;
+        }
+        return null;
+    },
     isCastling: function(owner, source, destination) {
         var result = false;
         if (owner == 28) { // white

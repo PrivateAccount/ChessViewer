@@ -254,6 +254,10 @@ window.onload = function() {
                         for (var i = 0; i < selection.length; i++) {
                             document.getElementById(selection[i]).classList.add('failed');
                         }
+                        const kingId = rules.checkMyKing(originId.innerText, fieldId.innerText, figureId.innerText);
+                        if (kingId) {
+                            document.getElementById('field-' + kingId.toString()).classList.add('check');
+                        }                
                         const msg = document.getElementById('msg');
                         msg.innerText = 'Niedozwolony ruch.';
                         setTimeout(function() {
