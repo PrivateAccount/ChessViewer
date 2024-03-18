@@ -162,6 +162,52 @@ window.onload = function() {
         }
     });
 
+    const runLastButton = document.getElementById('run-last');
+    runLastButton.addEventListener('click', function() {
+		runFirstButton.disabled = true;
+		runLastButton.disabled = true;
+		goForward(sequenceId, moveSequence.length, function() {
+			runFirstButton.disabled = false;
+			runLastButton.disabled = false;
+		});
+    });
+
+	function goForward(step, steps, callback) {
+		const delay = 500;
+		if (step < steps) {
+			runForwardButton.click();
+			setTimeout(function() {
+				goForward(step + 1, steps, callback);
+			}, delay);
+		}
+		else {
+			callback();
+		}
+	}
+
+    const runFirstButton = document.getElementById('run-first');
+    runFirstButton.addEventListener('click', function() {
+		runFirstButton.disabled = true;
+		runLastButton.disabled = true;
+		goBackward(sequenceId, moveSequence.length, function() {
+			runFirstButton.disabled = false;
+			runLastButton.disabled = false;
+		});
+    });
+
+	function goBackward(step, steps, callback) {
+		const delay = 500;
+		if (step > 0) {
+			runBackwardButton.click();
+			setTimeout(function() {
+				goBackward(step - 1, steps, callback);
+			}, delay);
+		}
+		else {
+			callback();
+		}
+	}
+
     function moveFigure(idx, position, steps, step, callback) {
         const dt = 10;
         const figure = document.getElementById('figure-' + idx);
@@ -263,6 +309,7 @@ window.onload = function() {
                         setTimeout(function() {
                             buttonReset.click();
                         }, delay);
+
                     }
                 }
             }
