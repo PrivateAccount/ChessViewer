@@ -371,6 +371,7 @@ window.onload = function() {
             runForwardButton.click();
             buttonReset.click();
             updateColor();
+            noteStep(sequenceId);
         }, delay);
         buttonSend.disabled = readOnlyMode;
         const kingId = rules.checkIsKingAttacked(origin, field, null);
@@ -417,6 +418,16 @@ window.onload = function() {
         }
     }
 
+    function noteStep(id) {
+        const itemHeight = 25;
+        var parentElement = document.getElementById('games');
+        const item = document.createElement('div');
+        item.id = 'step-' + id.toString();
+        item.innerHTML = '<span class="lp">' + id.toString() + '</span><span class="val">' + moveSequence[id].figure + '</span><span class="val">' + moveSequence[id].origin + '</span><span class="val">' + moveSequence[id].field + '</span><span class="val">' + moveSequence[id].kill + '</span>';
+        parentElement.appendChild(item);
+        parentElement.scrollTop = id * itemHeight;
+    }
+
     const buttonNew = document.getElementById('new');
     buttonNew.addEventListener('click', function() {
         const msg = document.getElementById('msg');
@@ -454,6 +465,10 @@ window.onload = function() {
         for (var i = 0; i < 2 * BOARD_SIZE; i++) {
             removeFigure(i + 32);
         }
+        var parentElement = document.getElementById('games');
+        while (parentElement.firstChild) {
+            parentElement.removeChild(parentElement.firstChild);
+        }
         promotions = [];
         moveSequence = [];
         sequenceId = 0;
@@ -488,7 +503,7 @@ window.onload = function() {
             for (var i = 0; i < items.length; i++) {
                 const item = document.createElement('div');
                 item.id = 'game-' + items[i].id;
-                item.innerHTML = '<a>' + items[i].user + ' : ' + items[i].email + ' : '  + items[i].ip + '<br>' + items[i].modified + ' : [' + items[i].sequences + ']</a>';
+                item.innerHTML = '<a>' + items[i].user + ' : ' + items[i].email + '<br>'  + items[i].ip + '<br>' + items[i].modified + ' : [' + items[i].sequences + ']</a>';
                 const gameId = items[i].id;
                 item.addEventListener('click', function() {
                     buttonNew.click();
@@ -509,6 +524,7 @@ window.onload = function() {
                             for (var i = 0; i < data.length; i++) {
                                 const moveParams = { figure: parseInt(data[i].figure), origin: parseInt(data[i].origin), field: parseInt(data[i].field), kill: parseInt(data[i].killed) };
                                 moveSequence.push(moveParams);
+                                noteStep(i);
                             }
                             updateCounter();
                             loadPromotions();

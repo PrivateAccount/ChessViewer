@@ -160,7 +160,7 @@ span.vertical {
     overflow-y: scroll;
 }
 #games div {
-    margin: 5px 5px 0 5px;
+    margin: 5px;
     padding: 2px;
     border: 1px dotted grey;
 }
@@ -208,4 +208,16 @@ span.vertical {
 #user button {
     width: 80px;
     margin: 1em 0 0 0;
+}
+#games span {
+    display: inline-block;
+    width: 20px;
+    padding: 0 1em;
+    text-align: right;
+}
+#games span.lp {
+    color: brown;
+}
+#games span.val {
+    color: grey;
 }
