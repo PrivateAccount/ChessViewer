@@ -200,7 +200,7 @@ window.onload = function() {
         runFirstButton.disabled = true;
         runLastButton.disabled = true;
         stopRun = false;
-        goBackward(sequenceId, moveSequence.length, function() {
+        goBackward(sequenceId, 0, function() {
             runFirstButton.disabled = false;
             runLastButton.disabled = false;
             currentMove = rules.getCurrentMove(moveSequence, sequenceId);
@@ -210,7 +210,7 @@ window.onload = function() {
 
     function goBackward(step, steps, callback) {
         const delay = 500;
-        if (step > 0 && !stopRun) {
+        if (step > steps && !stopRun) {
             runBackwardButton.click();
             setTimeout(function() {
                 goBackward(step - 1, steps, callback);
@@ -395,6 +395,7 @@ window.onload = function() {
             runForwardButton.disabled = false;
             runForwardButton.click();
             buttonReset.click();
+            noteStep(sequenceId);
         }, delay);
     }
 
@@ -415,6 +416,7 @@ window.onload = function() {
             runForwardButton.disabled = false;
             runForwardButton.click();
             buttonReset.click();
+            noteStep(sequenceId);
         }, delay);
         buttonSend.disabled = readOnlyMode;
         const kingId = rules.checkIsKingAttacked(origin, field, rules.promotion.figure);
@@ -429,7 +431,17 @@ window.onload = function() {
         const item = document.createElement('div');
         item.id = 'step-' + id.toString();
         item.className = 'step';
-        item.innerHTML = '<span class="lp">' + id.toString() + '</span><span class="val">' + moveSequence[id].figure + '</span><span class="val">' + moveSequence[id].origin + '</span><span class="val">' + moveSequence[id].field + '</span><span class="val">' + moveSequence[id].kill + '</span>';
+        item.innerHTML = '<span class="lp">' + (id + 1).toString() + '</span><span class="val">' + moveSequence[id].figure + '</span><span class="val">' + moveSequence[id].origin + '</span><span class="val">' + moveSequence[id].field + '</span><span class="val">' + moveSequence[id].kill + '</span>';
+        item.addEventListener('click', function() {
+            stopRun = false;
+            const id = parseInt(item.id.replace('step-', '')) + 1;
+            if (id < sequenceId) {
+                goBackward(sequenceId, id, function() {});
+            }
+            if (id > sequenceId) {
+                goForward(sequenceId, id, function() {});
+            }
+        });
         parentElement.appendChild(item);
         parentElement.scrollTop = id > pageLength ? (id - pageLength) * itemHeight : 0;
     }
@@ -446,6 +458,8 @@ window.onload = function() {
             element.classList.add('selected');
         }
         parentElement.scrollTop = id > pageLength ? (id - pageLength) * itemHeight : 0;
+        currentMove = rules.getCurrentMove(moveSequence, sequenceId);
+        updateColor();
     }
 
     const buttonNew = document.getElementById('new');
