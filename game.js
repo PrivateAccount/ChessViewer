@@ -159,11 +159,13 @@ const rules = {
                     result = this.checkFreeFields(source, destination);
                 }
             }
-            if (owner == 24) {
-                this.castlingBreak.push('58');
-            }
-            if (owner == 31) {
-                this.castlingBreak.push('62');
+            if (result) {
+                if (owner == 24) {
+                    this.castlingBreak.push('58');
+                }
+                if (owner == 31) {
+                    this.castlingBreak.push('62');
+                }
             }
         }
         else if (owner == 0 || owner == 7) { // black rook
@@ -172,11 +174,13 @@ const rules = {
                     result = this.checkFreeFields(source, destination);
                 }
             }
-            if (owner == 0) {
-                this.castlingBreak.push('2');
-            }
-            if (owner == 7) {
-                this.castlingBreak.push('6');
+            if (result) {
+                if (owner == 0) {
+                    this.castlingBreak.push('2');
+                }
+                if (owner == 7) {
+                    this.castlingBreak.push('6');
+                }
             }
         }
         else if (owner == 26 || owner == 29) { // white bishop
