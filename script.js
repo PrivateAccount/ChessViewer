@@ -31,6 +31,7 @@ window.onload = function() {
     var promotions = [];
     var readOnlyMode = false;
     var selectedGame = null;
+    var stopRun = false;
 
     const fields = document.getElementById('fields');
 
@@ -172,6 +173,7 @@ window.onload = function() {
     runLastButton.addEventListener('click', function() {
         runFirstButton.disabled = true;
         runLastButton.disabled = true;
+        stopRun = false;
         goForward(sequenceId, moveSequence.length, function() {
             runFirstButton.disabled = false;
             runLastButton.disabled = false;
@@ -182,7 +184,7 @@ window.onload = function() {
 
     function goForward(step, steps, callback) {
         const delay = 500;
-        if (step < steps) {
+        if (step < steps && !stopRun) {
             runForwardButton.click();
             setTimeout(function() {
                 goForward(step + 1, steps, callback);
@@ -197,6 +199,7 @@ window.onload = function() {
     runFirstButton.addEventListener('click', function() {
         runFirstButton.disabled = true;
         runLastButton.disabled = true;
+        stopRun = false;
         goBackward(sequenceId, moveSequence.length, function() {
             runFirstButton.disabled = false;
             runLastButton.disabled = false;
@@ -207,7 +210,7 @@ window.onload = function() {
 
     function goBackward(step, steps, callback) {
         const delay = 500;
-        if (step > 0) {
+        if (step > 0 && !stopRun) {
             runBackwardButton.click();
             setTimeout(function() {
                 goBackward(step - 1, steps, callback);
@@ -489,6 +492,7 @@ window.onload = function() {
         promotions = [];
         moveSequence = [];
         sequenceId = 0;
+        stopRun = false;
         updateCounter();
         buttonReset.click();
         buttonCancel.click();
@@ -550,7 +554,7 @@ window.onload = function() {
                             runBackwardButton.disabled = true;
                             runFirstButton.disabled = true;
                             runLastButton.disabled = false;
-                            readOnlyMode = true;
+                            readOnlyMode = false;
                         });
                     }
                 });
@@ -609,6 +613,11 @@ window.onload = function() {
         document.getElementById('field-id').innerText = '--';
         document.getElementById('kill-id').innerText = '--';
         clearSelection();
+    });
+
+    const buttonStop = document.getElementById('stop');
+    buttonStop.addEventListener('click', function() {
+        stopRun = true;
     });
 
     rules.init();
