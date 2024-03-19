@@ -138,6 +138,7 @@ window.onload = function() {
                 runLastButton.disabled = false;
                 clearSelection();
                 updatePromotions('show');
+                selectStep(sequenceId);
             });
             fieldOccupancy[moveSequence[sequenceId].origin] = -1;
             fieldOccupancy[moveSequence[sequenceId].field] = moveSequence[sequenceId].figure;
@@ -159,6 +160,7 @@ window.onload = function() {
                 runLastButton.disabled = false;
                 clearSelection();
                 updatePromotions('hide');
+                selectStep(sequenceId);
             });
             fieldOccupancy[moveSequence[sequenceId - 1].origin] = moveSequence[sequenceId - 1].figure;
             fieldOccupancy[moveSequence[sequenceId - 1].field] = moveSequence[sequenceId - 1].kill;
@@ -277,7 +279,7 @@ window.onload = function() {
             pieceId = 'figure-' + id.toString();
             placeId = 'field-' + figurePositions[id].toString();
         }
-        if (sequenceId == moveSequence.length) {
+        if (!readOnlyMode && sequenceId == moveSequence.length) {
             if (selection.length == 0) {
                 if (pieceId != '--' && pieceId != '-1' && pieceId != 'figure--1') {
                     figureId.innerText = pieceId.replace('figure-', '');
@@ -419,13 +421,28 @@ window.onload = function() {
     }
 
     function noteStep(id) {
-        const itemHeight = 25;
+        const itemHeight = 26, pageLength = 17;
         var parentElement = document.getElementById('games');
         const item = document.createElement('div');
         item.id = 'step-' + id.toString();
+        item.className = 'step';
         item.innerHTML = '<span class="lp">' + id.toString() + '</span><span class="val">' + moveSequence[id].figure + '</span><span class="val">' + moveSequence[id].origin + '</span><span class="val">' + moveSequence[id].field + '</span><span class="val">' + moveSequence[id].kill + '</span>';
         parentElement.appendChild(item);
-        parentElement.scrollTop = id * itemHeight;
+        parentElement.scrollTop = id > pageLength ? (id - pageLength) * itemHeight : 0;
+    }
+
+    function selectStep(id) {
+        const itemHeight = 26, pageLength = 17;
+        var parentElement = document.getElementById('games');
+        var items = parentElement.children;
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.remove('selected');
+        }
+        const element = document.getElementById('step-' + (id - 1).toString());
+        if (element) {
+            element.classList.add('selected');
+        }
+        parentElement.scrollTop = id > pageLength ? (id - pageLength) * itemHeight : 0;
     }
 
     const buttonNew = document.getElementById('new');
@@ -503,6 +520,7 @@ window.onload = function() {
             for (var i = 0; i < items.length; i++) {
                 const item = document.createElement('div');
                 item.id = 'game-' + items[i].id;
+                item.className = 'game';
                 item.innerHTML = '<a>' + items[i].user + ' : ' + items[i].email + '<br>'  + items[i].ip + '<br>' + items[i].modified + ' : [' + items[i].sequences + ']</a>';
                 const gameId = items[i].id;
                 item.addEventListener('click', function() {
@@ -539,6 +557,7 @@ window.onload = function() {
                 parentElement.appendChild(item);
             }
         });
+        readOnlyMode = true;
         buttonSend.disabled = true;
         buttonCancel.click();
     });

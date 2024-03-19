@@ -177,6 +177,9 @@ span.vertical {
 #games div.selected a {
     color: yellow;
 }
+#games div.selected span {
+    color: yellow;
+}
 #msg {
     text-align: center;
     color: darkgreen;
