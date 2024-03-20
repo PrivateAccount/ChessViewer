@@ -501,10 +501,10 @@ window.onload = function() {
         updateCounter();
         buttonReset.click();
         buttonCancel.click();
-        runForwardButton.disabled = true;
-        runBackwardButton.disabled = true;
-        runFirstButton.disabled = true;
-        runLastButton.disabled = true;
+        runForwardButton.disabled = false;
+        runBackwardButton.disabled = false;
+        runFirstButton.disabled = false;
+        runLastButton.disabled = false;
         buttonSend.disabled = true;
         readOnlyMode = false;
         rules.init();
