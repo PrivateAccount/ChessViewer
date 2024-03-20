@@ -575,9 +575,9 @@ window.onload = function() {
                 parentElement.appendChild(item);
             }
         });
-        readOnlyMode = true;
-        buttonSend.disabled = true;
+        buttonNew.click();
         buttonCancel.click();
+        readOnlyMode = true;
     });
 
     const buttonSend = document.getElementById('send');
