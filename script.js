@@ -30,7 +30,6 @@ window.onload = function() {
     var selection = [];
     var promotions = [];
     var readOnlyMode = false;
-    var selectedGame = null;
     var stopRun = false;
 
     const fields = document.getElementById('fields');
@@ -135,8 +134,6 @@ window.onload = function() {
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
-                runFirstButton.disabled = false;
-                runLastButton.disabled = false;
                 clearSelection();
                 updatePromotions('show');
                 selectStep(sequenceId);
@@ -157,8 +154,6 @@ window.onload = function() {
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
                 runBackwardButton.disabled = sequenceId == 0;
-                runFirstButton.disabled = false;
-                runLastButton.disabled = false;
                 clearSelection();
                 updatePromotions('hide');
                 selectStep(sequenceId);
@@ -466,10 +461,6 @@ window.onload = function() {
     buttonNew.addEventListener('click', function() {
         const msg = document.getElementById('msg');
         msg.innerText = 'Inicjalizacja nowej gry.';
-        const item = document.getElementById(selectedGame);
-        if (item) {
-            item.classList.remove('selected', 'failed', 'check');
-        }
         fieldOccupancy = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             if (i < 2 * BOARD_SIZE) {
@@ -534,7 +525,6 @@ window.onload = function() {
             while (parentElement.firstChild) {
                 parentElement.removeChild(parentElement.firstChild);
             }
-            selectedGame = null;
             for (var i = 0; i < items.length; i++) {
                 const item = document.createElement('div');
                 item.id = 'game-' + items[i].id;
@@ -543,34 +533,31 @@ window.onload = function() {
                 const gameId = items[i].id;
                 item.addEventListener('click', function() {
                     buttonNew.click();
-                    if (item.id != selectedGame) {
-                        selectedGame = item.id;
-                        const childrenElements = parentElement.children;
-                        for (var i = 0; i < childrenElements.length; i++) {
-                            const childElement = childrenElements[i];
-                            childElement.classList.remove('selected', 'failed', 'check');
-                        }
-                        item.classList.add('selected');
-                        fetch('https://my-notes.pl/api/get_game.php?id=' + gameId, {
-                            method: "GET",
-                            headers: { "Content-type": "application/json; charset=UTF-8" }
-                        }).then((response) => response.json()).then((response) => {
-                            msg.innerText = response.message;
-                            const data = response.data;
-                            for (var i = 0; i < data.length; i++) {
-                                const moveParams = { figure: parseInt(data[i].figure), origin: parseInt(data[i].origin), field: parseInt(data[i].field), kill: parseInt(data[i].killed) };
-                                moveSequence.push(moveParams);
-                                noteStep(i);
-                            }
-                            updateCounter();
-                            loadPromotions();
-                            runForwardButton.disabled = false;
-                            runBackwardButton.disabled = true;
-                            runFirstButton.disabled = true;
-                            runLastButton.disabled = false;
-                            readOnlyMode = false;
-                        });
+                    const childrenElements = parentElement.children;
+                    for (var i = 0; i < childrenElements.length; i++) {
+                        const childElement = childrenElements[i];
+                        childElement.classList.remove('selected', 'failed', 'check');
                     }
+                    item.classList.add('selected');
+                    fetch('https://my-notes.pl/api/get_game.php?id=' + gameId, {
+                        method: "GET",
+                        headers: { "Content-type": "application/json; charset=UTF-8" }
+                    }).then((response) => response.json()).then((response) => {
+                        msg.innerText = response.message;
+                        const data = response.data;
+                        for (var i = 0; i < data.length; i++) {
+                            const moveParams = { figure: parseInt(data[i].figure), origin: parseInt(data[i].origin), field: parseInt(data[i].field), kill: parseInt(data[i].killed) };
+                            moveSequence.push(moveParams);
+                            noteStep(i);
+                        }
+                        updateCounter();
+                        loadPromotions();
+                        runForwardButton.disabled = false;
+                        runBackwardButton.disabled = false;
+                        runFirstButton.disabled = false;
+                        runLastButton.disabled = false;
+                        readOnlyMode = false;
+                    });
                 });
                 parentElement.appendChild(item);
             }
