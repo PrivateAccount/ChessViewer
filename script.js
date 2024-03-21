@@ -127,7 +127,7 @@ window.onload = function() {
     const runForwardButton = document.getElementById('run-forward');
     runForwardButton.addEventListener('click', function() {
         runForwardButton.disabled = true;
-        if (sequenceId < moveSequence.length) {
+        if (sequenceId < moveSequence.length && moveSequence[sequenceId]) {
             moveFigure(moveSequence[sequenceId].figure, fieldPositions[moveSequence[sequenceId].field], steps, 0, function() {
                 removeFigure(moveSequence[sequenceId].kill);
                 sequenceId++;
@@ -147,7 +147,7 @@ window.onload = function() {
     const runBackwardButton = document.getElementById('run-backward');
     runBackwardButton.addEventListener('click', function() {
         runBackwardButton.disabled = true;
-        if (sequenceId > 0) {
+        if (sequenceId > 0 && moveSequence[sequenceId - 1]) {
             moveFigure(moveSequence[sequenceId - 1].figure, fieldPositions[moveSequence[sequenceId - 1].origin], steps, 0, function() {
                 restoreFigure(moveSequence[sequenceId - 1].kill);
                 sequenceId--;
@@ -168,10 +168,14 @@ window.onload = function() {
     runLastButton.addEventListener('click', function() {
         runFirstButton.disabled = true;
         runLastButton.disabled = true;
+        buttonNew.disabled = true;
+        buttonOpen.disabled = true;
         stopRun = false;
         goForward(sequenceId, moveSequence.length, function() {
             runFirstButton.disabled = false;
             runLastButton.disabled = false;
+            buttonNew.disabled = false;
+            buttonOpen.disabled = false;
             currentMove = rules.getCurrentMove(moveSequence, sequenceId);
             updateColor();
         });
@@ -194,10 +198,14 @@ window.onload = function() {
     runFirstButton.addEventListener('click', function() {
         runFirstButton.disabled = true;
         runLastButton.disabled = true;
+        buttonNew.disabled = true;
+        buttonOpen.disabled = true;
         stopRun = false;
         goBackward(sequenceId, 0, function() {
             runFirstButton.disabled = false;
             runLastButton.disabled = false;
+            buttonNew.disabled = false;
+            buttonOpen.disabled = false;
             currentMove = rules.getCurrentMove(moveSequence, sequenceId);
             updateColor();
         });
@@ -432,12 +440,20 @@ window.onload = function() {
         item.innerHTML = '<span class="lp">' + (id + 1).toString() + '</span><span class="val">' + moveSequence[id].figure + '</span><span class="val">' + moveSequence[id].origin + '</span><span class="val">' + moveSequence[id].field + '</span><span class="val">' + moveSequence[id].kill + '</span>';
         item.addEventListener('click', function() {
             stopRun = false;
+            buttonNew.disabled = true;
+            buttonOpen.disabled = true;
             const id = parseInt(item.id.replace('step-', '')) + 1;
             if (id < sequenceId) {
-                goBackward(sequenceId, id, function() {});
+                goBackward(sequenceId, id, function() {
+                    buttonNew.disabled = false;
+                    buttonOpen.disabled = false;
+                });
             }
             if (id > sequenceId) {
-                goForward(sequenceId, id, function() {});
+                goForward(sequenceId, id, function() {
+                    buttonNew.disabled = false;
+                    buttonOpen.disabled = false;
+                });
             }
         });
         parentElement.appendChild(item);
