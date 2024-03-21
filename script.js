@@ -127,7 +127,7 @@ window.onload = function() {
     const runForwardButton = document.getElementById('run-forward');
     runForwardButton.addEventListener('click', function() {
         runForwardButton.disabled = true;
-        if (sequenceId < moveSequence.length) {
+        if (sequenceId < moveSequence.length && moveSequence[sequenceId]) {
             moveFigure(moveSequence[sequenceId].figure, fieldPositions[moveSequence[sequenceId].field], steps, 0, function() {
                 if (moveSequence[sequenceId]) {
                     removeFigure(moveSequence[sequenceId].kill);
@@ -149,7 +149,7 @@ window.onload = function() {
     const runBackwardButton = document.getElementById('run-backward');
     runBackwardButton.addEventListener('click', function() {
         runBackwardButton.disabled = true;
-        if (sequenceId > 0) {
+        if (sequenceId > 0 && moveSequence[sequenceId - 1]) {
             moveFigure(moveSequence[sequenceId - 1].figure, fieldPositions[moveSequence[sequenceId - 1].origin], steps, 0, function() {
                 if (moveSequence[sequenceId - 1]) {
                     restoreFigure(moveSequence[sequenceId - 1].kill);
@@ -437,7 +437,7 @@ window.onload = function() {
 
     function noteStep(id) {
         const itemHeight = 26, pageLength = 17;
-        var parentElement = document.getElementById('games');
+        const parentElement = document.getElementById('games');
         const item = document.createElement('div');
         item.id = 'step-' + id.toString();
         item.className = 'step';
@@ -466,7 +466,7 @@ window.onload = function() {
 
     function selectStep(id) {
         const itemHeight = 26, pageLength = 17;
-        var parentElement = document.getElementById('games');
+        const parentElement = document.getElementById('games');
         var items = parentElement.children;
         for (var i = 0; i < items.length; i++) {
             items[i].classList.remove('selected');
@@ -513,7 +513,7 @@ window.onload = function() {
         for (var i = 0; i < 2 * BOARD_SIZE; i++) {
             removeFigure(i + 32);
         }
-        var parentElement = document.getElementById('games');
+        const parentElement = document.getElementById('games');
         while (parentElement.firstChild) {
             parentElement.removeChild(parentElement.firstChild);
         }
@@ -544,7 +544,7 @@ window.onload = function() {
         }).then((response) => response.json()).then((response) => {
             msg.innerText = response.message;
             const items = response.data;
-            var parentElement = document.getElementById('games');
+            const parentElement = document.getElementById('games');
             while (parentElement.firstChild) {
                 parentElement.removeChild(parentElement.firstChild);
             }
@@ -556,12 +556,6 @@ window.onload = function() {
                 const gameId = items[i].id;
                 item.addEventListener('click', function() {
                     buttonNew.click();
-                    const childrenElements = parentElement.children;
-                    for (var i = 0; i < childrenElements.length; i++) {
-                        const childElement = childrenElements[i];
-                        childElement.classList.remove('selected', 'failed', 'check');
-                    }
-                    item.classList.add('selected');
                     fetch('https://my-notes.pl/api/get_game.php?id=' + gameId, {
                         method: "GET",
                         headers: { "Content-type": "application/json; charset=UTF-8" }
