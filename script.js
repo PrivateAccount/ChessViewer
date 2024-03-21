@@ -127,9 +127,11 @@ window.onload = function() {
     const runForwardButton = document.getElementById('run-forward');
     runForwardButton.addEventListener('click', function() {
         runForwardButton.disabled = true;
-        if (sequenceId < moveSequence.length && moveSequence[sequenceId]) {
+        if (sequenceId < moveSequence.length) {
             moveFigure(moveSequence[sequenceId].figure, fieldPositions[moveSequence[sequenceId].field], steps, 0, function() {
-                removeFigure(moveSequence[sequenceId].kill);
+                if (moveSequence[sequenceId]) {
+                    removeFigure(moveSequence[sequenceId].kill);
+                }
                 sequenceId++;
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
@@ -147,9 +149,11 @@ window.onload = function() {
     const runBackwardButton = document.getElementById('run-backward');
     runBackwardButton.addEventListener('click', function() {
         runBackwardButton.disabled = true;
-        if (sequenceId > 0 && moveSequence[sequenceId - 1]) {
+        if (sequenceId > 0) {
             moveFigure(moveSequence[sequenceId - 1].figure, fieldPositions[moveSequence[sequenceId - 1].origin], steps, 0, function() {
-                restoreFigure(moveSequence[sequenceId - 1].kill);
+                if (moveSequence[sequenceId - 1]) {
+                    restoreFigure(moveSequence[sequenceId - 1].kill);
+                }
                 sequenceId--;
                 updateCounter();
                 runForwardButton.disabled = sequenceId == moveSequence.length;
@@ -516,7 +520,7 @@ window.onload = function() {
         promotions = [];
         moveSequence = [];
         sequenceId = 0;
-        stopRun = false;
+        stopRun = true;
         updateCounter();
         buttonReset.click();
         buttonCancel.click();
