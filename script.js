@@ -303,6 +303,7 @@ window.onload = function() {
                             registerPromotion();
                         }
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
+                        buttonSend.disabled = readOnlyMode;
                     }
                     else {
                         for (var i = 0; i < selection.length; i++) {
@@ -373,7 +374,6 @@ window.onload = function() {
             updateColor();
             noteStep(sequenceId);
         }, delay);
-        buttonSend.disabled = readOnlyMode;
         const kingId = rules.checkIsKingAttacked(origin, field, null);
         if (kingId) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
@@ -392,6 +392,10 @@ window.onload = function() {
             buttonReset.click();
             noteStep(sequenceId);
         }, delay);
+        const kingId = rules.checkIsKingAttacked(rules.castling.origin, rules.castling.field, null);
+        if (kingId) {
+            document.getElementById('field-' + kingId.toString()).classList.add('check');
+        }
     }
 
     function registerPromotion() {
@@ -413,7 +417,6 @@ window.onload = function() {
             buttonReset.click();
             noteStep(sequenceId);
         }, delay);
-        buttonSend.disabled = readOnlyMode;
         const kingId = rules.checkIsKingAttacked(origin, field, rules.promotion.figure);
         if (kingId) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
