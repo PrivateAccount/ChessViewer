@@ -1117,14 +1117,14 @@ const rules = {
     isPassant: function(owner, source, destination) {
         var result = false;
         if (owner >= 8 && owner < 16) { // black pawn
-            if (source >= 32 && source < 40) {
+            if (source >= 32 && source < 40 && this.fieldOccupancy[parseInt(destination) - 8] >= 16 && this.fieldOccupancy[parseInt(destination) - 8] < 24) {
                 this.passant = { figure: parseInt(owner), origin: parseInt(source), field: parseInt(destination), kill: this.fieldOccupancy[parseInt(destination) - 8] };
                 this.fieldOccupancy[parseInt(destination) - 8] = -1;
                 result = true;
             }
         }
         if (owner >= 16 && owner < 24) { // white pawn
-            if (source >= 24 && source < 32) {
+            if (source >= 24 && source < 32 && this.fieldOccupancy[parseInt(destination) + 8] >= 8 && this.fieldOccupancy[parseInt(destination) + 8] < 16) {
                 this.passant = { figure: parseInt(owner), origin: parseInt(source), field: parseInt(destination), kill: this.fieldOccupancy[parseInt(destination) + 8] };
                 this.fieldOccupancy[parseInt(destination) + 8] = -1;
                 result = true;
