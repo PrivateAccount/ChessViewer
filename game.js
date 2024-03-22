@@ -130,8 +130,8 @@ const rules = {
                 if (source >= 48 && source < 56) {
                     result = source - destination == 8 || source - destination == 16 && this.checkFreeFields(source, destination);
                 }
-                else if (source >= 24 && source < 32) {
-                    result = this.fieldOccupancy[parseInt(destination) + 8] >= 8 && this.fieldOccupancy[parseInt(destination) + 8] < 16 && (source - destination == 7 || source - destination == 9);
+                else if (source >= 24 && source < 32 && (source - destination == 7 || source - destination == 9)) {
+                    result = this.fieldOccupancy[parseInt(destination) + 8] >= 8 && this.fieldOccupancy[parseInt(destination) + 8] < 16;
                 }
                 else {
                     result = source - destination == 8;
@@ -148,8 +148,8 @@ const rules = {
                 if (source >= 8 && source < 16) {
                     result = destination - source == 8 || destination - source == 16 && this.checkFreeFields(source, destination);
                 }
-                else if (source >= 32 && source < 40) {
-                    result = this.fieldOccupancy[parseInt(destination) - 8] >= 16 && this.fieldOccupancy[parseInt(destination) - 8] < 24 && (destination - source == 7 || destination - source == 9);
+                else if (source >= 32 && source < 40 && (destination - source == 7 || destination - source == 9)) {
+                    result = this.fieldOccupancy[parseInt(destination) - 8] >= 16 && this.fieldOccupancy[parseInt(destination) - 8] < 24;
                 }
                 else {
                     result = destination - source == 8;
