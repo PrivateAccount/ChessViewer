@@ -314,6 +314,9 @@ window.onload = function() {
                         if (rules.isPromotion(figureId.innerText, fieldId.innerText)) {
                             registerPromotion();
                         }
+                        if (rules.isPassant(figureId.innerText, originId.innerText, fieldId.innerText)) {
+                            registerPassant();
+                        }
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
                         buttonSend.disabled = readOnlyMode;
                     }
@@ -430,6 +433,22 @@ window.onload = function() {
             noteStep(sequenceId);
         }, delay);
         const kingId = rules.checkIsKingAttacked(origin, field, rules.promotion.figure);
+        if (kingId) {
+            document.getElementById('field-' + kingId.toString()).classList.add('check');
+        }
+    }
+
+    function registerPassant() {
+        const delay = 1000;
+        const origin = document.getElementById('origin-id').innerText;
+        const field = document.getElementById('field-id').innerText;
+        moveSequence[sequenceId].kill = rules.passant.kill;
+        setTimeout(function() {
+            runForwardButton.disabled = false;
+            runForwardButton.click();
+            buttonReset.click();
+        }, delay);
+        const kingId = rules.checkIsKingAttacked(origin, field, rules.passant.figure);
         if (kingId) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
         }

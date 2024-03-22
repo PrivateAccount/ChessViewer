@@ -9,11 +9,13 @@ const rules = {
     castlingBreak: [],
     castling: {},
     promotion: {},
+    passant: {},
     init: function() {
         currentMove = player.WHITE;
         this.castlingBreak = [];
         this.castling = { figure: null, origin: null, field: null };
         this.promotion = { figure: null, origin: null, field: null, kill: null };
+        this.passant = { figure: null, origin: null, field: null, kill: null };
     },
     getPosition: function(origin) {
         return { row: Math.floor(origin / 8), column: Math.floor(origin % 8) };
@@ -128,6 +130,9 @@ const rules = {
                 if (source >= 48 && source < 56) {
                     result = source - destination == 8 || source - destination == 16 && this.checkFreeFields(source, destination);
                 }
+                else if (source >= 24 && source < 32) {
+                    result = this.fieldOccupancy[parseInt(destination) + 8] >= 8 && this.fieldOccupancy[parseInt(destination) + 8] < 16 && (source - destination == 7 || source - destination == 9);
+                }
                 else {
                     result = source - destination == 8;
                 }    
@@ -142,6 +147,9 @@ const rules = {
             if (kill == '--' || kill == '-1') {
                 if (source >= 8 && source < 16) {
                     result = destination - source == 8 || destination - source == 16 && this.checkFreeFields(source, destination);
+                }
+                else if (source >= 32 && source < 40) {
+                    result = this.fieldOccupancy[parseInt(destination) - 8] >= 16 && this.fieldOccupancy[parseInt(destination) - 8] < 24 && (destination - source == 7 || destination - source == 9);
                 }
                 else {
                     result = destination - source == 8;
@@ -1103,6 +1111,24 @@ const rules = {
         }
         if (result) {
             this.fieldOccupancy[destination] = parseInt(owner - 8) + 32;
+        }
+        return result;
+    },
+    isPassant: function(owner, source, destination) {
+        var result = false;
+        if (owner >= 8 && owner < 16) { // black pawn
+            if (source >= 32 && source < 40) {
+                this.passant = { figure: parseInt(owner), origin: parseInt(source), field: parseInt(destination), kill: this.fieldOccupancy[parseInt(destination) - 8] };
+                this.fieldOccupancy[parseInt(destination) - 8] = -1;
+                result = true;
+            }
+        }
+        if (owner >= 16 && owner < 24) { // white pawn
+            if (source >= 24 && source < 32) {
+                this.passant = { figure: parseInt(owner), origin: parseInt(source), field: parseInt(destination), kill: this.fieldOccupancy[parseInt(destination) + 8] };
+                this.fieldOccupancy[parseInt(destination) + 8] = -1;
+                result = true;
+            }
         }
         return result;
     },
