@@ -10,12 +10,14 @@ const rules = {
     castling: {},
     promotion: {},
     passant: {},
+    passantReady: false,
     init: function() {
         currentMove = player.WHITE;
         this.castlingBreak = [];
         this.castling = { figure: null, origin: null, field: null };
         this.promotion = { figure: null, origin: null, field: null, kill: null };
         this.passant = { figure: null, origin: null, field: null, kill: null };
+        this.passantReady = false;
     },
     getPosition: function(origin) {
         return { row: Math.floor(origin / 8), column: Math.floor(origin % 8) };
@@ -130,12 +132,12 @@ const rules = {
                 if (source >= 48 && source < 56) {
                     result = source - destination == 8 || source - destination == 16 && this.checkFreeFields(source, destination);
                 }
-                else if (source >= 24 && source < 32 && (source - destination == 7 || source - destination == 9)) {
+                else if (this.passantReady && source >= 24 && source < 32 && (source - destination == 7 || source - destination == 9)) {
                     result = this.fieldOccupancy[parseInt(destination) + 8] >= 8 && this.fieldOccupancy[parseInt(destination) + 8] < 16;
                 }
                 else {
                     result = source - destination == 8;
-                }    
+                }
             }
             else {
                 if (kill >= 0 && kill < 16 || kill >= 32 && kill < 40) {
@@ -148,12 +150,12 @@ const rules = {
                 if (source >= 8 && source < 16) {
                     result = destination - source == 8 || destination - source == 16 && this.checkFreeFields(source, destination);
                 }
-                else if (source >= 32 && source < 40 && (destination - source == 7 || destination - source == 9)) {
+                else if (this.passantReady && source >= 32 && source < 40 && (destination - source == 7 || destination - source == 9)) {
                     result = this.fieldOccupancy[parseInt(destination) - 8] >= 16 && this.fieldOccupancy[parseInt(destination) - 8] < 24;
                 }
                 else {
                     result = destination - source == 8;
-                }    
+                }
             }
             else {
                 if (kill >= 16 && kill < 32 || kill >= 40 && kill < 48) {
@@ -1132,8 +1134,25 @@ const rules = {
         }
         return result;
     },
+    setPassantReady: function(moveSequence, sequenceId) {
+        const owner = moveSequence[sequenceId - 1].figure;
+        const source = moveSequence[sequenceId - 1].origin;
+        const destination = moveSequence[sequenceId - 1].field;
+        this.passantReady = false;
+        if (owner >= 16 && owner < 24) { // white pawn
+            if (source - destination == 16 && this.checkFreeFields(source, destination)) {
+                this.passantReady = true;
+            }
+        }
+        else if (owner >= 8 && owner < 16) { // black pawn
+            if (destination - source == 16 && this.checkFreeFields(source, destination)) {
+                this.passantReady = true;
+            }
+        }
+    },
     getCurrentMove: function(moveSequence, sequenceId) {
         if (sequenceId > 0 && sequenceId <= moveSequence.length) {
+            this.setPassantReady(moveSequence, sequenceId);
             const owner = moveSequence[sequenceId - 1].figure;
             if (owner >= 16 && owner < 32 || owner >= 40 && owner < 48) {
                 return player.BLACK;
