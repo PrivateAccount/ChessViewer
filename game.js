@@ -10,14 +10,14 @@ const rules = {
     castling: {},
     promotion: {},
     passant: {},
-    passantReady: false,
+    passantReady: null,
     init: function() {
         currentMove = player.WHITE;
         this.castlingBreak = [];
         this.castling = { figure: null, origin: null, field: null };
         this.promotion = { figure: null, origin: null, field: null, kill: null };
         this.passant = { figure: null, origin: null, field: null, kill: null };
-        this.passantReady = false;
+        this.passantReady = null;
     },
     getPosition: function(origin) {
         return { row: Math.floor(origin / 8), column: Math.floor(origin % 8) };
@@ -132,7 +132,7 @@ const rules = {
                 if (source >= 48 && source < 56) {
                     result = source - destination == 8 || source - destination == 16 && this.checkFreeFields(source, destination);
                 }
-                else if (this.passantReady && source >= 24 && source < 32 && (source - destination == 7 || source - destination == 9)) {
+                else if (this.passantReady == destination && source >= 24 && source < 32 && (source - destination == 7 || source - destination == 9)) {
                     result = this.fieldOccupancy[parseInt(destination) + 8] >= 8 && this.fieldOccupancy[parseInt(destination) + 8] < 16;
                 }
                 else {
@@ -150,7 +150,7 @@ const rules = {
                 if (source >= 8 && source < 16) {
                     result = destination - source == 8 || destination - source == 16 && this.checkFreeFields(source, destination);
                 }
-                else if (this.passantReady && source >= 32 && source < 40 && (destination - source == 7 || destination - source == 9)) {
+                else if (this.passantReady == destination && source >= 32 && source < 40 && (destination - source == 7 || destination - source == 9)) {
                     result = this.fieldOccupancy[parseInt(destination) - 8] >= 16 && this.fieldOccupancy[parseInt(destination) - 8] < 24;
                 }
                 else {
@@ -1138,15 +1138,15 @@ const rules = {
         const owner = moveSequence[sequenceId - 1].figure;
         const source = moveSequence[sequenceId - 1].origin;
         const destination = moveSequence[sequenceId - 1].field;
-        this.passantReady = false;
-        if (owner >= 16 && owner < 24) { // white pawn
-            if (source - destination == 16 && this.checkFreeFields(source, destination)) {
-                this.passantReady = true;
+        this.passantReady = null;
+        if (owner >= 8 && owner < 16) { // black pawn
+            if (destination - source == 16 && this.checkFreeFields(source, destination)) {
+                this.passantReady = destination - 8;
             }
         }
-        else if (owner >= 8 && owner < 16) { // black pawn
-            if (destination - source == 16 && this.checkFreeFields(source, destination)) {
-                this.passantReady = true;
+        if (owner >= 16 && owner < 24) { // white pawn
+            if (source - destination == 16 && this.checkFreeFields(source, destination)) {
+                this.passantReady = destination + 8;
             }
         }
     },
