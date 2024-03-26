@@ -496,6 +496,7 @@ window.onload = function() {
         }
         parentElement.scrollTop = id > pageLength ? (id - pageLength) * itemHeight : 0;
         currentMove = rules.getCurrentMove(moveSequence, sequenceId);
+        buttonUndo.disabled = id != moveSequence.length;
         updateColor();
     }
 
@@ -548,6 +549,7 @@ window.onload = function() {
         runFirstButton.disabled = false;
         runLastButton.disabled = false;
         buttonSend.disabled = true;
+        buttonUndo.disabled = true;
         readOnlyMode = false;
         rules.init();
         updateColor();
@@ -657,6 +659,28 @@ window.onload = function() {
         stopRun = true;
     });
 
-    rules.init();
+    const buttonUndo = document.getElementById('undo');
+    buttonUndo.addEventListener('click', function() {
+        const delay = 500;
+        runBackwardButton.click();
+        buttonUndo.disabled = true;
+        setTimeout(function() {
+            moveSequence.pop();
+            const element = document.getElementById('step-' + moveSequence.length.toString());
+            if (element) {
+                element.remove();
+            }
+            for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
+                if (isNaN(fieldOccupancy[i])) {
+                    fieldOccupancy[i] = -1;
+                }
+            }
+            updateCounter();
+            buttonUndo.disabled = false;
+            buttonSend.disabled = moveSequence.length == 0;
+        }, delay);
+    });
+
+    buttonNew.click();
 
 };
