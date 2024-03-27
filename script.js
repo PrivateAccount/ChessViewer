@@ -662,8 +662,9 @@ window.onload = function() {
     const buttonUndo = document.getElementById('undo');
     buttonUndo.addEventListener('click', function() {
         const delay = 500;
-        runBackwardButton.click();
+        const lastMove = rules.getCurrentMove(moveSequence, sequenceId);
         buttonUndo.disabled = true;
+        runBackwardButton.click();
         setTimeout(function() {
             moveSequence.pop();
             const element = document.getElementById('step-' + moveSequence.length.toString());
@@ -676,8 +677,12 @@ window.onload = function() {
                 }
             }
             updateCounter();
-            buttonUndo.disabled = false;
+            buttonUndo.disabled = moveSequence.length == 0;
             buttonSend.disabled = moveSequence.length == 0;
+            const currentMove = rules.getCurrentMove(moveSequence, sequenceId);
+            if (sequenceId && currentMove == lastMove) {
+                buttonUndo.click();
+            }
         }, delay);
     });
 
