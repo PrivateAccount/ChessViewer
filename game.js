@@ -1097,6 +1097,26 @@ const rules = {
         }
         return result;
     },
+    undoCastling: function(owner, source, destination) {
+        if (owner == 28) { // white
+            if (source == 60 && (destination == 62 || destination == 58)) { // short and long castling
+                for (var i = 0; i < this.castlingBreak.length; i++) {
+                    if (this.castlingBreak[i] == '62' || this.castlingBreak[i] == '58') {
+                        this.castlingBreak[i] = null;
+                    }
+                }
+            }
+        }
+        if (owner == 4) { // black
+            if (source == 4 && (destination == 6 || destination == 2)) { // short and long castling
+                for (var i = 0; i < this.castlingBreak.length; i++) {
+                    if (this.castlingBreak[i] == '6' || this.castlingBreak[i] == '2') {
+                        this.castlingBreak[i] = null;
+                    }
+                }
+            }
+        }
+    },
     isPromotion: function(owner, destination) {
         var result = false;
         if (owner >= 8 && owner < 16) { // black pawn

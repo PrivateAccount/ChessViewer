@@ -681,7 +681,7 @@ window.onload = function() {
             buttonSend.disabled = moveSequence.length == 0;
             const currentMove = rules.getCurrentMove(moveSequence, sequenceId);
             if (sequenceId && currentMove == lastMove) {
-                rules.castlingBreak = [];
+                rules.undoCastling(moveSequence[sequenceId - 1].figure, moveSequence[sequenceId - 1].origin, moveSequence[sequenceId - 1].field);
                 rules.attackedFields = [];
                 buttonUndo.click();
             }
