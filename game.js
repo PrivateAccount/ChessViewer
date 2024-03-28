@@ -1117,6 +1117,22 @@ const rules = {
             }
         }
     },
+    clearCastling: function(found) {
+        if (!found[0]) {
+            for (var i = 0; i < this.castlingBreak.length; i++) {
+                if (this.castlingBreak[i] == '6' || this.castlingBreak[i] == '2') {
+                    this.castlingBreak[i] = null;
+                }
+            }
+        }
+        if (!found[1]) {
+            for (var i = 0; i < this.castlingBreak.length; i++) {
+                if (this.castlingBreak[i] == '62' || this.castlingBreak[i] == '58') {
+                    this.castlingBreak[i] = null;
+                }
+            }
+        }
+    },
     isPromotion: function(owner, destination) {
         var result = false;
         if (owner >= 8 && owner < 16) { // black pawn

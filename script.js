@@ -666,7 +666,17 @@ window.onload = function() {
         buttonUndo.disabled = true;
         runBackwardButton.click();
         setTimeout(function() {
+            var found = [false, false];
             moveSequence.pop();
+            for (var i = 0; i < moveSequence.length; i++) {
+                if (moveSequence[i].figure == 0 || moveSequence[i].figure == 7 || moveSequence[i].figure == 4) {
+                    found[0] = true;
+                }
+                if (moveSequence[i].figure == 24 || moveSequence[i].figure == 31 || moveSequence[i].figure == 28) {
+                    found[1] = true;
+                }
+            }
+            rules.clearCastling(found);
             const element = document.getElementById('step-' + moveSequence.length.toString());
             if (element) {
                 element.remove();
@@ -676,13 +686,13 @@ window.onload = function() {
                     fieldOccupancy[i] = -1;
                 }
             }
+            rules.attackedFields = [];
             updateCounter();
             buttonUndo.disabled = moveSequence.length == 0;
             buttonSend.disabled = moveSequence.length == 0;
             const currentMove = rules.getCurrentMove(moveSequence, sequenceId);
             if (sequenceId && currentMove == lastMove) {
                 rules.undoCastling(moveSequence[sequenceId - 1].figure, moveSequence[sequenceId - 1].origin, moveSequence[sequenceId - 1].field);
-                rules.attackedFields = [];
                 buttonUndo.click();
             }
         }, delay);
