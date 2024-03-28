@@ -672,7 +672,7 @@ window.onload = function() {
                 element.remove();
             }
             for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
-                if (isNaN(fieldOccupancy[i])) {
+                if (isNaN(fieldOccupancy[i]) || fieldOccupancy[i] == null) {
                     fieldOccupancy[i] = -1;
                 }
             }
@@ -681,6 +681,8 @@ window.onload = function() {
             buttonSend.disabled = moveSequence.length == 0;
             const currentMove = rules.getCurrentMove(moveSequence, sequenceId);
             if (sequenceId && currentMove == lastMove) {
+                rules.castlingBreak = [];
+                rules.attackedFields = [];
                 buttonUndo.click();
             }
         }, delay);
