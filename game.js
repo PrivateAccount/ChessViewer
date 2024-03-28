@@ -1118,16 +1118,24 @@ const rules = {
         }
     },
     clearCastling: function(found) {
-        if (!found[0]) {
-            for (var i = 0; i < this.castlingBreak.length; i++) {
-                if (this.castlingBreak[i] == '6' || this.castlingBreak[i] == '2') {
+        for (var i = 0; i < this.castlingBreak.length; i++) {
+            if (!found.includes(0) && !found.includes(4)) {
+                if (this.castlingBreak[i] == '2') {
                     this.castlingBreak[i] = null;
                 }
             }
-        }
-        if (!found[1]) {
-            for (var i = 0; i < this.castlingBreak.length; i++) {
-                if (this.castlingBreak[i] == '62' || this.castlingBreak[i] == '58') {
+            if (!found.includes(7) && !found.includes(4)) {
+                if (this.castlingBreak[i] == '6') {
+                    this.castlingBreak[i] = null;
+                }
+            }
+            if (!found.includes(24) && !found.includes(28)) {
+                if (this.castlingBreak[i] == '58') {
+                    this.castlingBreak[i] = null;
+                }
+            }
+            if (!found.includes(31) && !found.includes(28)) {
+                if (this.castlingBreak[i] == '62') {
                     this.castlingBreak[i] = null;
                 }
             }
