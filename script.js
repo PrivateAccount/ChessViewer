@@ -274,6 +274,7 @@ window.onload = function() {
 
     function markSelection(ownerId, kind) {
         const delay = 1000;
+        const msg = document.getElementById('msg');
         const figureId = document.getElementById('figure-id');
         const originId = document.getElementById('origin-id');
         const fieldId = document.getElementById('field-id');
@@ -319,6 +320,7 @@ window.onload = function() {
                         }
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
                         buttonSend.disabled = readOnlyMode;
+                        msg.innerText = moveSequence.length.toString() + '. ' + getFigureName(figureId.innerText) + ': ' + getFieldName(originId.innerText) + ' - ' + getFieldName(fieldId.innerText);
                     }
                     else {
                         for (var i = 0; i < selection.length; i++) {
@@ -328,7 +330,6 @@ window.onload = function() {
                         if (kingId) {
                             document.getElementById('field-' + kingId.toString()).classList.add('check');
                         }
-                        const msg = document.getElementById('msg');
                         msg.innerText = 'Niedozwolony ruch.';
                         setTimeout(function() {
                             buttonReset.click();
@@ -339,14 +340,59 @@ window.onload = function() {
         }
     }
 
+    function getFieldName(id) {
+        const col = Math.floor(parseInt(id) % BOARD_SIZE);
+        const row = BOARD_SIZE - Math.floor(parseInt(id) / BOARD_SIZE) - 1;
+        return labelsHorizontal[col] + labelsVertical[row];
+    }
+
+    function getFigureName(id) {
+        var idx;
+        if (parseInt(id) == 0 || parseInt(id) == 7) {
+            idx = 3;
+        }
+        if (parseInt(id) == 1 || parseInt(id) == 6) {
+            idx = 2;
+        }
+        if (parseInt(id) == 2 || parseInt(id) == 5) {
+            idx = 4;
+        }
+        if (parseInt(id) == 3) {
+            idx = 0;
+        }
+        if (parseInt(id) == 4) {
+            idx = 1;
+        }
+        if (parseInt(id) >= 8 && parseInt(id) < 16) {
+            idx = 5;
+        }
+        if (parseInt(id) == 24 || parseInt(id) == 31) {
+            idx = 9;
+        }
+        if (parseInt(id) == 25 || parseInt(id) == 30) {
+            idx = 8;
+        }
+        if (parseInt(id) == 26 || parseInt(id) == 29) {
+            idx = 10;
+        }
+        if (parseInt(id) == 27) {
+            idx = 6;
+        }
+        if (parseInt(id) == 28) {
+            idx = 7;
+        }
+        if (parseInt(id) >= 16 && parseInt(id) < 24) {
+            idx = 11;
+        }
+        return figureImages[idx];
+    }
+
     function clearSelection() {
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             const field = 'field-' + i.toString();
             document.getElementById(field).classList.remove('selected', 'failed', 'check');
         }
         selection = [];
-        const msg = document.getElementById('msg');
-        msg.innerText = '';
     }
 
     function updatePromotions(mode) {
@@ -554,7 +600,6 @@ window.onload = function() {
         readOnlyMode = false;
         rules.init();
         updateColor();
-        console.log(fieldPositions)
     });
 
     const buttonOpen = document.getElementById('open');
