@@ -357,7 +357,7 @@ window.onload = function() {
         if (parseInt(id) == 2 || parseInt(id) == 5) {
             idx = 4;
         }
-        if (parseInt(id) == 3) {
+        if (parseInt(id) == 3 || parseInt(id) >= 32 && parseInt(id) < 40) {
             idx = 0;
         }
         if (parseInt(id) == 4) {
@@ -375,7 +375,7 @@ window.onload = function() {
         if (parseInt(id) == 26 || parseInt(id) == 29) {
             idx = 10;
         }
-        if (parseInt(id) == 27) {
+        if (parseInt(id) == 27 || parseInt(id) >= 40 && parseInt(id) < 48) {
             idx = 6;
         }
         if (parseInt(id) == 28) {
