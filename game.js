@@ -1117,7 +1117,13 @@ const rules = {
             }
         }
     },
-    clearCastling: function(found) {
+    clearCastling: function(moveSequence) {
+        var found = [];
+        for (var i = 0; i < moveSequence.length; i++) {
+            if (moveSequence[i].figure == 0 || moveSequence[i].figure == 7 || moveSequence[i].figure == 4 || moveSequence[i].figure == 24 || moveSequence[i].figure == 31 || moveSequence[i].figure == 28) {
+                found.push(moveSequence[i].figure);
+            }
+        }
         for (var i = 0; i < this.castlingBreak.length; i++) {
             if (!found.includes(0) && !found.includes(4)) {
                 if (this.castlingBreak[i] == '2') {

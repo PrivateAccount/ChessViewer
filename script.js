@@ -666,14 +666,8 @@ window.onload = function() {
         buttonUndo.disabled = true;
         runBackwardButton.click();
         setTimeout(function() {
-            var found = [];
             moveSequence.pop();
-            for (var i = 0; i < moveSequence.length; i++) {
-                if (moveSequence[i].figure == 0 || moveSequence[i].figure == 7 || moveSequence[i].figure == 4 || moveSequence[i].figure == 24 || moveSequence[i].figure == 31 || moveSequence[i].figure == 28) {
-                    found.push(moveSequence[i].figure);
-                }
-            }
-            rules.clearCastling(found);
+            rules.clearCastling(moveSequence);
             const element = document.getElementById('step-' + moveSequence.length.toString());
             if (element) {
                 element.remove();
