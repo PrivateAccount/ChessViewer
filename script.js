@@ -320,7 +320,7 @@ window.onload = function() {
                         }
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
                         buttonSend.disabled = readOnlyMode;
-                        msg.innerText = moveSequence.length.toString() + '. ' + getFigureName(figureId.innerText) + ': ' + getFieldName(originId.innerText) + ' - ' + getFieldName(fieldId.innerText);
+                        msg.innerText = 'Moving...';
                     }
                     else {
                         for (var i = 0; i < selection.length; i++) {
@@ -330,7 +330,7 @@ window.onload = function() {
                         if (kingId) {
                             document.getElementById('field-' + kingId.toString()).classList.add('check');
                         }
-                        msg.innerText = 'Niedozwolony ruch.';
+                        msg.innerText = 'Illegal move.';
                         setTimeout(function() {
                             buttonReset.click();
                         }, delay);
@@ -531,6 +531,7 @@ window.onload = function() {
 
     function selectStep(id) {
         const itemHeight = 26, pageLength = 17;
+        const msg = document.getElementById('msg');
         const parentElement = document.getElementById('games');
         var items = parentElement.children;
         for (var i = 0; i < items.length; i++) {
@@ -543,13 +544,14 @@ window.onload = function() {
         parentElement.scrollTop = id > pageLength ? (id - pageLength) * itemHeight : 0;
         currentMove = rules.getCurrentMove(moveSequence, sequenceId);
         buttonUndo.disabled = id != moveSequence.length;
+        msg.innerText = sequenceId ? sequenceId.toString() + '. ' + getFigureName(moveSequence[sequenceId - 1].figure) + ': ' + getFieldName(moveSequence[sequenceId - 1].origin) + ' - ' + getFieldName(moveSequence[sequenceId - 1].field) : '';
         updateColor();
     }
 
     const buttonNew = document.getElementById('new');
     buttonNew.addEventListener('click', function() {
         const msg = document.getElementById('msg');
-        msg.innerText = 'Inicjalizacja nowej gry.';
+        msg.innerText = 'New game ready.';
         fieldOccupancy = [];
         fieldPositions = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
@@ -605,7 +607,7 @@ window.onload = function() {
     const buttonOpen = document.getElementById('open');
     buttonOpen.addEventListener('click', function() {
         const msg = document.getElementById('msg');
-        msg.innerText = 'Ładowanie...';
+        msg.innerText = 'Loading...';
         fetch('https://my-notes.pl/api/get_games.php', {
             method: "GET",
             headers: { "Content-type": "application/json; charset=UTF-8" }
@@ -662,12 +664,12 @@ window.onload = function() {
     const buttonSave = document.getElementById('ok');
     buttonSave.addEventListener('click', function() {
         const msg = document.getElementById('msg');
-        msg.innerText = 'Wpisz swoje dane...';
+        msg.innerText = 'Enter your name and email...';
         const username = document.getElementById('username').value.trim();
         const email = document.getElementById('email').value.trim();
         if (username.length && email.length) {
             const msg = document.getElementById('msg');
-            msg.innerText = 'Zapisywanie...';
+            msg.innerText = 'Saving...';
             fetch('https://my-notes.pl/api/store_game.php', {
                 method: "POST",
                 body: JSON.stringify({
