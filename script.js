@@ -505,6 +505,7 @@ window.onload = function() {
         const msg = document.getElementById('msg');
         msg.innerText = 'Inicjalizacja nowej gry.';
         fieldOccupancy = [];
+        fieldPositions = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             if (i < 2 * BOARD_SIZE) {
                 fieldOccupancy[i] = i;
@@ -553,6 +554,7 @@ window.onload = function() {
         readOnlyMode = false;
         rules.init();
         updateColor();
+        console.log(fieldPositions)
     });
 
     const buttonOpen = document.getElementById('open');
