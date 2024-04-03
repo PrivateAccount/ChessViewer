@@ -531,6 +531,10 @@ window.onload = function() {
 
     function selectStep(id) {
         const itemHeight = 26, pageLength = 17;
+        const figureId = document.getElementById('figure-id');
+        const originId = document.getElementById('origin-id');
+        const fieldId = document.getElementById('field-id');
+        const killId = document.getElementById('kill-id');
         const msg = document.getElementById('msg');
         const parentElement = document.getElementById('games');
         var items = parentElement.children;
@@ -544,6 +548,10 @@ window.onload = function() {
         parentElement.scrollTop = id > pageLength ? (id - pageLength) * itemHeight : 0;
         currentMove = rules.getCurrentMove(moveSequence, sequenceId);
         buttonUndo.disabled = id != moveSequence.length;
+        figureId.innerText = sequenceId ? moveSequence[sequenceId - 1].figure : '--';
+        originId.innerText = sequenceId ? moveSequence[sequenceId - 1].origin : '--';
+        fieldId.innerText = sequenceId ? moveSequence[sequenceId - 1].field : '--';
+        killId.innerText = sequenceId ? moveSequence[sequenceId - 1].kill : '--';
         msg.innerText = sequenceId ? sequenceId.toString() + '. ' + getFigureName(moveSequence[sequenceId - 1].figure) + ': ' + getFieldName(moveSequence[sequenceId - 1].origin) + ' - ' + getFieldName(moveSequence[sequenceId - 1].field) : '';
         updateColor();
     }
