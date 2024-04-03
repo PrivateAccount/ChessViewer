@@ -12,9 +12,9 @@ body {
 #board {
     margin-left: auto;
     margin-right: auto;
-    padding: 10px;
+    padding: 5px;
     width: 840px;
-    height: auto;
+    height: 840px;
     border: 1px solid grey;
 }
 #fields {
@@ -91,8 +91,8 @@ span.vertical {
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    left: -400px;
-    top: -830px;
+    left: -390px;
+    top: -820px;
     width: 0px;
     height: 0px;
 }
@@ -117,7 +117,7 @@ span.vertical {
     right: 100px;
     top: 82px;
     width: 300px;
-    height: 600px;
+    height: 590px;
     padding: 1em;
     text-align: center;
     border: 1px solid grey;
@@ -156,7 +156,7 @@ span.vertical {
     margin-top: 2em;
     border: 1px solid grey;
     width: 300px;
-    height: 460px;
+    height: 447px;
     overflow-y: scroll;
 }
 #games div {

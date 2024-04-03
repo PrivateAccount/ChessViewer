@@ -1,8 +1,8 @@
 window.onload = function() {
     
     const BOARD_SIZE = 8;
-    const FIELD_SIZE = 100;
-    const BORDER_WIDTH = 10;
+    const FIELD_SIZE = 99;
+    const BORDER_WIDTH = 5;
     const labelsHorizontal = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
     const labelsVertical = ['1', '2', '3', '4', '5', '6', '7', '8'];
     const figureImages = [
