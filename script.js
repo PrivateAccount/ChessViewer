@@ -530,7 +530,6 @@ window.onload = function() {
     }
 
     function selectStep(id) {
-        const itemHeight = 26, pageLength = 17;
         const figureId = document.getElementById('figure-id');
         const originId = document.getElementById('origin-id');
         const fieldId = document.getElementById('field-id');
@@ -544,8 +543,8 @@ window.onload = function() {
         const element = document.getElementById('step-' + (id - 1).toString());
         if (element) {
             element.classList.add('selected');
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-        parentElement.scrollTop = id > pageLength ? (id - pageLength) * itemHeight : 0;
         currentMove = rules.getCurrentMove(moveSequence, sequenceId);
         buttonUndo.disabled = id != moveSequence.length;
         figureId.innerText = sequenceId ? moveSequence[sequenceId - 1].figure : '--';
