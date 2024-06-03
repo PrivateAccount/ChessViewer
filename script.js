@@ -745,6 +745,27 @@ window.onload = function() {
         }, delay);
     });
 
+    document.addEventListener('keydown', function(event) {
+        event.preventDefault();
+        switch (event.key) {
+            case 'ArrowLeft':
+                runBackwardButton.click();
+                break;
+            case 'ArrowRight':
+                runForwardButton.click();
+                break;
+            case 'Home':
+                runFirstButton.click();
+                break;
+            case 'End':
+                runLastButton.click();
+                break;
+            case 'Escape':
+                buttonStop.click();
+                break;
+        }
+    });
+
     buttonNew.click();
 
 };
