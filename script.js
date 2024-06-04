@@ -746,7 +746,6 @@ window.onload = function() {
     });
 
     document.addEventListener('keydown', function(event) {
-        event.preventDefault();
         switch (event.key) {
             case 'ArrowLeft':
                 runBackwardButton.click();
