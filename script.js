@@ -299,6 +299,7 @@ window.onload = function() {
                     if (rules.checkMoveOrder(parseInt(figureId.innerText))) {
                         document.getElementById(placeId).classList.add('selected');
                         selection.push(placeId);
+                        buttonEdit.disabled = true;
                     }
                 }
             }
@@ -306,6 +307,7 @@ window.onload = function() {
                 if (placeId != selection[0]) {
                     document.getElementById(placeId).classList.add('selected');
                     selection.push(placeId);
+                    buttonEdit.disabled = false;
                     fieldId.innerText = placeId.replace('field-', '');
                     killId.innerText = pieceId.replace('figure-', '');
                     if (rules.checkIsLegalMove(figureId, originId, fieldId, killId, fieldOccupancy)) {
