@@ -148,8 +148,8 @@ span.vertical {
     display: inline-block;
     width: 25px;
 }
-#new, #open, #send, #reset, #stop, #undo {
-    width: 80px;
+#new, #open, #send, #reset, #stop, #undo, #edit {
+    width: 65px;
     margin: 5px 0;
 }
 #games {

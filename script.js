@@ -31,6 +31,7 @@ window.onload = function() {
     var promotions = [];
     var readOnlyMode = false;
     var stopRun = false;
+    var editSituationMode = false;
 
     const fields = document.getElementById('fields');
 
@@ -290,7 +291,7 @@ window.onload = function() {
             pieceId = 'figure-' + id.toString();
             placeId = 'field-' + figurePositions[id].toString();
         }
-        if (!readOnlyMode && sequenceId == moveSequence.length) {
+        if (!readOnlyMode && !editSituationMode && sequenceId == moveSequence.length) {
             if (selection.length == 0) {
                 if (pieceId != '--' && pieceId != '-1' && pieceId != 'figure--1') {
                     figureId.innerText = pieceId.replace('figure-', '');
@@ -335,6 +336,16 @@ window.onload = function() {
                             buttonReset.click();
                         }, delay);
                     }
+                }
+            }
+        }
+        if (editSituationMode) {
+            if (pieceId != '--' && pieceId != '-1' && pieceId != 'figure--1') {
+                figureId.innerText = pieceId.replace('figure-', '');
+                originId.innerText = placeId.replace('field-', '');
+                if (figureId.innerText != 4 && figureId.innerText != 28) {
+                    removeFigure(parseInt(figureId.innerText));
+                    fieldOccupancy[parseInt(originId.innerText)] = -1;
                 }
             }
         }
@@ -606,7 +617,9 @@ window.onload = function() {
         runLastButton.disabled = false;
         buttonSend.disabled = true;
         buttonUndo.disabled = true;
+        buttonEdit.disabled = false;
         readOnlyMode = false;
+        editSituationMode = false;
         rules.init();
         updateColor();
     });
@@ -713,6 +726,17 @@ window.onload = function() {
     const buttonStop = document.getElementById('stop');
     buttonStop.addEventListener('click', function() {
         stopRun = true;
+        editSituationMode = false;
+        buttonEdit.disabled = false;
+        msg.innerText = 'Normal mode.';
+    });
+
+    const buttonEdit = document.getElementById('edit');
+    buttonEdit.addEventListener('click', function() {
+        stopRun = false;
+        editSituationMode = true;
+        buttonEdit.disabled = true;
+        msg.innerText = 'Edit mode.';
     });
 
     const buttonUndo = document.getElementById('undo');
