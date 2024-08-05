@@ -31,7 +31,8 @@ window.onload = function() {
     var promotions = [];
     var readOnlyMode = false;
     var stopRun = false;
-    var editSituationMode = false;
+    var editPositionMode = false;
+    var deletePositionMode = false;
 
     const fields = document.getElementById('fields');
 
@@ -291,7 +292,7 @@ window.onload = function() {
             pieceId = 'figure-' + id.toString();
             placeId = 'field-' + figurePositions[id].toString();
         }
-        if (!readOnlyMode && !editSituationMode && sequenceId == moveSequence.length) {
+        if (!readOnlyMode && !editPositionMode && !deletePositionMode && sequenceId == moveSequence.length) {
             if (selection.length == 0) {
                 if (pieceId != '--' && pieceId != '-1' && pieceId != 'figure--1') {
                     figureId.innerText = pieceId.replace('figure-', '');
@@ -341,13 +342,48 @@ window.onload = function() {
                 }
             }
         }
-        if (editSituationMode) {
+        if (!readOnlyMode && editPositionMode && sequenceId == moveSequence.length) {
+            if (selection.length == 0) {
+                if (pieceId != '--' && pieceId != '-1' && pieceId != 'figure--1') {
+                    figureId.innerText = pieceId.replace('figure-', '');
+                    originId.innerText = placeId.replace('field-', '');
+                    document.getElementById(placeId).classList.add('selected');
+                    selection.push(placeId);
+                }
+            }
+            else if (selection.length == 1) {
+                if (placeId != selection[0]) {
+                    document.getElementById(placeId).classList.add('selected');
+                    selection.push(placeId);
+                    fieldId.innerText = placeId.replace('field-', '');
+                    killId.innerText = pieceId.replace('figure-', '');
+                    if (killId.innerText != 4 && killId.innerText != 28) {
+                        registerMove();
+                    }
+                    else {
+                        for (var i = 0; i < selection.length; i++) {
+                            document.getElementById(selection[i]).classList.add('failed');
+                        }
+                        setTimeout(function() {
+                            buttonReset.click();
+                        }, delay);
+                    }
+                }
+            }
+        }
+        if (!readOnlyMode && deletePositionMode && sequenceId == moveSequence.length) {
             if (pieceId != '--' && pieceId != '-1' && pieceId != 'figure--1') {
                 figureId.innerText = pieceId.replace('figure-', '');
                 originId.innerText = placeId.replace('field-', '');
                 if (figureId.innerText != 4 && figureId.innerText != 28) {
                     removeFigure(parseInt(figureId.innerText));
                     fieldOccupancy[parseInt(originId.innerText)] = -1;
+                }
+                else {
+                    document.getElementById(placeId).classList.add('failed');
+                    setTimeout(function() {
+                        buttonReset.click();
+                    }, delay);
                 }
             }
         }
@@ -560,6 +596,8 @@ window.onload = function() {
         }
         currentMove = rules.getCurrentMove(moveSequence, sequenceId);
         buttonUndo.disabled = id != moveSequence.length;
+        buttonEdit.disabled = id != moveSequence.length;
+        buttonDelete.disabled = id != moveSequence.length;
         figureId.innerText = sequenceId ? moveSequence[sequenceId - 1].figure : '--';
         originId.innerText = sequenceId ? moveSequence[sequenceId - 1].origin : '--';
         fieldId.innerText = sequenceId ? moveSequence[sequenceId - 1].field : '--';
@@ -620,8 +658,10 @@ window.onload = function() {
         buttonSend.disabled = true;
         buttonUndo.disabled = true;
         buttonEdit.disabled = false;
+        buttonDelete.disabled = false;
         readOnlyMode = false;
-        editSituationMode = false;
+        editPositionMode = false;
+        deletePositionMode = false;
         rules.init();
         updateColor();
     });
@@ -728,17 +768,31 @@ window.onload = function() {
     const buttonStop = document.getElementById('stop');
     buttonStop.addEventListener('click', function() {
         stopRun = true;
-        editSituationMode = false;
+        editPositionMode = false;
+        deletePositionMode = false;
         buttonEdit.disabled = false;
+        buttonDelete.disabled = false;
         msg.innerText = 'Normal mode.';
     });
 
     const buttonEdit = document.getElementById('edit');
     buttonEdit.addEventListener('click', function() {
         stopRun = false;
-        editSituationMode = true;
+        editPositionMode = true;
+        deletePositionMode = false;
         buttonEdit.disabled = true;
+        buttonDelete.disabled = false;
         msg.innerText = 'Edit mode.';
+    });
+
+    const buttonDelete = document.getElementById('delete');
+    buttonDelete.addEventListener('click', function() {
+        stopRun = false;
+        editPositionMode = false;
+        deletePositionMode = true;
+        buttonEdit.disabled = false;
+        buttonDelete.disabled = true;
+        msg.innerText = 'Delete mode.';
     });
 
     const buttonUndo = document.getElementById('undo');
@@ -763,6 +817,8 @@ window.onload = function() {
             updateCounter();
             buttonUndo.disabled = moveSequence.length == 0;
             buttonSend.disabled = moveSequence.length == 0;
+            buttonEdit.disabled = moveSequence.length == 0;
+            buttonDelete.disabled = moveSequence.length == 0;
             const currentMove = rules.getCurrentMove(moveSequence, sequenceId);
             if (sequenceId && currentMove == lastMove) {
                 rules.undoCastling(moveSequence[sequenceId - 1].figure, moveSequence[sequenceId - 1].origin, moveSequence[sequenceId - 1].field);

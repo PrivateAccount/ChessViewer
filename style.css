@@ -148,7 +148,7 @@ span.vertical {
     display: inline-block;
     width: 25px;
 }
-#new, #open, #send, #reset, #stop, #undo, #edit {
+#new, #open, #send, #reset, #stop, #undo, #edit, #delete {
     width: 65px;
     margin: 5px 0;
 }
