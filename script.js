@@ -827,6 +827,12 @@ window.onload = function() {
         }, delay);
     });
 
+    const buttonPanel = document.getElementById('panel');
+    buttonPanel.addEventListener('click', function() {
+        const tools = document.getElementById('tools');
+        tools.style.display = tools.style.display == 'block' ? 'none' : 'block';
+    });
+
     document.addEventListener('keydown', function(event) {
         switch (event.key) {
             case 'ArrowLeft':
