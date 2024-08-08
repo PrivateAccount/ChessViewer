@@ -124,8 +124,8 @@ span.vertical {
 }
 #tools {
     position: absolute;
-    right: 20px;
-    top: 82px;
+    left: calc(50vw + 430px);
+    top: 52px;
     width: 300px;
     height: 590px;
     padding: 1em;

@@ -483,7 +483,6 @@ window.onload = function() {
             buttonReset.click();
             updateColor();
             noteStep(sequenceId);
-            removeFigure(moveParams.kill);
         }, delay);
         const kingId = rules.checkIsKingAttacked(origin, field, null);
         if (kingId) {
