@@ -934,6 +934,9 @@ const rules = {
         this.attackedFields = [];
         this.protectedFields = [];
         if (figureId == kingId) { // king is moving
+            if (killId >= 0) { // and killing
+                this.fieldOccupancy[fieldId] = -1;
+            }
             for (var i = 0; i < this.fieldOccupancy.length; i++) {
                 if (currentMove == player.WHITE) {
                     if ((this.fieldOccupancy[i] >= 0 && this.fieldOccupancy[i] < 16 || this.fieldOccupancy[i] >= 32 && this.fieldOccupancy[i] < 40) && this.fieldOccupancy[i] != -1) {
