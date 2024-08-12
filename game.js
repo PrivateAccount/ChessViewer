@@ -42,10 +42,12 @@ const rules = {
         const killId = kill.innerText;
         this.fieldOccupancy = fieldOccupancy;
         result = this.checkMoveOrder(figureId);
-        if (!result) return false;
-        result = this.checkMoveCorrectness(figureId, originId, fieldId, killId);
-        if (!result) return false;
-        result = this.checkIsKingSafe(figureId, originId, fieldId, killId);
+        if (result) {
+            result = this.checkMoveCorrectness(figureId, originId, fieldId, killId);
+            if (result) {
+                result = this.checkIsKingSafe(figureId, originId, fieldId, killId);
+            }
+        }
         return result;
     },
     checkFreeFields: function(from, to) {
@@ -917,7 +919,7 @@ const rules = {
         }
     },
     checkIsKingSafe: function(figureId, originId, fieldId, killId) {
-        result = true;
+        var result = true;
         var kingId, kingFieldId, lastId;
         switch (currentMove) {
             case player.WHITE:
@@ -929,7 +931,7 @@ const rules = {
         }
         kingFieldId = this.getFigureField(kingId);
         if (killId == 4 || killId == 28) { // try to kill a king
-            return false;
+            result = false;
         }
         this.attackedFields = [];
         this.protectedFields = [];
@@ -952,11 +954,11 @@ const rules = {
             }
             this.fieldOccupancy[fieldId] = lastId;
             if (this.isAttacked(fieldId)) {
-                return false;
+                result = false;
             }
             this.getProtectedFields(fieldId);
             if (this.isProtected(fieldId)) {
-                return false;
+                result = false;
             }
         }
         else { // any other is moving
@@ -967,7 +969,7 @@ const rules = {
             this.fieldOccupancy[originId] = orig.from;
             this.fieldOccupancy[fieldId] = orig.to;
             if (this.isAttacked(kingId)) {
-                return false;
+                result = false;
             }
         }
         return result;
