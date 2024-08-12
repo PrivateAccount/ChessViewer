@@ -918,7 +918,7 @@ const rules = {
     },
     checkIsKingSafe: function(figureId, originId, fieldId, killId) {
         result = true;
-        var kingId, kingFieldId;
+        var kingId, kingFieldId, lastId;
         switch (currentMove) {
             case player.WHITE:
                 kingId = 28;
@@ -934,6 +934,7 @@ const rules = {
         this.attackedFields = [];
         this.protectedFields = [];
         if (figureId == kingId) { // king is moving
+            lastId = this.fieldOccupancy[fieldId];
             if (killId >= 0) { // and killing
                 this.fieldOccupancy[fieldId] = -1;
             }
@@ -949,6 +950,7 @@ const rules = {
                     }
                 }
             }
+            this.fieldOccupancy[fieldId] = lastId;
             if (this.isAttacked(fieldId)) {
                 return false;
             }
