@@ -339,6 +339,13 @@ window.onload = function() {
                             buttonReset.click();
                         }, delay);
                     }
+                    setTimeout(function() {
+                        if (rules.checkIsMate()) {
+                            const kingField = currentMove == player.WHITE ? rules.getFigureField(28) : rules.getFigureField(4);
+                            document.getElementById('field-' + kingField).classList.add('debug');
+                            msg.innerText = 'Check mate.';
+                        }
+                    }, 2 * delay);
                 }
             }
         }
@@ -483,11 +490,6 @@ window.onload = function() {
             buttonReset.click();
             updateColor();
             noteStep(sequenceId);
-            if (rules.checkIsMate()) {
-                const kingField = currentMove == player.WHITE ? rules.getFigureField(28) : rules.getFigureField(4);
-                document.getElementById('field-' + kingField).classList.add('debug');
-                msg.innerText = 'Check mate.';
-            }
         }, delay);
         const kingId = rules.checkIsKingAttacked(origin, field, null);
         if (kingId) {
