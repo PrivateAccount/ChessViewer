@@ -1052,6 +1052,71 @@ const rules = {
         }
         return null;
     },
+    checkIsMate: function() {
+        var result = false;
+        var possibleMoves = [], counter = 0;
+        if (currentMove == player.BLACK) {
+            for (var i = 0; i < 40; i++) {
+                if (i < 16 || i >= 32) {
+                    if (this.fieldOccupancy.includes(i)) {
+                        possibleMoves = this.getPossibleMoves(i);
+                        counter += possibleMoves.length;
+                        result = counter == 0;
+                    }
+                }
+            }
+        }
+        if (currentMove == player.WHITE) {
+            for (var i = 16; i < 48; i++) {
+                if (i < 32 || i >= 40) {
+                    if (this.fieldOccupancy.includes(i)) {
+                        possibleMoves = this.getPossibleMoves(i);
+                        counter += possibleMoves.length;
+                        result = counter == 0;
+                    }
+                }
+            }
+        }
+        return result;
+    },
+    getPossibleMoves: function(figure) {
+        var fields = [], potential = [];
+        if (figure == 4 || figure == 28) { // black or white king
+            potential = [-9, -8, -7, -1, 1, 7, 8, 9];
+        }
+        if (figure == 1 || figure == 6 || figure == 25 || figure == 30) { // black or white knight
+            potential = [-17, -15, -10, -6, 6, 10, 15, 17];
+        }
+        if (figure == 0 || figure == 7 || figure == 24 || figure == 31) { // black or white rook
+            potential = [-8, -16, -24, -32, -40, -48, -56, 8, 16, 24, 32, 40, 48, 56, -1, -2, -3, -4, -5, -6, -7, 1, 2, 3, 4, 5, 6, 7];
+        }
+        if (figure == 2 || figure == 5 || figure == 26 || figure == 29) { // black or white bishop
+            potential = [-9, -18, -27, -36, -45, -54, -63, 9, 18, 27, 36, 45, 54, 63, -7, -14, -21, -28, -35, -42, -49, 7, 14, 21, 28, 35, 42, 49];
+        }
+        if (figure == 3 || figure == 27) { // black or white queen
+            potential = [-8, -16, -24, -32, -40, -48, -56, 8, 16, 24, 32, 40, 48, 56, -1, -2, -3, -4, -5, -6, -7, 1, 2, 3, 4, 5, 6, 7, -9, -18, -27, -36, -45, -54, -63, 9, 18, 27, 36, 45, 54, 63, -7, -14, -21, -28, -35, -42, -49, 7, 14, 21, 28, 35, 42, 49];
+        }
+        if (figure >= 8 && figure < 16) { // black pawn
+            potential = [7, 8, 9, 16];
+        }
+        if (figure >= 16 && figure < 24) { // white pawn
+            potential = [-7, -8, -9, -16];
+        }
+        for (var i = 0; i < potential.length; i++) {
+            const examine = this.getFigureField(figure) + potential[i];
+            const target = this.fieldOccupancy[examine] == undefined ? -1 : this.fieldOccupancy[examine];
+            const kill = examine >= 0 && examine < 64 ? target : -1;
+            var result = false;
+            result = this.checkMoveCorrectness(figure, this.getFigureField(figure), examine, kill);
+            if (result) {
+                result = this.checkIsKingSafe(figure, this.getFigureField(figure), examine, kill);
+                if (result && examine >= 0 && examine < 64) {
+                    fields.push(examine);
+                }
+            }
+        }
+        return fields;
+    },
     isCastling: function(owner, source, destination) {
         var result = false;
         if (owner == 28) { // white

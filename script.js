@@ -439,7 +439,7 @@ window.onload = function() {
     function clearSelection() {
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             const field = 'field-' + i.toString();
-            document.getElementById(field).classList.remove('selected', 'failed', 'check');
+            document.getElementById(field).classList.remove('selected', 'failed', 'check', 'debug');
         }
         selection = [];
     }
@@ -483,6 +483,11 @@ window.onload = function() {
             buttonReset.click();
             updateColor();
             noteStep(sequenceId);
+            if (rules.checkIsMate()) {
+                const kingField = currentMove == player.WHITE ? rules.getFigureField(28) : rules.getFigureField(4);
+                document.getElementById('field-' + kingField).classList.add('debug');
+                msg.innerText = 'Check mate.';
+            }
         }, delay);
         const kingId = rules.checkIsKingAttacked(origin, field, null);
         if (kingId) {

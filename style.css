@@ -48,6 +48,9 @@ body {
 .field.light.check, .field.dark.check {
     background-color: gold;
 }
+.field.light.debug, .field.dark.debug {
+    background-color: blue;
+}
 #labels-top {
     position: relative;
     width: auto;
