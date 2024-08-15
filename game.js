@@ -1093,7 +1093,7 @@ const rules = {
         if (figure == 2 || figure == 5 || figure == 26 || figure == 29) { // black or white bishop
             potential = [-9, -18, -27, -36, -45, -54, -63, 9, 18, 27, 36, 45, 54, 63, -7, -14, -21, -28, -35, -42, -49, 7, 14, 21, 28, 35, 42, 49];
         }
-        if (figure == 3 || figure == 27) { // black or white queen
+        if (figure == 3 || figure == 27 || figure >= 32 && figure < 48) { // black or white queen plus promoted
             potential = [-8, -16, -24, -32, -40, -48, -56, 8, 16, 24, 32, 40, 48, 56, -1, -2, -3, -4, -5, -6, -7, 1, 2, 3, 4, 5, 6, 7, -9, -18, -27, -36, -45, -54, -63, 9, 18, 27, 36, 45, 54, 63, -7, -14, -21, -28, -35, -42, -49, 7, 14, 21, 28, 35, 42, 49];
         }
         if (figure >= 8 && figure < 16) { // black pawn
