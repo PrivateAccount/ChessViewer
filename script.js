@@ -275,7 +275,7 @@ window.onload = function() {
     }
 
     function markSelection(ownerId, kind) {
-        const delay = 1000;
+        const delay = 1000, mate = 1500;
         const msg = document.getElementById('msg');
         const figureId = document.getElementById('figure-id');
         const originId = document.getElementById('origin-id');
@@ -301,6 +301,10 @@ window.onload = function() {
                         document.getElementById(placeId).classList.add('selected');
                         selection.push(placeId);
                         buttonEdit.disabled = true;
+                        const possibleMoves = rules.getPossibleMoves(figureId.innerText, fieldOccupancy);
+                        for (var i = 0; i < possibleMoves.length; i++) {
+                            document.getElementById('field-' + possibleMoves[i].toString()).classList.add('free');
+                        }
                     }
                 }
             }
@@ -345,7 +349,7 @@ window.onload = function() {
                             document.getElementById('field-' + kingField).classList.add('debug');
                             msg.innerText = 'Check mate.';
                         }
-                    }, 2 * delay);
+                    }, mate);
                 }
             }
         }
@@ -446,7 +450,7 @@ window.onload = function() {
     function clearSelection() {
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             const field = 'field-' + i.toString();
-            document.getElementById(field).classList.remove('selected', 'failed', 'check', 'debug');
+            document.getElementById(field).classList.remove('selected', 'failed', 'check', 'debug', 'free');
         }
         selection = [];
     }

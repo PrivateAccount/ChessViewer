@@ -51,6 +51,9 @@ body {
 .field.light.debug, .field.dark.debug {
     background-color: blue;
 }
+.field.light.free, .field.dark.free {
+    background-color: lightcoral;
+}
 #labels-top {
     position: relative;
     width: auto;

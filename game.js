@@ -1059,7 +1059,7 @@ const rules = {
             for (var i = 0; i < 40; i++) {
                 if (i < 16 || i >= 32) {
                     if (this.fieldOccupancy.includes(i)) {
-                        possibleMoves = this.getPossibleMoves(i);
+                        possibleMoves = this.getPossibleMoves(i, this.fieldOccupancy);
                         counter += possibleMoves.length;
                         result = counter == 0;
                     }
@@ -1070,7 +1070,7 @@ const rules = {
             for (var i = 16; i < 48; i++) {
                 if (i < 32 || i >= 40) {
                     if (this.fieldOccupancy.includes(i)) {
-                        possibleMoves = this.getPossibleMoves(i);
+                        possibleMoves = this.getPossibleMoves(i, this.fieldOccupancy);
                         counter += possibleMoves.length;
                         result = counter == 0;
                     }
@@ -1079,7 +1079,7 @@ const rules = {
         }
         return result;
     },
-    getPossibleMoves: function(figure) {
+    getPossibleMoves: function(figure, fieldOccupancy) {
         var fields = [], potential = [];
         if (figure == 4 || figure == 28) { // black or white king
             potential = [-9, -8, -7, -1, 1, 7, 8, 9];
@@ -1102,6 +1102,7 @@ const rules = {
         if (figure >= 16 && figure < 24) { // white pawn
             potential = [-7, -8, -9, -16];
         }
+        this.fieldOccupancy = fieldOccupancy;
         for (var i = 0; i < potential.length; i++) {
             const examine = this.getFigureField(figure) + potential[i];
             const target = this.fieldOccupancy[examine] == undefined ? -1 : this.fieldOccupancy[examine];
