@@ -1082,7 +1082,7 @@ const rules = {
     getPossibleMoves: function(figure, fieldOccupancy) {
         var fields = [], potential = [];
         if (figure == 4 || figure == 28) { // black or white king
-            potential = [-9, -8, -7, -1, 1, 7, 8, 9];
+            potential = [-9, -8, -7, -2, -1, 1, 2, 7, 8, 9];
         }
         if (figure == 1 || figure == 6 || figure == 25 || figure == 30) { // black or white knight
             potential = [-17, -15, -10, -6, 6, 10, 15, 17];
@@ -1158,7 +1158,7 @@ const rules = {
         var result = false;
         const field = parseInt(source) < parseInt(destination) ? parseInt(source) + 1 : parseInt(destination) + 1;
         if (owner == 28 && source == 60 || owner == 4 && source == 4) {
-            result = !this.castlingBreak.includes(destination);
+            result = !this.castlingBreak.includes(source) || !this.castlingBreak.includes(destination);
         }
         if (this.isAttacked(source)) {
             result = false;
@@ -1168,9 +1168,6 @@ const rules = {
         }
         if (this.isAttacked(field)) {
             result = false;
-        }
-        if (result) {
-            this.castlingBreak.push(destination);
         }
         return result;
     },
