@@ -495,6 +495,7 @@ window.onload = function() {
             updateColor();
             noteStep(sequenceId);
         }, delay);
+        rules.registerCastling(moveParams.figure);
         const kingId = rules.checkIsKingAttacked(origin, field, null);
         if (kingId) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');

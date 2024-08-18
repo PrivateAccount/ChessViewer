@@ -171,27 +171,11 @@ const rules = {
                     result = this.checkFreeFields(source, destination);
                 }
             }
-            if (result) {
-                if (owner == 24) {
-                    this.castlingBreak.push('58');
-                }
-                if (owner == 31) {
-                    this.castlingBreak.push('62');
-                }
-            }
         }
         else if (owner == 0 || owner == 7) { // black rook
             if (kill == '--' || kill == '-1' || kill >= 16 && kill < 32 || kill >= 40 && kill < 48) {
                 if (this.getPosition(source).column == this.getPosition(destination).column || this.getPosition(source).row == this.getPosition(destination).row) {
                     result = this.checkFreeFields(source, destination);
-                }
-            }
-            if (result) {
-                if (owner == 0) {
-                    this.castlingBreak.push('2');
-                }
-                if (owner == 7) {
-                    this.castlingBreak.push('6');
                 }
             }
         }
@@ -240,10 +224,6 @@ const rules = {
             else if (kill == '--' || kill == '-1' || kill >= 0 && kill < 16 || kill >= 32 && kill < 40) {
                 result = Math.abs(this.getPosition(source).column - this.getPosition(destination).column) < 2 && Math.abs(this.getPosition(source).row - this.getPosition(destination).row) < 2;
             }
-            if (result) {
-                this.castlingBreak.push('58');
-                this.castlingBreak.push('62');
-            }
         }
         else if (owner == 4) { // black king
             if (this.isCastling(owner, source, destination)) {
@@ -251,10 +231,6 @@ const rules = {
             }
             else if (kill == '--' || kill == '-1' || kill >= 16 && kill < 32 || kill >= 40 && kill < 48) {
                 result = Math.abs(this.getPosition(source).column - this.getPosition(destination).column) < 2 && Math.abs(this.getPosition(source).row - this.getPosition(destination).row) < 2;
-            }
-            if (result) {
-                this.castlingBreak.push('2');
-                this.castlingBreak.push('6');
             }
         }
         return result;
@@ -1081,8 +1057,15 @@ const rules = {
     },
     getPossibleMoves: function(figure, fieldOccupancy) {
         var fields = [], potential = [];
-        if (figure == 4 || figure == 28) { // black or white king
-            potential = [-9, -8, -7, -2, -1, 1, 2, 7, 8, 9];
+        if (figure == 4) { // black king
+            potential = [-9, -8, -7, -1, 1, 7, 8, 9];
+            if (!this.castlingBreak.includes('2')) potential.push(-2);
+            if (!this.castlingBreak.includes('6')) potential.push(2);
+        }
+        if (figure == 28) { // white king
+            potential = [-9, -8, -7, -1, 1, 7, 8, 9];
+            if (!this.castlingBreak.includes('58')) potential.push(-2);
+            if (!this.castlingBreak.includes('62')) potential.push(2);
         }
         if (figure == 1 || figure == 6 || figure == 25 || figure == 30) { // black or white knight
             potential = [-17, -15, -10, -6, 6, 10, 15, 17];
@@ -1170,6 +1153,34 @@ const rules = {
             result = false;
         }
         return result;
+    },
+    registerCastling: function(figure) {
+        if (figure == 4) { // black king
+            this.castlingBreak.push('2');
+            this.castlingBreak.push('4');
+            this.castlingBreak.push('6');
+        }
+        if (figure == 28) { // white king
+            this.castlingBreak.push('58');
+            this.castlingBreak.push('60');
+            this.castlingBreak.push('62');
+        }
+        if (figure == 0) { // black rook
+            this.castlingBreak.push('2');
+            this.castlingBreak.push('4');
+        }
+        if (figure == 7) { // black rook
+            this.castlingBreak.push('4');
+            this.castlingBreak.push('6');
+        }
+        if (figure == 24) { // white rook
+            this.castlingBreak.push('58');
+            this.castlingBreak.push('60');
+        }
+        if (figure == 31) { // white rook
+            this.castlingBreak.push('60');
+            this.castlingBreak.push('62');
+        }
     },
     undoCastling: function(owner, source, destination) {
         if (owner == 28) { // white
