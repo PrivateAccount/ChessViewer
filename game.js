@@ -143,7 +143,7 @@ const rules = {
             }
             else {
                 if (kill >= 0 && kill < 16 || kill >= 32 && kill < 40) {
-                    result = source - destination == 7 || source - destination == 9;
+                    result = (source - destination == 7 || source - destination == 9) && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1;
                 }
             }
         }
@@ -161,7 +161,7 @@ const rules = {
             }
             else {
                 if (kill >= 16 && kill < 32 || kill >= 40 && kill < 48) {
-                    result = destination - source == 7 || destination - source == 9;
+                    result = (destination - source == 7 || destination - source == 9) && Math.abs(this.getPosition(source).column - this.getPosition(destination).column) == 1;
                 }
             }
         }
