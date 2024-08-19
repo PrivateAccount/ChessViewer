@@ -1156,30 +1156,30 @@ const rules = {
     },
     registerCastling: function(figure) {
         if (figure == 4) { // black king
-            this.castlingBreak.push('2');
-            this.castlingBreak.push('4');
-            this.castlingBreak.push('6');
+            if (!this.castlingBreak.includes('2')) this.castlingBreak.push('2');
+            if (!this.castlingBreak.includes('4')) this.castlingBreak.push('4');
+            if (!this.castlingBreak.includes('6')) this.castlingBreak.push('6');
         }
         if (figure == 28) { // white king
-            this.castlingBreak.push('58');
-            this.castlingBreak.push('60');
-            this.castlingBreak.push('62');
+            if (!this.castlingBreak.includes('58')) this.castlingBreak.push('58');
+            if (!this.castlingBreak.includes('60')) this.castlingBreak.push('60');
+            if (!this.castlingBreak.includes('62')) this.castlingBreak.push('62');
         }
         if (figure == 0) { // black rook
-            this.castlingBreak.push('2');
-            this.castlingBreak.push('4');
+            if (!this.castlingBreak.includes('2')) this.castlingBreak.push('2');
+            if (!this.castlingBreak.includes('4')) this.castlingBreak.push('4');
         }
         if (figure == 7) { // black rook
-            this.castlingBreak.push('4');
-            this.castlingBreak.push('6');
+            if (!this.castlingBreak.includes('4')) this.castlingBreak.push('4');
+            if (!this.castlingBreak.includes('6')) this.castlingBreak.push('6');
         }
         if (figure == 24) { // white rook
-            this.castlingBreak.push('58');
-            this.castlingBreak.push('60');
+            if (!this.castlingBreak.includes('58')) this.castlingBreak.push('58');
+            if (!this.castlingBreak.includes('60')) this.castlingBreak.push('60');
         }
         if (figure == 31) { // white rook
-            this.castlingBreak.push('60');
-            this.castlingBreak.push('62');
+            if (!this.castlingBreak.includes('60')) this.castlingBreak.push('60');
+            if (!this.castlingBreak.includes('62')) this.castlingBreak.push('62');
         }
     },
     undoCastling: function(owner, source, destination) {
@@ -1211,22 +1211,22 @@ const rules = {
         }
         for (var i = 0; i < this.castlingBreak.length; i++) {
             if (!found.includes(0) && !found.includes(4)) {
-                if (this.castlingBreak[i] == '2') {
+                if (this.castlingBreak[i] == '2' || this.castlingBreak[i] == '4') {
                     this.castlingBreak[i] = null;
                 }
             }
             if (!found.includes(7) && !found.includes(4)) {
-                if (this.castlingBreak[i] == '6') {
+                if (this.castlingBreak[i] == '6' || this.castlingBreak[i] == '4') {
                     this.castlingBreak[i] = null;
                 }
             }
             if (!found.includes(24) && !found.includes(28)) {
-                if (this.castlingBreak[i] == '58') {
+                if (this.castlingBreak[i] == '58' || this.castlingBreak[i] == '60') {
                     this.castlingBreak[i] = null;
                 }
             }
             if (!found.includes(31) && !found.includes(28)) {
-                if (this.castlingBreak[i] == '62') {
+                if (this.castlingBreak[i] == '62' || this.castlingBreak[i] == '60') {
                     this.castlingBreak[i] = null;
                 }
             }
