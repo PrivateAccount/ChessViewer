@@ -7,6 +7,7 @@ body {
     text-align: center;
     margin: 1em;
     font-size: large;
+    font-weight: bold;
     color: brown;
 }
 #board {
@@ -133,7 +134,7 @@ span.vertical {
     left: calc(50vw + 430px);
     top: 52px;
     width: 300px;
-    height: 590px;
+    height: 610px;
     padding: 1em;
     text-align: center;
     border: 1px solid grey;
@@ -167,6 +168,12 @@ span.vertical {
 #new, #open, #send, #reset, #stop, #undo, #edit, #delete {
     width: 65px;
     margin: 5px 0;
+}
+#mark {
+    margin: 10px 0 -10px 0;
+}
+#mark-moves {
+    margin: 0 10px;
 }
 #games {
     margin-top: 2em;

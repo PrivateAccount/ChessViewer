@@ -33,6 +33,7 @@ window.onload = function() {
     var stopRun = false;
     var editPositionMode = false;
     var deletePositionMode = false;
+    var markMoves = true;
 
     const fields = document.getElementById('fields');
 
@@ -301,9 +302,11 @@ window.onload = function() {
                         document.getElementById(placeId).classList.add('selected');
                         selection.push(placeId);
                         buttonEdit.disabled = true;
-                        const possibleMoves = rules.getPossibleMoves(figureId.innerText, fieldOccupancy);
-                        for (var i = 0; i < possibleMoves.length; i++) {
-                            document.getElementById('field-' + possibleMoves[i].toString()).classList.add('free');
+                        if (markMoves) {
+                            const possibleMoves = rules.getPossibleMoves(figureId.innerText, fieldOccupancy);
+                            for (var i = 0; i < possibleMoves.length; i++) {
+                                document.getElementById('field-' + possibleMoves[i].toString()).classList.add('free');
+                            }
                         }
                     }
                 }
@@ -843,6 +846,11 @@ window.onload = function() {
     buttonPanel.addEventListener('click', function() {
         const tools = document.getElementById('tools');
         tools.style.display = tools.style.display == 'block' ? 'none' : 'block';
+    });
+
+    const checkboxMark = document.getElementById('mark-moves');
+    checkboxMark.addEventListener('click', function() {
+        markMoves = checkboxMark.checked;
     });
 
     document.addEventListener('keydown', function(event) {
