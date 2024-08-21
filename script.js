@@ -889,7 +889,7 @@ window.onload = function() {
     });
     
     function makeDemoMoves() {
-        const delay = 1000;
+        const delay = 1500;
         var result = false, source, destination, figure, kill, board = [], possibleMoves = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) board.push(i);
         const shuffled = shuffle(board);
