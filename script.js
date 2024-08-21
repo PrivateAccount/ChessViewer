@@ -796,6 +796,7 @@ window.onload = function() {
         deletePositionMode = false;
         buttonEdit.disabled = false;
         buttonDelete.disabled = false;
+        document.getElementById('status').innerText = '';
         msg.innerText = 'Normal mode.';
     });
 
@@ -806,6 +807,7 @@ window.onload = function() {
         deletePositionMode = false;
         buttonEdit.disabled = true;
         buttonDelete.disabled = false;
+        document.getElementById('status').innerText = 'E';
         msg.innerText = 'Edit mode.';
     });
 
@@ -816,6 +818,7 @@ window.onload = function() {
         deletePositionMode = true;
         buttonEdit.disabled = false;
         buttonDelete.disabled = true;
+        document.getElementById('status').innerText = 'R';
         msg.innerText = 'Delete mode.';
     });
 
@@ -881,13 +884,14 @@ window.onload = function() {
                 break;
         }
     });
-    
+
     const buttonRunDemo = document.getElementById('run-demo');
     buttonRunDemo.addEventListener('click', function() {
+        document.getElementById('status').innerText = 'D';
         stopDemo = false;
         makeDemoMoves();
     });
-    
+
     function makeDemoMoves() {
         const delay = 1500;
         var result = false, source, destination, figure, kill, board = [], possibleMoves = [];
@@ -934,10 +938,11 @@ window.onload = function() {
 
     const buttonRunUser = document.getElementById('run-user');
     buttonRunUser.addEventListener('click', function() {
+        document.getElementById('status').innerText = 'P';
         playUserMode = true;
         msg.innerText = 'Play mode.';
     });
-    
+
     function makePlayMoves() {
         const delay = 1000;
         var result = false, source, destination, figure, kill, board = [], possibleMoves = [];

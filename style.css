@@ -156,6 +156,14 @@ span.vertical {
 #move.black {
     background-color: black;
 }
+#status {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: large;
+    font-weight: bold;
+    color: red;
+}
 #params {
     padding: 1em 0;
     font-size: large;
