@@ -34,6 +34,8 @@ window.onload = function() {
     var editPositionMode = false;
     var deletePositionMode = false;
     var markMoves = true;
+    var stopDemo = false;
+    var playUserMode = false;
 
     const fields = document.getElementById('fields');
 
@@ -497,6 +499,9 @@ window.onload = function() {
             buttonReset.click();
             updateColor();
             noteStep(sequenceId);
+            if (playUserMode) {
+                makePlayMoves();
+            }
         }, delay);
         rules.registerCastling(moveParams.figure);
         const kingId = rules.checkIsKingAttacked(origin, field, null);
@@ -570,7 +575,7 @@ window.onload = function() {
         const item = document.createElement('div');
         item.id = 'step-' + id.toString();
         item.className = 'step';
-        item.innerHTML = '<span class="lp">' + (id + 1).toString() + '</span><span class="val">' + moveSequence[id].figure + '</span><span class="val">' + moveSequence[id].origin + '</span><span class="val">' + moveSequence[id].field + '</span><span class="val">' + moveSequence[id].kill + '</span>';
+        item.innerHTML = moveSequence[id] ? '<span class="lp">' + (id + 1).toString() + '</span><span class="val">' + moveSequence[id].figure + '</span><span class="val">' + moveSequence[id].origin + '</span><span class="val">' + moveSequence[id].field + '</span><span class="val">' + moveSequence[id].kill + '</span>' : '-';
         item.addEventListener('click', function() {
             stopRun = false;
             buttonNew.disabled = true;
@@ -613,11 +618,13 @@ window.onload = function() {
         buttonUndo.disabled = id != moveSequence.length;
         buttonEdit.disabled = id != moveSequence.length;
         buttonDelete.disabled = id != moveSequence.length;
-        figureId.innerText = sequenceId ? moveSequence[sequenceId - 1].figure : '--';
-        originId.innerText = sequenceId ? moveSequence[sequenceId - 1].origin : '--';
-        fieldId.innerText = sequenceId ? moveSequence[sequenceId - 1].field : '--';
-        killId.innerText = sequenceId ? moveSequence[sequenceId - 1].kill : '--';
-        msg.innerText = sequenceId ? sequenceId.toString() + '. ' + getFigureName(moveSequence[sequenceId - 1].figure) + ': ' + getFieldName(moveSequence[sequenceId - 1].origin) + ' - ' + getFieldName(moveSequence[sequenceId - 1].field) : '';
+        if (moveSequence[sequenceId - 1]) {
+            figureId.innerText = sequenceId ? moveSequence[sequenceId - 1].figure : '--';
+            originId.innerText = sequenceId ? moveSequence[sequenceId - 1].origin : '--';
+            fieldId.innerText = sequenceId ? moveSequence[sequenceId - 1].field : '--';
+            killId.innerText = sequenceId ? moveSequence[sequenceId - 1].kill : '--';
+            msg.innerText = sequenceId ? sequenceId.toString() + '. ' + getFigureName(moveSequence[sequenceId - 1].figure) + ': ' + getFieldName(moveSequence[sequenceId - 1].origin) + ' - ' + getFieldName(moveSequence[sequenceId - 1].field) : '';
+        }
         updateColor();
     }
 
@@ -769,6 +776,8 @@ window.onload = function() {
     buttonCancel.addEventListener('click', function() {
         const userDetails = document.getElementById('user');
         userDetails.style.display = 'none';
+        stopDemo = true;
+        playUserMode = false;
     });
 
     const buttonReset = document.getElementById('reset');
@@ -872,7 +881,112 @@ window.onload = function() {
                 break;
         }
     });
+    
+    const buttonRunDemo = document.getElementById('run-demo');
+    buttonRunDemo.addEventListener('click', function() {
+        stopDemo = false;
+        makeDemoMoves();
+    });
+    
+    function makeDemoMoves() {
+        const delay = 1000;
+        var result = false, source, destination, figure, kill, board = [], possibleMoves = [];
+        for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) board.push(i);
+        const shuffled = shuffle(board);
+        for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
+            source = shuffled[idx];
+            figure = fieldOccupancy[shuffled[idx]];
+            if (currentMove == player.BLACK) {
+                if (figure >= 0 && figure < 16 || figure >= 32 && figure < 40) {
+                    possibleMoves = rules.getPossibleMoves(figure, fieldOccupancy);
+                    if (possibleMoves.length) {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+            if (currentMove == player.WHITE) {
+                if (figure >= 16 && figure < 32 || figure >= 40 && figure < 48) {
+                    possibleMoves = rules.getPossibleMoves(figure, fieldOccupancy);
+                    if (possibleMoves.length) {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (result) {
+            destination = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+            kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
+            result = rules.checkIsKingSafe(figure.toString(), source.toString(), destination.toString(), kill);
+            if (result) {
+                document.getElementById('field-' + source.toString()).click();
+                document.getElementById('field-' + destination.toString()).click();
+                setTimeout(function() {
+                    if (!stopDemo) makeDemoMoves();
+                }, delay);
+            }
+            else {
+                makeDemoMoves();
+            }
+        }
+    }
+
+    const buttonRunUser = document.getElementById('run-user');
+    buttonRunUser.addEventListener('click', function() {
+        playUserMode = true;
+        msg.innerText = 'Play mode.';
+    });
+    
+    function makePlayMoves() {
+        const delay = 1000;
+        var result = false, source, destination, figure, kill, board = [], possibleMoves = [];
+        for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) board.push(i);
+        const shuffled = shuffle(board);
+        if (currentMove == player.BLACK) {
+            for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
+                source = shuffled[idx];
+                figure = fieldOccupancy[shuffled[idx]];
+                if (figure >= 0 && figure < 16 || figure >= 32 && figure < 40) {
+                    possibleMoves = rules.getPossibleMoves(figure, fieldOccupancy);
+                    if (possibleMoves.length) {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+            if (result) {
+                destination = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
+                result = rules.checkIsKingSafe(figure.toString(), source.toString(), destination.toString(), kill);
+                if (result) {
+                    setTimeout(function() {
+                        document.getElementById('field-' + source.toString()).click();
+                        document.getElementById('field-' + destination.toString()).click();
+                    }, delay);
+                }
+            }
+        }
+    }
 
     buttonNew.click();
+
+    var shuffle = function(obj) {
+        var randomIndex, used = false;
+        var result = [], usedIndex = [];
+        for (var i = 0; i < obj.length; i++) {
+            do {
+                randomIndex = Math.floor(Math.random() * obj.length);
+                used = false;
+                for (var j = 0; j < i; j++) {
+                    if (randomIndex == usedIndex[j]) used = true;
+                }
+            }
+            while (used);
+            usedIndex.push(randomIndex);
+            result.push(obj[randomIndex]);
+        }
+        return result;
+    };
 
 };

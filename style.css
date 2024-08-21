@@ -247,3 +247,10 @@ span.vertical {
 #games span.val {
     color: grey;
 }
+#demo {
+    margin-top: 160px;
+}
+#run-demo, #run-user {
+    width: 160px;
+    margin: 2px;
+}
