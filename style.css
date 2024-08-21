@@ -212,7 +212,7 @@ span.vertical {
     display: none;
     position: absolute;
     right: 0px;
-    top: 670px;
+    top: 730px;
     width: 300px;
     height: 110px;
     border: 1px solid grey;
@@ -248,7 +248,7 @@ span.vertical {
     color: grey;
 }
 #demo {
-    margin-top: 160px;
+    margin-top: 10px;
 }
 #run-demo, #run-user {
     width: 160px;

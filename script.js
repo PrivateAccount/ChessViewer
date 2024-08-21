@@ -923,7 +923,7 @@ window.onload = function() {
                 document.getElementById('field-' + source.toString()).click();
                 document.getElementById('field-' + destination.toString()).click();
                 setTimeout(function() {
-                    if (!stopDemo) makeDemoMoves();
+                    if (moveSequence.length == sequenceId && !stopDemo) makeDemoMoves();
                 }, delay);
             }
             else {
