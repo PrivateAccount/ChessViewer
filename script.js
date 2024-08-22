@@ -38,6 +38,8 @@ window.onload = function() {
     var playUserMode = false;
 
     const fields = document.getElementById('fields');
+    const msg = document.getElementById('msg');
+    const status = document.getElementById('status');
 
     for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
         const swap = Math.floor(i / BOARD_SIZE) % 2 == 0;
@@ -279,7 +281,6 @@ window.onload = function() {
 
     function markSelection(ownerId, kind) {
         const delay = 1000, mate = 1500;
-        const msg = document.getElementById('msg');
         const figureId = document.getElementById('figure-id');
         const originId = document.getElementById('origin-id');
         const fieldId = document.getElementById('field-id');
@@ -603,7 +604,6 @@ window.onload = function() {
         const originId = document.getElementById('origin-id');
         const fieldId = document.getElementById('field-id');
         const killId = document.getElementById('kill-id');
-        const msg = document.getElementById('msg');
         const parentElement = document.getElementById('games');
         var items = parentElement.children;
         for (var i = 0; i < items.length; i++) {
@@ -630,8 +630,8 @@ window.onload = function() {
 
     const buttonNew = document.getElementById('new');
     buttonNew.addEventListener('click', function() {
-        const msg = document.getElementById('msg');
         msg.innerText = 'New game ready.';
+        status.innerText = '';
         fieldOccupancy = [];
         fieldPositions = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
@@ -670,6 +670,8 @@ window.onload = function() {
         moveSequence = [];
         sequenceId = 0;
         stopRun = true;
+        stopDemo = true;
+        playUserMode = false;
         updateCounter();
         buttonReset.click();
         buttonCancel.click();
@@ -690,7 +692,6 @@ window.onload = function() {
 
     const buttonOpen = document.getElementById('open');
     buttonOpen.addEventListener('click', function() {
-        const msg = document.getElementById('msg');
         msg.innerText = 'Loading...';
         fetch('https://my-notes.pl/api/get_games.php', {
             method: "GET",
@@ -747,12 +748,10 @@ window.onload = function() {
 
     const buttonSave = document.getElementById('ok');
     buttonSave.addEventListener('click', function() {
-        const msg = document.getElementById('msg');
         msg.innerText = 'Enter your name and email...';
         const username = document.getElementById('username').value.trim();
         const email = document.getElementById('email').value.trim();
         if (username.length && email.length) {
-            const msg = document.getElementById('msg');
             msg.innerText = 'Saving...';
             fetch('https://my-notes.pl/api/store_game.php', {
                 method: "POST",
@@ -796,8 +795,8 @@ window.onload = function() {
         deletePositionMode = false;
         buttonEdit.disabled = false;
         buttonDelete.disabled = false;
-        document.getElementById('status').innerText = '';
         msg.innerText = 'Normal mode.';
+        status.innerText = '';
     });
 
     const buttonEdit = document.getElementById('edit');
@@ -807,8 +806,8 @@ window.onload = function() {
         deletePositionMode = false;
         buttonEdit.disabled = true;
         buttonDelete.disabled = false;
-        document.getElementById('status').innerText = 'E';
         msg.innerText = 'Edit mode.';
+        status.innerText = 'E';
     });
 
     const buttonDelete = document.getElementById('delete');
@@ -818,8 +817,8 @@ window.onload = function() {
         deletePositionMode = true;
         buttonEdit.disabled = false;
         buttonDelete.disabled = true;
-        document.getElementById('status').innerText = 'R';
         msg.innerText = 'Delete mode.';
+        status.innerText = 'D';
     });
 
     const buttonUndo = document.getElementById('undo');
@@ -887,8 +886,10 @@ window.onload = function() {
 
     const buttonRunDemo = document.getElementById('run-demo');
     buttonRunDemo.addEventListener('click', function() {
-        document.getElementById('status').innerText = 'D';
         stopDemo = false;
+        playUserMode = false;
+        msg.innerText = 'Computer mode.';
+        status.innerText = 'C';
         makeDemoMoves();
     });
 
@@ -904,6 +905,8 @@ window.onload = function() {
                 if (figure >= 0 && figure < 16 || figure >= 32 && figure < 40) {
                     possibleMoves = rules.getPossibleMoves(figure, fieldOccupancy);
                     if (possibleMoves.length) {
+                        destination = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                        kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
                         result = true;
                         break;
                     }
@@ -913,15 +916,53 @@ window.onload = function() {
                 if (figure >= 16 && figure < 32 || figure >= 40 && figure < 48) {
                     possibleMoves = rules.getPossibleMoves(figure, fieldOccupancy);
                     if (possibleMoves.length) {
+                        destination = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                        kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
                         result = true;
                         break;
                     }
                 }
             }
         }
+        var preferredSource, preferredFigure, found = false;
+        for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
+            preferredSource = shuffled[idx];
+            preferredFigure = fieldOccupancy[shuffled[idx]];
+            if (currentMove == player.BLACK) {
+                if (preferredFigure >= 0 && preferredFigure < 16 || preferredFigure >= 32 && preferredFigure < 40) {
+                    possibleMoves = rules.getPossibleMoves(preferredFigure, fieldOccupancy);
+                    if (possibleMoves.length) {
+                        for (var i = 0; i < possibleMoves.length; i++) {
+                            if (fieldOccupancy[possibleMoves[i]] >= 16 && fieldOccupancy[possibleMoves[i]] < 32 || fieldOccupancy[possibleMoves[i]] >= 40 && fieldOccupancy[possibleMoves[i]] < 48) {
+                                source = preferredSource;
+                                figure = preferredFigure;
+                                destination = possibleMoves[i];
+                                kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
+                                found = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (currentMove == player.WHITE) {
+                if (preferredFigure >= 16 && preferredFigure < 32 || preferredFigure >= 40 && preferredFigure < 48) {
+                    possibleMoves = rules.getPossibleMoves(preferredFigure, fieldOccupancy);
+                    if (possibleMoves.length) {
+                        for (var i = 0; i < possibleMoves.length; i++) {
+                            if (fieldOccupancy[possibleMoves[i]] >= 0 && fieldOccupancy[possibleMoves[i]] < 16 || fieldOccupancy[possibleMoves[i]] >= 32 && fieldOccupancy[possibleMoves[i]] < 40) {
+                                source = preferredSource;
+                                figure = preferredFigure;
+                                destination = possibleMoves[i];
+                                kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
+                                found = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (found) break;
+        }
         if (result) {
-            destination = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
-            kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
             result = rules.checkIsKingSafe(figure.toString(), source.toString(), destination.toString(), kill);
             if (result) {
                 document.getElementById('field-' + source.toString()).click();
@@ -938,9 +979,10 @@ window.onload = function() {
 
     const buttonRunUser = document.getElementById('run-user');
     buttonRunUser.addEventListener('click', function() {
-        document.getElementById('status').innerText = 'P';
+        stopDemo = true;
         playUserMode = true;
-        msg.innerText = 'Play mode.';
+        msg.innerText = 'Player mode.';
+        status.innerText = 'P';
     });
 
     function makePlayMoves() {
@@ -955,14 +997,34 @@ window.onload = function() {
                 if (figure >= 0 && figure < 16 || figure >= 32 && figure < 40) {
                     possibleMoves = rules.getPossibleMoves(figure, fieldOccupancy);
                     if (possibleMoves.length) {
+                        destination = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                        kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
                         result = true;
                         break;
                     }
                 }
             }
+            var preferredSource, preferredFigure, found = false;
+            for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
+                preferredSource = shuffled[idx];
+                preferredFigure = fieldOccupancy[shuffled[idx]];
+                if (preferredFigure >= 0 && preferredFigure < 16 || preferredFigure >= 32 && preferredFigure < 40) {
+                    possibleMoves = rules.getPossibleMoves(preferredFigure, fieldOccupancy);
+                    if (possibleMoves.length) {
+                        for (var i = 0; i < possibleMoves.length; i++) {
+                            if (fieldOccupancy[possibleMoves[i]] >= 16 && fieldOccupancy[possibleMoves[i]] < 32 || fieldOccupancy[possibleMoves[i]] >= 40 && fieldOccupancy[possibleMoves[i]] < 48) {
+                                source = preferredSource;
+                                figure = preferredFigure;
+                                destination = possibleMoves[i];
+                                kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
+                                found = true;
+                            }
+                        }
+                    }
+                }
+                if (found) break;
+            }
             if (result) {
-                destination = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
-                kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
                 result = rules.checkIsKingSafe(figure.toString(), source.toString(), destination.toString(), kill);
                 if (result) {
                     setTimeout(function() {
