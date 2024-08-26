@@ -1059,13 +1059,17 @@ const rules = {
         var fields = [], potential = [];
         if (figure == 4) { // black king
             potential = [-9, -8, -7, -1, 1, 7, 8, 9];
-            if (!this.castlingBreak.includes('2')) potential.push(-2);
-            if (!this.castlingBreak.includes('6')) potential.push(2);
+            if (!this.isAttacked(this.getFigureField(figure))) {
+                if (!this.castlingBreak.includes('2')) potential.push(-2);
+                if (!this.castlingBreak.includes('6')) potential.push(2);
+            }
         }
         if (figure == 28) { // white king
             potential = [-9, -8, -7, -1, 1, 7, 8, 9];
-            if (!this.castlingBreak.includes('58')) potential.push(-2);
-            if (!this.castlingBreak.includes('62')) potential.push(2);
+            if (!this.isAttacked(this.getFigureField(figure))) {
+                if (!this.castlingBreak.includes('58')) potential.push(-2);
+                if (!this.castlingBreak.includes('62')) potential.push(2);
+            }
         }
         if (figure == 1 || figure == 6 || figure == 25 || figure == 30) { // black or white knight
             potential = [-17, -15, -10, -6, 6, 10, 15, 17];
