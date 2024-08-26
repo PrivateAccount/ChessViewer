@@ -324,7 +324,9 @@ window.onload = function() {
                     if (rules.checkIsLegalMove(figureId, originId, fieldId, killId, fieldOccupancy)) {
                         registerMove();
                         if (rules.isCastling(figureId.innerText, originId.innerText, fieldId.innerText)) {
-                            registerCastling();
+                            if (rules.castlingAllowable(figureId.innerText, originId.innerText, fieldId.innerText)) {
+                                registerCastling();
+                            }
                         }
                         if (rules.isPromotion(figureId.innerText, fieldId.innerText)) {
                             registerPromotion();
