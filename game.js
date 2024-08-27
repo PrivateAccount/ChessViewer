@@ -218,7 +218,7 @@ const rules = {
             }
         }
         else if (owner == 28) { // white king
-            if (this.isCastling(owner, source, destination)) {
+            if (!this.getAttackedFields(owner) && this.isCastling(owner, source, destination)) {
                 result = this.castlingAllowable(owner, source, destination);
             }
             else if (kill == '--' || kill == '-1' || kill >= 0 && kill < 16 || kill >= 32 && kill < 40) {
@@ -226,7 +226,7 @@ const rules = {
             }
         }
         else if (owner == 4) { // black king
-            if (this.isCastling(owner, source, destination)) {
+            if (!this.getAttackedFields(owner) && this.isCastling(owner, source, destination)) {
                 result = this.castlingAllowable(owner, source, destination);
             }
             else if (kill == '--' || kill == '-1' || kill >= 16 && kill < 32 || kill >= 40 && kill < 48) {
