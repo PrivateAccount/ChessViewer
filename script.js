@@ -690,10 +690,12 @@ window.onload = function() {
         updateColor();
     });
 
+    const API_URL = 'https://fx4001zfw9.execute-api.eu-central-1.amazonaws.com';
+
     const buttonOpen = document.getElementById('open');
     buttonOpen.addEventListener('click', function() {
         msg.innerText = 'Loading...';
-        fetch('https://my-notes.pl/api/get_games.php', {
+        fetch(API_URL + '/games', {
             method: "GET",
             headers: { "Content-type": "application/json; charset=UTF-8" }
         }).then((response) => response.json()).then((response) => {
@@ -707,16 +709,16 @@ window.onload = function() {
                 const item = document.createElement('div');
                 item.id = 'game-' + items[i].id;
                 item.className = 'game';
-                item.innerHTML = '<a>' + items[i].user + ' : ' + items[i].email + '<br>'  + items[i].ip + '<br>' + items[i].modified + ' : [' + items[i].sequences + ']</a>';
+                item.innerHTML = '<a>' + items[i].user + ' : ' + items[i].email + '<br>'  + items[i].modified + ' : [' + items[i].sequences + ']</a>';
                 const gameId = items[i].id;
                 item.addEventListener('click', function() {
                     buttonNew.click();
-                    fetch('https://my-notes.pl/api/get_game.php?id=' + gameId, {
+                    fetch(API_URL + '/games?id=' + gameId, {
                         method: "GET",
                         headers: { "Content-type": "application/json; charset=UTF-8" }
                     }).then((response) => response.json()).then((response) => {
                         msg.innerText = response.message;
-                        const data = response.data;
+                        const data = response.data.details;
                         for (var i = 0; i < data.length; i++) {
                             const moveParams = { figure: parseInt(data[i].figure), origin: parseInt(data[i].origin), field: parseInt(data[i].field), kill: parseInt(data[i].killed) };
                             moveSequence.push(moveParams);
@@ -751,15 +753,18 @@ window.onload = function() {
         msg.innerText = 'Enter your name and email...';
         const username = document.getElementById('username').value.trim();
         const email = document.getElementById('email').value.trim();
+        const today = new Date();
         if (username.length && email.length) {
             msg.innerText = 'Saving...';
-            fetch('https://my-notes.pl/api/store_game.php', {
+            fetch(API_URL + '/games', {
                 method: "POST",
                 body: JSON.stringify({
+                    id: today.getTime().toString(),
                     user: username,
                     email: email,
                     sequences: moveSequence.length,
                     details: moveSequence,
+                    modified: today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString() + '-' + today.getDate().toString() + ' ' + today.getHours().toString() + ':' + today.getMinutes().toString(),
                 }),
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             }).then((response) => response.json()).then((response) => {
