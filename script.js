@@ -720,7 +720,7 @@ window.onload = function() {
                         msg.innerText = response.message;
                         const data = response.data.details;
                         for (var i = 0; i < data.length; i++) {
-                            const moveParams = { figure: parseInt(data[i].figure), origin: parseInt(data[i].origin), field: parseInt(data[i].field), kill: parseInt(data[i].killed) };
+                            const moveParams = { figure: parseInt(data[i].figure), origin: parseInt(data[i].origin), field: parseInt(data[i].field), kill: parseInt(data[i].kill) };
                             moveSequence.push(moveParams);
                             noteStep(i);
                         }
