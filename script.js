@@ -709,7 +709,7 @@ window.onload = function() {
                 const item = document.createElement('div');
                 item.id = 'game-' + items[i].id;
                 item.className = 'game';
-                item.innerHTML = '<a>' + items[i].user + ' : ' + items[i].email + '<br>'  + items[i].saved + ' : [' + items[i].sequences + ']</a>';
+                item.innerHTML = '<a>' + items[i].user + ' : ' + items[i].email + '<br>'  + items[i].saved.year + '-' + items[i].saved.month + '-' + items[i].saved.day + ' ' + items[i].saved.hours + ':' + items[i].saved.minutes + ':' + items[i].saved.seconds + ' : [' + items[i].sequences + ']</a>';
                 const gameId = items[i].id;
                 item.addEventListener('click', function() {
                     buttonNew.click();
@@ -754,13 +754,21 @@ window.onload = function() {
         const username = document.getElementById('username').value.trim();
         const email = document.getElementById('email').value.trim();
         const today = new Date();
+        const saved = {
+            year: today.getFullYear().toString(),
+            month: (today.getMonth() + 1).toString(),
+            day: today.getDate().toString(),
+            hours: today.getHours().toString(),
+            minutes: today.getMinutes().toString(),
+            seconds: today.getSeconds().toString(),
+        };
         if (username.length && email.length) {
             msg.innerText = 'Saving...';
             fetch(API_URL + '/games', {
                 method: "POST",
                 body: JSON.stringify({
                     id: today.getTime().toString(),
-                    saved: today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString() + '-' + today.getDate().toString() + ' ' + today.getHours().toString() + ':' + today.getMinutes().toString() + ':' + today.getSeconds().toString(),
+                    saved: saved,
                     user: username,
                     email: email,
                     sequences: moveSequence.length,
