@@ -709,7 +709,7 @@ window.onload = function() {
                 const item = document.createElement('div');
                 item.id = 'game-' + items[i].id;
                 item.className = 'game';
-                item.innerHTML = '<a>' + items[i].user + ' : ' + items[i].email + '<br>'  + items[i].modified + ' : [' + items[i].sequences + ']</a>';
+                item.innerHTML = '<a>' + items[i].user + ' : ' + items[i].email + '<br>'  + items[i].saved + ' : [' + items[i].sequences + ']</a>';
                 const gameId = items[i].id;
                 item.addEventListener('click', function() {
                     buttonNew.click();
@@ -760,7 +760,7 @@ window.onload = function() {
                 method: "POST",
                 body: JSON.stringify({
                     id: today.getTime().toString(),
-                    modified: today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString() + '-' + today.getDate().toString() + '/' + today.getHours().toString() + ':' + today.getMinutes().toString(),
+                    saved: today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString() + '-' + today.getDate().toString() + ' ' + today.getHours().toString() + ':' + today.getMinutes().toString() + ':' + today.getSeconds().toString(),
                     user: username,
                     email: email,
                     sequences: moveSequence.length,
