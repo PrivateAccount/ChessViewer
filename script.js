@@ -764,7 +764,7 @@ window.onload = function() {
                     email: email,
                     sequences: moveSequence.length,
                     details: moveSequence,
-                    modified: today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString() + '-' + today.getDate().toString() + ' ' + today.getHours().toString() + ':' + today.getMinutes().toString(),
+                    modified: today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString() + '-' + today.getDate().toString() + '/' + today.getHours().toString() + ':' + today.getMinutes().toString(),
                 }),
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             }).then((response) => response.json()).then((response) => {
