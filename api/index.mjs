@@ -42,6 +42,7 @@ export const handler = async (event, context) => {
                         TableName: tableName,
                         Item: {
                             id: requestJSON.id,
+                            saved: requestJSON.saved,
                             user: requestJSON.user,
                             email: requestJSON.email,
                             sequences: requestJSON.sequences,
