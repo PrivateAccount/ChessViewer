@@ -393,6 +393,11 @@ window.onload = function() {
                 figureId.innerText = pieceId.replace('figure-', '');
                 originId.innerText = placeId.replace('field-', '');
                 if (figureId.innerText != 4 && figureId.innerText != 28) {
+                    const moveParams = { figure: figureId.innerText, origin: originId.innerText, field: originId.innerText, kill: figureId.innerText };
+                    moveSequence.push(moveParams);
+                    runForwardButton.disabled = false;
+                    runForwardButton.click();
+                    noteStep(sequenceId);
                     removeFigure(parseInt(figureId.innerText));
                     fieldOccupancy[parseInt(originId.innerText)] = -1;
                 }
