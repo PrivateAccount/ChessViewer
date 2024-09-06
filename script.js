@@ -1075,11 +1075,7 @@ window.onload = function() {
             }
             updateCounter();
             loadPromotions();
-            runForwardButton.disabled = false;
-            runBackwardButton.disabled = false;
-            runFirstButton.disabled = false;
-            runLastButton.disabled = false;
-            readOnlyMode = false;
+            runLastButton.click();
         });
     }
 
