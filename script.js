@@ -727,6 +727,7 @@ window.onload = function() {
                         for (var i = 0; i < data.length; i++) {
                             const moveParams = { figure: parseInt(data[i].figure), origin: parseInt(data[i].origin), field: parseInt(data[i].field), kill: parseInt(data[i].kill) };
                             moveSequence.push(moveParams);
+                            if (moveParams.origin == moveParams.field) fieldOccupancy[parseInt(moveParams.field)] = -1;
                             noteStep(i);
                         }
                         updateCounter();
