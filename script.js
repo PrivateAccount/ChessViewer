@@ -1060,8 +1060,9 @@ window.onload = function() {
 
     const paramName = '?position=';
     const urlParam = window.location.href.indexOf(paramName);
+    const paramLength = 13;
     if (urlParam > -1) {
-        const id = window.location.href.substring(urlParam + paramName.length, window.location.href.length);
+        const id = window.location.href.substring(urlParam + paramName.length, urlParam + paramName.length + paramLength);
         fetch(API_URL + '/games?id=' + id, {
             method: "GET",
             headers: { "Content-type": "application/json; charset=UTF-8" }
