@@ -554,6 +554,7 @@ window.onload = function() {
             runForwardButton.click();
             buttonReset.click();
             noteStep(sequenceId);
+            fieldOccupancy[rules.promotion.field] = rules.promotion.figure;
         }, delay);
         const kingId = rules.checkIsKingAttacked(origin, field, rules.promotion.figure);
         if (kingId) {
