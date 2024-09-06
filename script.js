@@ -149,6 +149,7 @@ window.onload = function() {
             });
             fieldOccupancy[moveSequence[sequenceId].origin] = -1;
             fieldOccupancy[moveSequence[sequenceId].field] = moveSequence[sequenceId].figure;
+            if (moveSequence[sequenceId].origin == moveSequence[sequenceId].field) fieldOccupancy[moveSequence[sequenceId].field] = -1;
             figurePositions[moveSequence[sequenceId].figure] = moveSequence[sequenceId].field;
         }
     });
@@ -171,6 +172,7 @@ window.onload = function() {
             });
             fieldOccupancy[moveSequence[sequenceId - 1].origin] = moveSequence[sequenceId - 1].figure;
             fieldOccupancy[moveSequence[sequenceId - 1].field] = moveSequence[sequenceId - 1].kill;
+            if (moveSequence[sequenceId - 1].origin == moveSequence[sequenceId - 1].field) fieldOccupancy[moveSequence[sequenceId - 1].field] = -1;
             figurePositions[moveSequence[sequenceId - 1].figure] = moveSequence[sequenceId - 1].origin;
         }
     });
@@ -727,7 +729,6 @@ window.onload = function() {
                         for (var i = 0; i < data.length; i++) {
                             const moveParams = { figure: parseInt(data[i].figure), origin: parseInt(data[i].origin), field: parseInt(data[i].field), kill: parseInt(data[i].kill) };
                             moveSequence.push(moveParams);
-                            if (moveParams.origin == moveParams.field) fieldOccupancy[parseInt(moveParams.field)] = -1;
                             noteStep(i);
                         }
                         updateCounter();
