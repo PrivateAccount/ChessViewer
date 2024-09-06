@@ -1058,6 +1058,31 @@ window.onload = function() {
 
     buttonNew.click();
 
+    const paramName = '?position=';
+    const urlParam = window.location.href.indexOf(paramName);
+    if (urlParam > -1) {
+        const id = window.location.href.substring(urlParam + paramName.length, window.location.href.length);
+        fetch(API_URL + '/games?id=' + id, {
+            method: "GET",
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        }).then((response) => response.json()).then((response) => {
+            msg.innerText = response.message;
+            const data = response.data.details;
+            for (var i = 0; i < data.length; i++) {
+                const moveParams = { figure: parseInt(data[i].figure), origin: parseInt(data[i].origin), field: parseInt(data[i].field), kill: parseInt(data[i].kill) };
+                moveSequence.push(moveParams);
+                noteStep(i);
+            }
+            updateCounter();
+            loadPromotions();
+            runForwardButton.disabled = false;
+            runBackwardButton.disabled = false;
+            runFirstButton.disabled = false;
+            runLastButton.disabled = false;
+            readOnlyMode = false;
+        });
+    }
+
     var shuffle = function(obj) {
         var randomIndex, used = false;
         var result = [], usedIndex = [];
