@@ -354,7 +354,7 @@ window.onload = function() {
                     setTimeout(function() {
                         if (rules.checkIsMate()) {
                             const kingField = currentMove == player.WHITE ? rules.getFigureField(28) : rules.getFigureField(4);
-                            document.getElementById('field-' + kingField).classList.add('debug');
+                            document.getElementById('field-' + kingField).classList.add('mate');
                             msg.innerText = 'Check mate.';
                         }
                     }, mate);
@@ -463,7 +463,7 @@ window.onload = function() {
     function clearSelection() {
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             const field = 'field-' + i.toString();
-            document.getElementById(field).classList.remove('selected', 'failed', 'check', 'debug', 'free');
+            document.getElementById(field).classList.remove('selected', 'failed', 'check', 'mate', 'free');
         }
         selection = [];
     }
@@ -777,8 +777,8 @@ window.onload = function() {
                 body: JSON.stringify({
                     id: today.getTime().toString(),
                     saved: saved,
-                    user: username,
-                    email: email,
+                    user: username.substring(0, 16),
+                    email: email.substring(0, 32),
                     sequences: moveSequence.length,
                     details: moveSequence,
                 }),

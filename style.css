@@ -49,11 +49,11 @@ body {
 .field.light.check, .field.dark.check {
     background-color: gold;
 }
-.field.light.debug, .field.dark.debug {
+.field.light.mate, .field.dark.mate {
     background-color: blue;
 }
 .field.light.free, .field.dark.free {
-    background-color: lightcoral;
+    background-color: lightgreen;
 }
 #labels-top {
     position: relative;
