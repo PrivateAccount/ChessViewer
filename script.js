@@ -740,6 +740,7 @@ window.onload = function() {
                         runLastButton.disabled = false;
                         readOnlyMode = false;
                     });
+                    copyLink(gameId);
                 });
                 parentElement.appendChild(item);
             }
@@ -762,6 +763,7 @@ window.onload = function() {
         const username = document.getElementById('username').value.trim();
         const email = document.getElementById('email').value.trim();
         const today = new Date();
+        const id = today.getTime().toString();
         const saved = {
             year: today.getFullYear().toString(),
             month: (today.getMonth() + 1).toString(),
@@ -775,7 +777,7 @@ window.onload = function() {
             fetch(API_URL + '/games', {
                 method: "POST",
                 body: JSON.stringify({
-                    id: today.getTime().toString(),
+                    id: id,
                     saved: saved,
                     user: username.substring(0, 16),
                     email: email.substring(0, 32),
@@ -790,6 +792,7 @@ window.onload = function() {
                 buttonOpen.click();
             });
         }
+        copyLink(id);
     });
 
     const buttonCancel = document.getElementById('cancel');
@@ -1097,6 +1100,17 @@ window.onload = function() {
             result.push(obj[randomIndex]);
         }
         return result;
+    };
+
+    var copyLink = function(id) {
+        const URL = 'https://master.d2mlbkja551bj3.amplifyapp.com/';
+        const link = URL + '?position=' + id;
+        const textarea = document.createElement("textarea");
+        textarea.value = link;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
     };
 
 };
