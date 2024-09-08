@@ -1057,6 +1057,7 @@ const rules = {
     },
     getPossibleMoves: function(figure, fieldOccupancy) {
         var fields = [], potential = [];
+        this.fieldOccupancy = fieldOccupancy;
         if (figure == 4) { // black king
             potential = [-9, -8, -7, -1, 1, 7, 8, 9];
             if (!this.isAttacked(this.getFigureField(figure))) {
@@ -1093,7 +1094,6 @@ const rules = {
             else if (this.getPosition(this.getFigureField(figure)).column == 7) potential = [-8, -9, -16];
             else potential = [-7, -8, -9, -16];
         }
-        this.fieldOccupancy = fieldOccupancy;
         for (var i = 0; i < potential.length; i++) {
             const examine = this.getFigureField(figure) + potential[i];
             const target = this.fieldOccupancy[examine] == undefined ? -1 : this.fieldOccupancy[examine];
