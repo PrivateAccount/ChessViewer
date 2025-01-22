@@ -1,4 +1,4 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
 import {
     DynamoDBDocumentClient,
     ScanCommand,
@@ -29,7 +29,10 @@ export const handler = async (event, context) => {
                 body = await dynamo.send(
                     new ScanCommand({ TableName: tableName })
                 );
-                body = body.Items;
+                const sortedItems = body.Items.sort((a, b) => {
+                    return parseInt(b.id) - parseInt(a.id);
+                });
+                body = sortedItems;
                 if (event.rawQueryString != "") {
                     body = body.find(item => item.id == event.rawQueryString.replace("id=", ""));
                 }
