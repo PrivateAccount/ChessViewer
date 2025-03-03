@@ -34,6 +34,7 @@ window.onload = function() {
     var editPositionMode = false;
     var deletePositionMode = false;
     var markMoves = true;
+    var playDemoMode = false;
     var stopDemo = false;
     var playUserMode = false;
 
@@ -623,9 +624,9 @@ window.onload = function() {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         currentMove = rules.getCurrentMove(moveSequence, sequenceId);
-        buttonUndo.disabled = id != moveSequence.length;
-        buttonEdit.disabled = id != moveSequence.length;
-        buttonDelete.disabled = id != moveSequence.length;
+        buttonUndo.disabled = id != moveSequence.length || playDemoMode;
+        buttonEdit.disabled = id != moveSequence.length || playDemoMode;
+        buttonDelete.disabled = id != moveSequence.length || playDemoMode;
         if (moveSequence[sequenceId - 1]) {
             figureId.innerText = sequenceId ? moveSequence[sequenceId - 1].figure : '--';
             originId.innerText = sequenceId ? moveSequence[sequenceId - 1].origin : '--';
@@ -679,6 +680,7 @@ window.onload = function() {
         sequenceId = 0;
         stopRun = true;
         stopDemo = true;
+        playDemoMode = false;
         playUserMode = false;
         updateCounter();
         buttonReset.click();
@@ -912,6 +914,7 @@ window.onload = function() {
     buttonRunDemo.addEventListener('click', function() {
         stopDemo = false;
         playUserMode = false;
+        playDemoMode = true;
         msg.innerText = 'Computer mode.';
         status.innerText = 'C';
         makeDemoMoves();
@@ -1033,6 +1036,7 @@ window.onload = function() {
     buttonRunUser.addEventListener('click', function() {
         stopDemo = true;
         playUserMode = true;
+        playDemoMode = true;
         msg.innerText = 'Player mode.';
         status.innerText = 'P';
     });
@@ -1074,7 +1078,6 @@ window.onload = function() {
                                 if (kill != '--') {
                                     lastEval = evaluate;
                                     evaluate = priorty.indexOf(kill);
-                                    console.log(evaluate, lastEval);
                                     if (evaluate < lastEval) {
                                         preferredIndex = i;
                                     }
