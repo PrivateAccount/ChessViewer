@@ -1060,7 +1060,7 @@ window.onload = function() {
                     }
                 }
             }
-            var preferredSource, preferredFigure, found = false, evaluate, lastEval, preferredIndex = -1;
+            var preferredSource, preferredFigure, evaluate, lastEval, bestSource, bestFigure, bestDestination, bestKill, bestEval = false;
             const priorty = [28, 27, 40, 41, 42, 43, 44, 45, 46, 47, 24, 31, 25, 30, 26, 29, 16, 17, 18, 19, 20, 21, 22, 23];
             evaluate = priorty.length;
             for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
@@ -1074,26 +1074,26 @@ window.onload = function() {
                                 source = preferredSource;
                                 figure = preferredFigure;
                                 destination = possibleMoves[i];
-                                kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
-                                if (kill != '--') {
-                                    lastEval = evaluate;
-                                    evaluate = priorty.indexOf(kill);
-                                    if (evaluate < lastEval) {
-                                        preferredIndex = i;
-                                    }
+                                kill = fieldOccupancy[destination];
+                                lastEval = evaluate;
+                                evaluate = priorty.indexOf(kill);
+                                if (evaluate < lastEval) {
+                                    bestSource = source;
+                                    bestFigure = figure;
+                                    bestDestination = destination;
+                                    bestKill = kill;
+                                    bestEval = true;
                                 }
-                                found = true;
                             }
-                        }
-                        if (preferredIndex > -1) {
-                            source = preferredSource;
-                            figure = preferredFigure;
-                            destination = possibleMoves[preferredIndex];
-                            kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
                         }
                     }
                 }
-                if (found) break;
+            }
+            if (bestEval) {
+                source = bestSource;
+                figure = bestFigure;
+                destination = bestDestination;
+                kill = bestKill;
             }
             if (result) {
                 result = rules.checkIsKingSafe(figure.toString(), source.toString(), destination.toString(), kill);
