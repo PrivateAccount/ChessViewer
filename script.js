@@ -965,6 +965,15 @@ window.onload = function() {
                     possibleMoves = rules.getPossibleMoves(preferredFigure, fieldOccupancy);
                     if (possibleMoves.length) {
                         for (var i = 0; i < possibleMoves.length; i++) {
+                            const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
+                            if (kingId) {
+                                bestSource = preferredSource;
+                                bestFigure = preferredFigure;
+                                bestDestination = possibleMoves[i];
+                                bestKill = fieldOccupancy[bestDestination];
+                                bestEval = true;
+                                break;
+                            }
                             if (fieldOccupancy[possibleMoves[i]] >= 16 && fieldOccupancy[possibleMoves[i]] < 32 || fieldOccupancy[possibleMoves[i]] >= 40 && fieldOccupancy[possibleMoves[i]] < 48) {
                                 source = preferredSource;
                                 figure = preferredFigure;
@@ -989,6 +998,15 @@ window.onload = function() {
                     possibleMoves = rules.getPossibleMoves(preferredFigure, fieldOccupancy);
                     if (possibleMoves.length) {
                         for (var i = 0; i < possibleMoves.length; i++) {
+                            const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
+                            if (kingId) {
+                                bestSource = preferredSource;
+                                bestFigure = preferredFigure;
+                                bestDestination = possibleMoves[i];
+                                bestKill = fieldOccupancy[bestDestination];
+                                bestEval = true;
+                                break;
+                            }
                             if (fieldOccupancy[possibleMoves[i]] >= 0 && fieldOccupancy[possibleMoves[i]] < 16 || fieldOccupancy[possibleMoves[i]] >= 32 && fieldOccupancy[possibleMoves[i]] < 40) {
                                 source = preferredSource;
                                 figure = preferredFigure;
@@ -1072,6 +1090,15 @@ window.onload = function() {
                     possibleMoves = rules.getPossibleMoves(preferredFigure, fieldOccupancy);
                     if (possibleMoves.length) {
                         for (var i = 0; i < possibleMoves.length; i++) {
+                            const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
+                            if (kingId) {
+                                bestSource = preferredSource;
+                                bestFigure = preferredFigure;
+                                bestDestination = possibleMoves[i];
+                                bestKill = fieldOccupancy[bestDestination];
+                                bestEval = true;
+                                break;
+                            }
                             if (fieldOccupancy[possibleMoves[i]] >= 16 && fieldOccupancy[possibleMoves[i]] < 32 || fieldOccupancy[possibleMoves[i]] >= 40 && fieldOccupancy[possibleMoves[i]] < 48) {
                                 source = preferredSource;
                                 figure = preferredFigure;
