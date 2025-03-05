@@ -307,7 +307,6 @@ window.onload = function() {
                     if (rules.checkMoveOrder(parseInt(figureId.innerText))) {
                         document.getElementById(placeId).classList.add('selected');
                         selection.push(placeId);
-                        buttonEdit.disabled = true;
                         if (markMoves) {
                             const possibleMoves = rules.getPossibleMoves(figureId.innerText, fieldOccupancy);
                             for (var i = 0; i < possibleMoves.length; i++) {
@@ -321,7 +320,6 @@ window.onload = function() {
                 if (placeId != selection[0]) {
                     document.getElementById(placeId).classList.add('selected');
                     selection.push(placeId);
-                    buttonEdit.disabled = false;
                     fieldId.innerText = placeId.replace('field-', '');
                     killId.innerText = pieceId.replace('figure-', '');
                     if (rules.checkIsLegalMove(figureId, originId, fieldId, killId, fieldOccupancy)) {
@@ -336,7 +334,7 @@ window.onload = function() {
                             registerPassant();
                         }
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
-                        buttonSend.disabled = readOnlyMode;
+                        buttonSend.disabled = readOnlyMode || playDemoMode || playUserMode;
                         msg.innerText = 'Moving...';
                     }
                     else {
@@ -624,9 +622,6 @@ window.onload = function() {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         currentMove = rules.getCurrentMove(moveSequence, sequenceId);
-        buttonUndo.disabled = id != moveSequence.length || playDemoMode;
-        buttonEdit.disabled = id != moveSequence.length || playDemoMode;
-        buttonDelete.disabled = id != moveSequence.length || playDemoMode;
         if (moveSequence[sequenceId - 1]) {
             figureId.innerText = sequenceId ? moveSequence[sequenceId - 1].figure : '--';
             originId.innerText = sequenceId ? moveSequence[sequenceId - 1].origin : '--';
@@ -634,6 +629,7 @@ window.onload = function() {
             killId.innerText = sequenceId ? moveSequence[sequenceId - 1].kill : '--';
             msg.innerText = sequenceId ? sequenceId.toString() + '. ' + getFigureName(moveSequence[sequenceId - 1].figure) + ': ' + getFieldName(moveSequence[sequenceId - 1].origin) + ' - ' + getFieldName(moveSequence[sequenceId - 1].field) : '';
         }
+        buttonUndo.disabled = id != moveSequence.length || playDemoMode || playUserMode;
         updateColor();
     }
 
@@ -689,6 +685,7 @@ window.onload = function() {
         runBackwardButton.disabled = false;
         runFirstButton.disabled = false;
         runLastButton.disabled = false;
+        buttonOpen.disabled = false;
         buttonSend.disabled = true;
         buttonUndo.disabled = true;
         buttonEdit.disabled = false;
@@ -757,7 +754,6 @@ window.onload = function() {
         const userDetails = document.getElementById('user');
         userDetails.style.display = 'block';
     });
-    buttonSend.disabled = true;
 
     const buttonSave = document.getElementById('ok');
     buttonSave.addEventListener('click', function() {
@@ -821,6 +817,7 @@ window.onload = function() {
         deletePositionMode = false;
         buttonEdit.disabled = false;
         buttonDelete.disabled = false;
+        buttonSend.disabled = false;
         msg.innerText = 'Normal mode.';
         status.innerText = '';
     });
@@ -832,6 +829,7 @@ window.onload = function() {
         deletePositionMode = false;
         buttonEdit.disabled = true;
         buttonDelete.disabled = false;
+        buttonSend.disabled = true;
         msg.innerText = 'Edit mode.';
         status.innerText = 'E';
     });
@@ -843,6 +841,7 @@ window.onload = function() {
         deletePositionMode = true;
         buttonEdit.disabled = false;
         buttonDelete.disabled = true;
+        buttonSend.disabled = true;
         msg.innerText = 'Delete mode.';
         status.innerText = 'D';
     });
@@ -917,6 +916,10 @@ window.onload = function() {
         playDemoMode = true;
         msg.innerText = 'Computer mode.';
         status.innerText = 'C';
+        buttonOpen.disabled = true;
+        buttonSend.disabled = true;
+        buttonEdit.disabled = true;
+        buttonDelete.disabled = true;
         makeDemoMoves();
     });
 
@@ -966,7 +969,7 @@ window.onload = function() {
                                 source = preferredSource;
                                 figure = preferredFigure;
                                 destination = possibleMoves[i];
-                                kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
+                                kill = fieldOccupancy[destination];
                                 lastEval = evaluate;
                                 evaluate = priorty.indexOf(kill);
                                 if (evaluate < lastEval) {
@@ -990,7 +993,7 @@ window.onload = function() {
                                 source = preferredSource;
                                 figure = preferredFigure;
                                 destination = possibleMoves[i];
-                                kill = fieldOccupancy[destination] >= 0 ? fieldOccupancy[destination] : '--';
+                                kill = fieldOccupancy[destination];
                                 lastEval = evaluate;
                                 evaluate = priorty.indexOf(kill);
                                 if (evaluate < lastEval) {
@@ -1033,6 +1036,10 @@ window.onload = function() {
         playUserMode = true;
         playDemoMode = true;
         msg.innerText = 'Player mode.';
+        buttonOpen.disabled = true;
+        buttonSend.disabled = true;
+        buttonEdit.disabled = true;
+        buttonDelete.disabled = true;
         status.innerText = 'P';
     });
 
