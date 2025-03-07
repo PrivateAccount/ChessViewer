@@ -924,7 +924,7 @@ window.onload = function() {
     });
 
     function makeDemoMoves() {
-        const delay = 1500;
+        const delay = 2000;
         var result = false, source, destination, figure, kill, board = [], possibleMoves = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) board.push(i);
         const shuffled = shuffle(board);
@@ -957,6 +957,7 @@ window.onload = function() {
         var preferredSource, preferredFigure, evaluate, lastEval, bestSource, bestFigure, bestDestination, bestKill, bestEval = false;
         const priorty = [4, 28, 3, 32, 33, 34, 35, 36, 37, 38, 39, 27, 40, 41, 42, 43, 44, 45, 46, 47, 0, 7, 24, 31, 1, 6, 25, 30, 2, 5, 26, 29, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
         evaluate = priorty.length;
+        var checkMoves = [];
         for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
             preferredSource = shuffled[idx];
             preferredFigure = fieldOccupancy[shuffled[idx]];
@@ -967,12 +968,8 @@ window.onload = function() {
                         for (var i = 0; i < possibleMoves.length; i++) {
                             const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
                             if (kingId) {
-                                bestSource = preferredSource;
-                                bestFigure = preferredFigure;
-                                bestDestination = possibleMoves[i];
-                                bestKill = fieldOccupancy[bestDestination];
+                                checkMoves.push({ source: preferredSource, figure: preferredFigure, destination: possibleMoves[i], kill: fieldOccupancy[possibleMoves[i]] });
                                 bestEval = true;
-                                break;
                             }
                             if (fieldOccupancy[possibleMoves[i]] >= 16 && fieldOccupancy[possibleMoves[i]] < 32 || fieldOccupancy[possibleMoves[i]] >= 40 && fieldOccupancy[possibleMoves[i]] < 48) {
                                 source = preferredSource;
@@ -1000,12 +997,8 @@ window.onload = function() {
                         for (var i = 0; i < possibleMoves.length; i++) {
                             const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
                             if (kingId) {
-                                bestSource = preferredSource;
-                                bestFigure = preferredFigure;
-                                bestDestination = possibleMoves[i];
-                                bestKill = fieldOccupancy[bestDestination];
+                                checkMoves.push({ source: preferredSource, figure: preferredFigure, destination: possibleMoves[i], kill: fieldOccupancy[possibleMoves[i]] });
                                 bestEval = true;
-                                break;
                             }
                             if (fieldOccupancy[possibleMoves[i]] >= 0 && fieldOccupancy[possibleMoves[i]] < 16 || fieldOccupancy[possibleMoves[i]] >= 32 && fieldOccupancy[possibleMoves[i]] < 40) {
                                 source = preferredSource;
@@ -1028,6 +1021,13 @@ window.onload = function() {
             }
         }
         if (bestEval) {
+            if (checkMoves.length) {
+                const randomIdx = Math.floor(Math.random() * checkMoves.length);
+                bestSource = checkMoves[randomIdx].source;
+                bestFigure = checkMoves[randomIdx].figure;
+                bestDestination = checkMoves[randomIdx].destination;
+                bestKill = checkMoves[randomIdx].kill;
+            }
             source = bestSource;
             figure = bestFigure;
             destination = bestDestination;
@@ -1062,7 +1062,7 @@ window.onload = function() {
     });
 
     function makePlayMoves() {
-        const delay = 1000;
+        const delay = 2000;
         var result = false, source, destination, figure, kill, board = [], possibleMoves = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) board.push(i);
         const shuffled = shuffle(board);
@@ -1083,6 +1083,7 @@ window.onload = function() {
             var preferredSource, preferredFigure, evaluate, lastEval, bestSource, bestFigure, bestDestination, bestKill, bestEval = false;
             const priorty = [28, 27, 40, 41, 42, 43, 44, 45, 46, 47, 24, 31, 25, 30, 26, 29, 16, 17, 18, 19, 20, 21, 22, 23];
             evaluate = priorty.length;
+            var checkMoves = [];
             for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
                 preferredSource = shuffled[idx];
                 preferredFigure = fieldOccupancy[shuffled[idx]];
@@ -1092,12 +1093,8 @@ window.onload = function() {
                         for (var i = 0; i < possibleMoves.length; i++) {
                             const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
                             if (kingId) {
-                                bestSource = preferredSource;
-                                bestFigure = preferredFigure;
-                                bestDestination = possibleMoves[i];
-                                bestKill = fieldOccupancy[bestDestination];
+                                checkMoves.push({ source: preferredSource, figure: preferredFigure, destination: possibleMoves[i], kill: fieldOccupancy[possibleMoves[i]] });
                                 bestEval = true;
-                                break;
                             }
                             if (fieldOccupancy[possibleMoves[i]] >= 16 && fieldOccupancy[possibleMoves[i]] < 32 || fieldOccupancy[possibleMoves[i]] >= 40 && fieldOccupancy[possibleMoves[i]] < 48) {
                                 source = preferredSource;
@@ -1119,6 +1116,13 @@ window.onload = function() {
                 }
             }
             if (bestEval) {
+                if (checkMoves.length) {
+                    const randomIdx = Math.floor(Math.random() * checkMoves.length);
+                    bestSource = checkMoves[randomIdx].source;
+                    bestFigure = checkMoves[randomIdx].figure;
+                    bestDestination = checkMoves[randomIdx].destination;
+                    bestKill = checkMoves[randomIdx].kill;
+                }
                 source = bestSource;
                 figure = bestFigure;
                 destination = bestDestination;
