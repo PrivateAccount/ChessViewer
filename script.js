@@ -969,6 +969,10 @@ window.onload = function() {
                             const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
                             if (kingId) {
                                 checkMoves.push({ source: preferredSource, figure: preferredFigure, destination: possibleMoves[i], kill: fieldOccupancy[possibleMoves[i]] });
+                                bestSource = preferredSource;
+                                bestFigure = preferredFigure;
+                                bestDestination = possibleMoves[i];
+                                bestKill = fieldOccupancy[bestDestination];
                                 bestEval = true;
                             }
                             if (fieldOccupancy[possibleMoves[i]] >= 16 && fieldOccupancy[possibleMoves[i]] < 32 || fieldOccupancy[possibleMoves[i]] >= 40 && fieldOccupancy[possibleMoves[i]] < 48) {
@@ -998,6 +1002,10 @@ window.onload = function() {
                             const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
                             if (kingId) {
                                 checkMoves.push({ source: preferredSource, figure: preferredFigure, destination: possibleMoves[i], kill: fieldOccupancy[possibleMoves[i]] });
+                                bestSource = preferredSource;
+                                bestFigure = preferredFigure;
+                                bestDestination = possibleMoves[i];
+                                bestKill = fieldOccupancy[bestDestination];
                                 bestEval = true;
                             }
                             if (fieldOccupancy[possibleMoves[i]] >= 0 && fieldOccupancy[possibleMoves[i]] < 16 || fieldOccupancy[possibleMoves[i]] >= 32 && fieldOccupancy[possibleMoves[i]] < 40) {
@@ -1021,7 +1029,7 @@ window.onload = function() {
             }
         }
         if (bestEval) {
-            if (checkMoves.length) {
+            if (checkMoves.length && Math.random() > 0.5) {
                 const randomIdx = Math.floor(Math.random() * checkMoves.length);
                 bestSource = checkMoves[randomIdx].source;
                 bestFigure = checkMoves[randomIdx].figure;
@@ -1094,6 +1102,10 @@ window.onload = function() {
                             const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
                             if (kingId) {
                                 checkMoves.push({ source: preferredSource, figure: preferredFigure, destination: possibleMoves[i], kill: fieldOccupancy[possibleMoves[i]] });
+                                bestSource = preferredSource;
+                                bestFigure = preferredFigure;
+                                bestDestination = possibleMoves[i];
+                                bestKill = fieldOccupancy[bestDestination];
                                 bestEval = true;
                             }
                             if (fieldOccupancy[possibleMoves[i]] >= 16 && fieldOccupancy[possibleMoves[i]] < 32 || fieldOccupancy[possibleMoves[i]] >= 40 && fieldOccupancy[possibleMoves[i]] < 48) {
@@ -1116,7 +1128,7 @@ window.onload = function() {
                 }
             }
             if (bestEval) {
-                if (checkMoves.length) {
+                if (checkMoves.length && Math.random() > 0.5) {
                     const randomIdx = Math.floor(Math.random() * checkMoves.length);
                     bestSource = checkMoves[randomIdx].source;
                     bestFigure = checkMoves[randomIdx].figure;
