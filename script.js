@@ -37,6 +37,7 @@ window.onload = function() {
     var playDemoMode = false;
     var stopDemo = false;
     var playUserMode = false;
+    var demoFiguresLeft = {};
 
     const fields = document.getElementById('fields');
     const msg = document.getElementById('msg');
@@ -957,7 +958,7 @@ window.onload = function() {
         var preferredSource, preferredFigure, evaluate, lastEval, bestSource, bestFigure, bestDestination, bestKill, bestEval = false;
         const priorty = [4, 28, 3, 32, 33, 34, 35, 36, 37, 38, 39, 27, 40, 41, 42, 43, 44, 45, 46, 47, 0, 7, 24, 31, 1, 6, 25, 30, 2, 5, 26, 29, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
         evaluate = priorty.length;
-        var checkMoves = [];
+        var checkMoves = [], figuresLeft = 0;
         for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
             preferredSource = shuffled[idx];
             preferredFigure = fieldOccupancy[shuffled[idx]];
@@ -992,7 +993,9 @@ window.onload = function() {
                             }
                         }
                     }
+                    figuresLeft++;
                 }
+                demoFiguresLeft.BLACK = figuresLeft;
             }
             if (currentMove == player.WHITE) {
                 if (preferredFigure >= 16 && preferredFigure < 32 || preferredFigure >= 40 && preferredFigure < 48) {
@@ -1025,11 +1028,13 @@ window.onload = function() {
                             }
                         }
                     }
+                    figuresLeft++;
                 }
+                demoFiguresLeft.WHITE = figuresLeft;
             }
         }
         if (bestEval) {
-            if (checkMoves.length && Math.random() > 0.5) {
+            if (checkMoves.length) {
                 const randomIdx = Math.floor(Math.random() * checkMoves.length);
                 bestSource = checkMoves[randomIdx].source;
                 bestFigure = checkMoves[randomIdx].figure;
@@ -1040,6 +1045,14 @@ window.onload = function() {
             figure = bestFigure;
             destination = bestDestination;
             kill = bestKill;
+        }
+        if (demoFiguresLeft.BLACK == 1 && demoFiguresLeft.WHITE == 1) {
+            const blackKing = rules.getFigureField(4);
+            document.getElementById('field-' + blackKing).classList.add('mate');
+            const whiteKing = rules.getFigureField(28);
+            document.getElementById('field-' + whiteKing).classList.add('mate');
+            msg.innerText = 'Game over.';
+            return;
         }
         if (result) {
             result = rules.checkIsKingSafe(figure.toString(), source.toString(), destination.toString(), kill);
@@ -1128,7 +1141,7 @@ window.onload = function() {
                 }
             }
             if (bestEval) {
-                if (checkMoves.length && Math.random() > 0.5) {
+                if (checkMoves.length) {
                     const randomIdx = Math.floor(Math.random() * checkMoves.length);
                     bestSource = checkMoves[randomIdx].source;
                     bestFigure = checkMoves[randomIdx].figure;
