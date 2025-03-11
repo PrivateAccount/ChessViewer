@@ -22,6 +22,11 @@ const rules = {
     getPosition: function(origin) {
         return { row: Math.floor(origin / 8), column: Math.floor(origin % 8) };
     },
+    getDistance: function(origin, destination) {
+        const originPosition = this.getPosition(origin);
+        const destinationPosition = this.getPosition(destination);
+        return Math.abs(originPosition.row - destinationPosition.row) + Math.abs(originPosition.column - destinationPosition.column);
+    },
     getField: function(row, column) {
         return row * 8 + column;
     },
