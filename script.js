@@ -1136,7 +1136,7 @@ window.onload = function() {
             var preferredSource, preferredFigure, evaluate, lastEval, bestSource, bestFigure, bestDestination, bestKill, bestEval = false;
             const priorty = [28, 27, 40, 41, 42, 43, 44, 45, 46, 47, 24, 31, 25, 30, 26, 29, 16, 17, 18, 19, 20, 21, 22, 23];
             evaluate = priorty.length;
-            var checkMoves = [];
+            var checkMoves = [], figuresLeft = 0, kingDistance = BOARD_SIZE * BOARD_SIZE;
             for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
                 preferredSource = shuffled[idx];
                 preferredFigure = fieldOccupancy[shuffled[idx]];
@@ -1168,9 +1168,24 @@ window.onload = function() {
                                     bestEval = true;
                                 }
                             }
+                            if (demoFiguresLeft.emptyComputer && sequenceId % 4 == 0) {
+                                if (preferredFigure == 4) {
+                                    const distance = rules.getDistance(rules.getFigureField(28), possibleMoves[i]);
+                                    if (distance < kingDistance) {
+                                        kingDistance = distance;
+                                        bestSource = preferredSource;
+                                        bestFigure = preferredFigure;
+                                        bestDestination = possibleMoves[i];
+                                        bestKill = fieldOccupancy[bestDestination];
+                                        bestEval = true;
+                                    }
+                                }
+                            }
                         }
                     }
+                    figuresLeft++;
                 }
+                demoFiguresLeft.emptyComputer = figuresLeft <= 2;
             }
             if (bestEval) {
                 if (checkMoves.length) {
