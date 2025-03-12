@@ -334,6 +334,11 @@ window.onload = function() {
                         if (rules.isPassant(figureId.innerText, originId.innerText, fieldId.innerText)) {
                             registerPassant();
                         }
+                        if (playUserMode) {
+                            setTimeout(function() {
+                                makePlayMoves();
+                            }, delay);
+                        }            
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
                         buttonSend.disabled = readOnlyMode || playDemoMode || playUserMode;
                         msg.innerText = 'Moving...';
@@ -507,9 +512,6 @@ window.onload = function() {
             buttonReset.click();
             updateColor();
             noteStep(sequenceId);
-            if (playUserMode) {
-                makePlayMoves();
-            }
         }, delay);
         rules.registerCastling(moveParams.figure);
         const kingId = rules.checkIsKingAttacked(origin, field, null);
