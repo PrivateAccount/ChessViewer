@@ -38,6 +38,17 @@ export const handler = async (event, context) => {
                 }
                 body = { data: body, message: "Loaded successfully." };
                 break;
+            case "GET /games/{id}":
+                body = await dynamo.send(
+                    new GetCommand({
+                        TableName: tableName,
+                        Key: {
+                            id: event.pathParameters.id,
+                        },
+                    })
+                );
+                body = { data: body, message: "Loaded game steps." };
+                break;                            
             case "POST /games":
                 let requestJSON = JSON.parse(event.body);
                 await dynamo.send(

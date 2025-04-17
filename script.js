@@ -723,7 +723,7 @@ window.onload = function() {
                 const gameId = items[i].id;
                 item.addEventListener('click', function() {
                     buttonNew.click();
-                    fetch(API_URL + '/games?id=' + gameId, {
+                    fetch(API_URL + '/games/' + gameId, {
                         method: "GET",
                         headers: { "Content-type": "application/json; charset=UTF-8" }
                     }).then((response) => response.json()).then((response) => {
@@ -747,8 +747,10 @@ window.onload = function() {
                 parentElement.appendChild(item);
             }
         });
-        buttonNew.click();
-        buttonCancel.click();
+        stopRun = true;
+        stopDemo = true;
+        playDemoMode = false;
+        playUserMode = false;
         readOnlyMode = true;
     });
 
