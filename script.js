@@ -728,7 +728,7 @@ window.onload = function() {
                         headers: { "Content-type": "application/json; charset=UTF-8" }
                     }).then((response) => response.json()).then((response) => {
                         msg.innerText = response.message;
-                        const data = response.data.details;
+                        const data = response.data.Item.details;
                         for (var i = 0; i < data.length; i++) {
                             const moveParams = { figure: parseInt(data[i].figure), origin: parseInt(data[i].origin), field: parseInt(data[i].field), kill: parseInt(data[i].kill) };
                             moveSequence.push(moveParams);
