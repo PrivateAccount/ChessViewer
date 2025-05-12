@@ -1,11 +1,42 @@
 # ChessViewer
 Simple chess game viewer deployed on AWS Amplify (frontend) and AWS API Gateway + Lambda + DynamoDB (backend).
+
 # Demo
 URL: https://master.d2mlbkja551bj3.amplifyapp.com
 
 ## Purpose
+* ChessViewer is a simple chess game viewer deployed on AWS Amplify (frontend) and AWS API Gateway + Lambda + DynamoDB (backend). It allows to view, analyze and interact with chess games, including making moves, viewing possible moves, and saving or loading games.
+* It is designed to be a useful tool that allows users to configure game position by using tool panel in a such way:
+  * **Delete** - for removing pieces (**D mode**)
+  * **Edit** - for placing pieces (**E mode**)
+  * **Stop** - for finishing configuration (back to **normal mode**)
+* It has additional function - it allows to play chess against a computer opponent (**P mode**) or computer against computer demo (**C mode**).
 
-ChessViewer is a simple chess game viewer deployed on AWS Amplify (frontend) and AWS API Gateway + Lambda + DynamoDB (backend). It allows to view, analyze and interact with chess games, including making moves, viewing possible moves, and saving or loading games.
+## Description
+* This web application handles the chess game logic and rules, including piece movement, game state management, and user interactions.
+* It uses HTML elements to represent the chessboard and pieces, and it communicates with a backend API to save and load game states.
+ 
+## Architecture 
+* This web application is organized into several sections, including:
+  * **Initialization**: Sets up the chessboard, pieces, and event listeners.
+  * **Game Logic**: Handles the movement of pieces, checking for legal moves, and updating the game state.
+  * **User Interface**: Manages the display of messages, game state, and user interactions.
+  * **API Communication**: Interacts with a backend API to save and load game states.
+  * **Event Handlers**: Responds to user actions, such as clicking on pieces or fields, and updates the game state accordingly.
+  * **Utility Functions**: Provides helper functions for common tasks, such as updating the display or checking game conditions.
+* It includes features such as:
+  * Chessboard setup with draggable pieces.
+  * Piece movement and legal move checking.
+  * Game state management (saving and loading games).
+  * User interface for displaying game status and messages.
+  * API communication for saving and loading game states.
+
+## Dependencies
+  * HTML elements and CSS styles for the chessboard and pieces.
+  * JavaScript for event handling and game logic.
+  * A backend API for saving and loading game states.
+  * AWS SDK for JavaScript (v3).
+  * DynamoDB Document Client for storing games data.
 
 ## Functionalities
 
@@ -50,9 +81,7 @@ ChessViewer is a simple chess game viewer deployed on AWS Amplify (frontend) and
 - **Game Saving**: Users can save the current game state to the server, including the move history and player details.
 
 ## License
-
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Contact
-
 For any questions or feedback, please contact Andrzej Żukowski at [andrzuk@gmail.com](mailto:andrzuk@gmail.com).

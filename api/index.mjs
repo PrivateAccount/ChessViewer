@@ -47,7 +47,7 @@ export const handler = async (event, context) => {
                         },
                     })
                 );
-                body = { data: body, message: "Loaded game steps." };
+                body = { data: body, message: "Loaded item: " + event.pathParameters.id };
                 break;                            
             case "POST /games":
                 let requestJSON = JSON.parse(event.body);
