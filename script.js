@@ -334,6 +334,7 @@ window.onload = function() {
                         if (rules.isPassant(figureId.innerText, originId.innerText, fieldId.innerText)) {
                             registerPassant();
                         }
+                        checkStalemate();
                         if (playUserMode) {
                             setTimeout(function() {
                                 makePlayMoves();
@@ -634,6 +635,32 @@ window.onload = function() {
         }
         buttonUndo.disabled = id != moveSequence.length || playDemoMode || playUserMode;
         updateColor();
+    }
+
+    function checkStalemate() {
+        const delay = 2000;
+        var figuresCounter = [0, 0];
+        setTimeout(function() {
+            for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
+                const figure = fieldOccupancy[idx];
+                if (figure >= 0 && figure < 16 || figure >= 32 && figure < 40) {
+                    figuresCounter[0]++;
+                }
+                if (figure >= 16 && figure < 32 || figure >= 40 && figure < 48) {
+                    figuresCounter[1]++;
+                }
+            }
+            if (figuresCounter[0] == 1 && figuresCounter[1] == 1) {
+                clearSelection();
+                const blackKing = rules.getFigureField(4);
+                document.getElementById('field-' + blackKing).classList.add('mate');
+                const whiteKing = rules.getFigureField(28);
+                document.getElementById('field-' + whiteKing).classList.add('mate');
+                msg.innerText = 'Game over.';
+                readOnlyMode = true;
+                stopDemo = true;
+            }
+        }, delay);
     }
 
     const buttonNew = document.getElementById('new');
@@ -1090,14 +1117,7 @@ window.onload = function() {
             destination = bestDestination;
             kill = bestKill;
         }
-        if (demoFiguresLeft.BLACK == 1 && demoFiguresLeft.WHITE == 1) {
-            const blackKing = rules.getFigureField(4);
-            document.getElementById('field-' + blackKing).classList.add('mate');
-            const whiteKing = rules.getFigureField(28);
-            document.getElementById('field-' + whiteKing).classList.add('mate');
-            msg.innerText = 'Game over.';
-            return;
-        }
+        checkStalemate();
         if (result) {
             result = rules.checkIsKingSafe(figure.toString(), source.toString(), destination.toString(), kill);
             if (result) {
