@@ -1114,6 +1114,29 @@ const rules = {
         }
         return fields;
     },
+    getTotalMoves: function(fieldOccupancy) {
+        var fields = [];
+        for (var idx = 0; idx < fieldOccupancy.length; idx++) {
+            const figure = fieldOccupancy[idx];
+            if (currentMove == player.BLACK) {
+                if (figure >= 0 && figure < 16 || figure >= 32 && figure < 40) {
+                    possibleMoves = rules.getPossibleMoves(figure, fieldOccupancy);
+                    for (var i = 0; i < possibleMoves.length; i++) {
+                        fields.push(possibleMoves[i]);
+                    }
+                }
+            }
+            if (currentMove == player.WHITE) {
+                if (figure >= 16 && figure < 32 || figure >= 40 && figure < 48) {
+                    possibleMoves = rules.getPossibleMoves(figure, fieldOccupancy);
+                    for (var i = 0; i < possibleMoves.length; i++) {
+                        fields.push(possibleMoves[i]);
+                    }
+                }
+            }
+        }
+        return fields;
+    },
     isCastling: function(owner, source, destination) {
         var result = false;
         if (owner == 28) { // white

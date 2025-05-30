@@ -55,6 +55,9 @@ body {
 .field.light.free, .field.dark.free {
     background-color: lightgreen;
 }
+.field.light.total, .field.dark.total {
+    background-color: lightblue;
+}
 #labels-top {
     position: relative;
     width: auto;
@@ -180,7 +183,7 @@ span.vertical {
 #mark {
     margin: 10px 0 -10px 0;
 }
-#mark-moves {
+#mark-moves, #mark-total {
     margin: 0 10px;
 }
 #games {

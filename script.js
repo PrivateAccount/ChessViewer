@@ -34,6 +34,7 @@ window.onload = function() {
     var editPositionMode = false;
     var deletePositionMode = false;
     var markMoves = true;
+    var markTotal = false;
     var playDemoMode = false;
     var stopDemo = false;
     var playUserMode = false;
@@ -308,10 +309,22 @@ window.onload = function() {
                     if (rules.checkMoveOrder(parseInt(figureId.innerText))) {
                         document.getElementById(placeId).classList.add('selected');
                         selection.push(placeId);
+                        const totalMoves = rules.getTotalMoves(fieldOccupancy);
+                        const possibleMoves = rules.getPossibleMoves(figureId.innerText, fieldOccupancy);
                         if (markMoves) {
-                            const possibleMoves = rules.getPossibleMoves(figureId.innerText, fieldOccupancy);
+                            for (var i = 0; i < totalMoves.length; i++) {
+                                document.getElementById('field-' + totalMoves[i].toString()).classList.remove('free');
+                            }
                             for (var i = 0; i < possibleMoves.length; i++) {
                                 document.getElementById('field-' + possibleMoves[i].toString()).classList.add('free');
+                            }
+                        }
+                        if (markTotal) {
+                            for (var i = 0; i < totalMoves.length; i++) {
+                                document.getElementById('field-' + totalMoves[i].toString()).classList.add('total');
+                            }
+                            for (var i = 0; i < possibleMoves.length; i++) {
+                                document.getElementById('field-' + possibleMoves[i].toString()).classList.remove('total');
                             }
                         }
                     }
@@ -469,7 +482,7 @@ window.onload = function() {
     function clearSelection() {
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             const field = 'field-' + i.toString();
-            document.getElementById(field).classList.remove('selected', 'failed', 'check', 'mate', 'free');
+            document.getElementById(field).classList.remove('selected', 'failed', 'check', 'mate', 'free', 'total');
         }
         selection = [];
     }
@@ -919,6 +932,11 @@ window.onload = function() {
     const checkboxMark = document.getElementById('mark-moves');
     checkboxMark.addEventListener('click', function() {
         markMoves = checkboxMark.checked;
+    });
+
+    const checkboxTotal = document.getElementById('mark-total');
+    checkboxTotal.addEventListener('click', function() {
+        markTotal = checkboxTotal.checked;
     });
 
     document.addEventListener('keydown', function(event) {
