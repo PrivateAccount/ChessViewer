@@ -926,7 +926,7 @@ window.onload = function() {
     const buttonPanel = document.getElementById('panel');
     buttonPanel.addEventListener('click', function() {
         const tools = document.getElementById('tools');
-        tools.style.display = tools.style.display == 'block' ? 'none' : 'block';
+        tools.style.display = (tools.style.display == '' || tools.style.display == 'block') ? 'none' : 'block';
     });
 
     const checkboxMark = document.getElementById('mark-moves');

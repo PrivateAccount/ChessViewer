@@ -142,7 +142,7 @@ span.vertical {
     text-align: center;
     border: 1px solid grey;
     background-color: white;
-    display: none;
+    display: block;
 }
 #move {
     position: absolute;
@@ -181,7 +181,10 @@ span.vertical {
     margin: 5px 0;
 }
 #mark {
-    margin: 10px 0 -10px 0;
+    margin: 15px 0 -10px 0;
+}
+#mark label {
+    cursor: pointer;
 }
 #mark-moves, #mark-total {
     margin: 0 10px;
