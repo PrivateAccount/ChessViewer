@@ -1,5 +1,5 @@
 window.onload = function() {
-    
+
     const BOARD_SIZE = 8;
     const FIELD_SIZE = 99;
     const BORDER_WIDTH = 5;
@@ -352,7 +352,7 @@ window.onload = function() {
                             setTimeout(function() {
                                 makePlayMoves();
                             }, delay);
-                        }            
+                        }
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
                         buttonSend.disabled = readOnlyMode || playDemoMode || playUserMode;
                         msg.innerText = 'Moving...';
@@ -927,6 +927,7 @@ window.onload = function() {
     buttonPanel.addEventListener('click', function() {
         const tools = document.getElementById('tools');
         tools.style.display = (tools.style.display == '' || tools.style.display == 'block') ? 'none' : 'block';
+        this.textContent = tools.style.display == 'block' ? '<<' : '>>';
     });
 
     const checkboxMark = document.getElementById('mark-moves');
@@ -954,7 +955,7 @@ window.onload = function() {
                 runLastButton.click();
                 break;
             case 'Escape':
-                buttonStop.click();
+                buttonReset.click();
                 break;
         }
     });
