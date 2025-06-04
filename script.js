@@ -518,7 +518,7 @@ window.onload = function() {
         const field = document.getElementById('field-id').innerText;
         const kill = document.getElementById('kill-id').innerText;
         if (figure == '--' || origin == '--' || field == '--') return;
-        const moveParams = { figure: parseInt(figure), origin: parseInt(origin), field: parseInt(field), kill: parseInt(kill) };
+        const moveParams = { figure: parseInt(figure), origin: parseInt(origin), field: parseInt(field), kill: isNaN(kill) ? '--' : parseInt(kill) };
         moveSequence.push(moveParams);
         setTimeout(function() {
             runForwardButton.disabled = false;
