@@ -319,14 +319,6 @@ window.onload = function() {
                                 document.getElementById('field-' + possibleMoves[i].toString()).classList.add('free');
                             }
                         }
-                        if (markTotal) {
-                            for (var i = 0; i < totalMoves.length; i++) {
-                                document.getElementById('field-' + totalMoves[i].toString()).classList.add('total');
-                            }
-                            for (var i = 0; i < possibleMoves.length; i++) {
-                                document.getElementById('field-' + possibleMoves[i].toString()).classList.remove('total');
-                            }
-                        }
                     }
                 }
             }
@@ -352,6 +344,9 @@ window.onload = function() {
                             setTimeout(function() {
                                 makePlayMoves();
                             }, delay);
+                        }
+                        if (markTotal) {
+                            markTotals(figureId.innerText);
                         }
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
                         buttonSend.disabled = readOnlyMode || playDemoMode || playUserMode;
@@ -676,6 +671,32 @@ window.onload = function() {
         }, delay);
     }
 
+    function markTotals(figure) {
+        const delay = 1000;
+        for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
+            document.getElementById('field-' + idx.toString()).classList.remove('total');
+        }
+        setTimeout(function() {
+            rules.attackedFields = [];
+            rules.getAttackedFields(figure);
+            rules.attackedFields.forEach(function(field) {
+                const element = document.getElementById('field-' + field.toString());
+                if (element) {
+                    if (currentMove == player.WHITE) {
+                        if (!(fieldOccupancy[field] >= 0 && fieldOccupancy[field] < 16 || fieldOccupancy[field] >= 32 && fieldOccupancy[field] < 40)) {
+                            element.classList.add('total');
+                        }
+                    }
+                    if (currentMove == player.BLACK) {
+                        if (!(fieldOccupancy[field] >= 16 && fieldOccupancy[field] < 32 || fieldOccupancy[field] >= 40 && fieldOccupancy[field] < 48)) {
+                            element.classList.add('total');
+                        }
+                    }
+                }
+            });
+        }, delay);
+    }
+
     const buttonNew = document.getElementById('new');
     buttonNew.addEventListener('click', function() {
         msg.innerText = 'New game ready.';
@@ -683,6 +704,8 @@ window.onload = function() {
         fieldOccupancy = [];
         fieldPositions = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
+            const cl = document.getElementById('field-' + i.toString()).classList;
+            cl.remove('selected', 'failed', 'check', 'mate', 'free', 'total');
             if (i < 2 * BOARD_SIZE) {
                 fieldOccupancy[i] = i;
             }
