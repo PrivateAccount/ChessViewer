@@ -474,6 +474,253 @@ const rules = {
     isAttacked: function(fieldId) {
         return this.attackedFields.includes(parseInt(fieldId));
     },
+    getAttackedByFigure: function(figure) {
+        const field = this.getFigureField(figure);
+        const position = this.getPosition(field);
+        const color = figure >= 0 && figure < 16 || figure >= 32 && figure < 40 ? 'B' : 'W';
+        if (figure >= 16 && figure < 24) { // white pawn
+            if (position.column == 0) {
+                this.attackedFields.push(field - 7);
+            }
+            else if (position.column == 7) {
+                this.attackedFields.push(field - 9);
+            }
+            else {
+                this.attackedFields.push(field - 7);
+                this.attackedFields.push(field - 9);
+            }
+        }
+        if (figure >= 8 && figure < 16) { // black pawn
+            if (position.column == 0) {
+                this.attackedFields.push(field + 9);
+            }
+            else if (position.column == 7) {
+                this.attackedFields.push(field + 7);
+            }
+            else {
+                this.attackedFields.push(field + 7);
+                this.attackedFields.push(field + 9);
+            }
+        }
+        if (figure == 4 || figure == 28) { // white or black king
+            if (position.column == 0) {
+                this.attackedFields.push(field - 8);
+                this.attackedFields.push(field - 7);
+                this.attackedFields.push(field + 1);
+                this.attackedFields.push(field + 8);
+                this.attackedFields.push(field + 9);
+            }
+            else if (position.column == 7) {
+                this.attackedFields.push(field - 9);
+                this.attackedFields.push(field - 8);
+                this.attackedFields.push(field - 1);
+                this.attackedFields.push(field + 7);
+                this.attackedFields.push(field + 8);
+            }
+            else {
+                this.attackedFields.push(field - 9);
+                this.attackedFields.push(field - 8);
+                this.attackedFields.push(field - 7);
+                this.attackedFields.push(field - 1);
+                this.attackedFields.push(field + 1);
+                this.attackedFields.push(field + 7);
+                this.attackedFields.push(field + 8);
+                this.attackedFields.push(field + 9);
+            }
+        }
+        if (figure == 0 || figure == 7 || figure == 24 || figure == 31) { // white or black rook
+            for (var i = position.column - 1; i >= 0; i--) {
+                const field = this.getField(position.row, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.column + 1; i < 8; i++) {
+                const field = this.getField(position.row, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.row - 1; i >= 0; i--) {
+                const field = this.getField(i, position.column);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.row + 1; i < 8; i++) {
+                const field = this.getField(i, position.column);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+        }
+        if (figure == 2 || figure == 5 || figure == 26 || figure == 29) { // white or black bishop
+            for (var i = position.column - 1, j = position.row - 1; i >= 0 && j >= 0; i--, j--) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.column + 1, j = position.row + 1; i < 8 && j < 8; i++, j++) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.column + 1, j = position.row - 1; i < 8 && j >= 0; i++, j--) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.column - 1, j = position.row + 1; i >= 0 && j < 8; i--, j++) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+        }
+        if (figure == 3 || figure == 27 || figure >= 32 && figure < 48) { // white or black queen
+            for (var i = position.column - 1; i >= 0; i--) {
+                const field = this.getField(position.row, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.column + 1; i < 8; i++) {
+                const field = this.getField(position.row, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.row - 1; i >= 0; i--) {
+                const field = this.getField(i, position.column);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.row + 1; i < 8; i++) {
+                const field = this.getField(i, position.column);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.column - 1, j = position.row - 1; i >= 0 && j >= 0; i--, j--) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.column + 1, j = position.row + 1; i < 8 && j < 8; i++, j++) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.column + 1, j = position.row - 1; i < 8 && j >= 0; i++, j--) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+            for (var i = position.column - 1, j = position.row + 1; i >= 0 && j < 8; i--, j++) {
+                const field = this.getField(j, i);
+                if (this.fieldOccupancy[field] == undefined || this.fieldOccupancy[field] == -1 || color == 'W' && this.fieldOccupancy[field] == 4 || color == 'B' && this.fieldOccupancy[field] == 28) {
+                    this.attackedFields.push(field);
+                }
+                else {
+                    this.attackedFields.push(field);
+                    break;
+                }
+            }
+        }
+        if (figure == 1 || figure == 6 || figure == 25 || figure == 30) { // white or black knight
+            if (position.row >= 2 && position.column >= 1) {
+                this.attackedFields.push(this.getField(position.row - 2, position.column - 1));
+            }
+            if (position.row >= 2 && position.column < 7) {
+                this.attackedFields.push(this.getField(position.row - 2, position.column + 1));
+            }
+            if (position.row >= 1 && position.column >= 2) {
+                this.attackedFields.push(this.getField(position.row - 1, position.column - 2));
+            }
+            if (position.row >= 1 && position.column < 6) {
+                this.attackedFields.push(this.getField(position.row - 1, position.column + 2));
+            }
+            if (position.row < 7 && position.column >= 2) {
+                this.attackedFields.push(this.getField(position.row + 1, position.column - 2));
+            }
+            if (position.row < 7 && position.column < 6) {
+                this.attackedFields.push(this.getField(position.row + 1, position.column + 2));
+            }
+            if (position.row < 6 && position.column >= 1) {
+                this.attackedFields.push(this.getField(position.row + 2, position.column - 1));
+            }
+            if (position.row < 6 && position.column < 7) {
+                this.attackedFields.push(this.getField(position.row + 2, position.column + 1));
+            }
+        }
+    },
     getProtectedFields: function(fieldId) {
         const position = this.getPosition(fieldId);
         for (var i = position.column - 1; i >= 0; i--) {
