@@ -678,7 +678,7 @@ window.onload = function() {
         }
         setTimeout(function() {
             rules.attackedFields = [];
-            rules.getAttackedByFigure(figure);
+            rules.getAttackedFields(figure, true);
             rules.attackedFields.forEach(function(field) {
                 const element = document.getElementById('field-' + field.toString());
                 if (element) {
