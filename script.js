@@ -346,7 +346,7 @@ window.onload = function() {
                             }, delay);
                         }
                         if (markTotal) {
-                            markTotals(figureId.innerText);
+                            markTotals();
                         }
                         currentMove = currentMove == player.WHITE ? player.BLACK : player.WHITE;
                         buttonSend.disabled = readOnlyMode || playDemoMode || playUserMode;
@@ -671,12 +671,13 @@ window.onload = function() {
         }, delay);
     }
 
-    function markTotals(figure) {
-        const delay = 1000;
+    function markTotals() {
+        const delay = 1500;
         for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
             document.getElementById('field-' + idx.toString()).classList.remove('total');
         }
         setTimeout(function() {
+            const figure = document.getElementById('figure-id').innerText;
             rules.attackedFields = [];
             rules.getAttackedFields(figure, true);
             rules.attackedFields.forEach(function(field) {
