@@ -678,23 +678,102 @@ window.onload = function() {
         }
         setTimeout(function() {
             const figure = document.getElementById('figure-id').innerText;
-            rules.attackedFields = [];
-            rules.getAttackedFields(figure, true);
-            rules.attackedFields.forEach(function(field) {
-                const element = document.getElementById('field-' + field.toString());
-                if (element) {
+            if (figure == 4 || figure == 28) {
+                rules.attackedFields = [];
+                for (var i = 0; i < fieldOccupancy.length; i++) {
                     if (currentMove == player.WHITE) {
-                        if (!(fieldOccupancy[field] >= 0 && fieldOccupancy[field] < 16 || fieldOccupancy[field] >= 32 && fieldOccupancy[field] < 40)) {
-                            element.classList.add('total');
+                        if ((fieldOccupancy[i] >= 16 && fieldOccupancy[i] < 32 || fieldOccupancy[i] >= 40 && fieldOccupancy[i] < 48) && fieldOccupancy[i] != -1) {
+                            rules.getAttackedFields(fieldOccupancy[i], false);
                         }
                     }
                     if (currentMove == player.BLACK) {
-                        if (!(fieldOccupancy[field] >= 16 && fieldOccupancy[field] < 32 || fieldOccupancy[field] >= 40 && fieldOccupancy[field] < 48)) {
-                            element.classList.add('total');
+                        if ((fieldOccupancy[i] >= 0 && fieldOccupancy[i] < 16 || fieldOccupancy[i] >= 32 && fieldOccupancy[i] < 40) && fieldOccupancy[i] != -1) {
+                            rules.getAttackedFields(fieldOccupancy[i], false);
                         }
                     }
                 }
-            });
+                var restrictedFields = [];
+                rules.attackedFields.forEach(function(field) {
+                    restrictedFields.push(field);
+                });
+                rules.attackedFields = [];
+                rules.getAttackedFields(figure, true);
+                rules.attackedFields.forEach(function(field) {
+                    const element = document.getElementById('field-' + field.toString());
+                    if (element && !restrictedFields.includes(field)) {
+                        if (currentMove == player.WHITE) {
+                            if (!(fieldOccupancy[field] >= 0 && fieldOccupancy[field] < 16 || fieldOccupancy[field] >= 32 && fieldOccupancy[field] < 40)) {
+                                element.classList.add('total');
+                            }
+                        }
+                        if (currentMove == player.BLACK) {
+                            if (!(fieldOccupancy[field] >= 16 && fieldOccupancy[field] < 32 || fieldOccupancy[field] >= 40 && fieldOccupancy[field] < 48)) {
+                                element.classList.add('total');
+                            }
+                        }
+                    }
+                });
+            }
+            else if (figure >= 8 && figure < 24) {
+                rules.attackedFields = [];
+                const field = parseInt(document.getElementById('field-id').innerText);
+                const position = rules.getPosition(field);
+                if (currentMove == player.WHITE) {
+                    if (position.column == 0) {
+                        if (fieldOccupancy[field + 8] == undefined || fieldOccupancy[field + 8] == -1) rules.attackedFields.push(field + 8);
+                        if (fieldOccupancy[field + 9] >= 16 && fieldOccupancy[field + 9] < 32 || fieldOccupancy[field + 9] >= 40 && fieldOccupancy[field + 9] < 48) rules.attackedFields.push(field + 9);
+                    }
+                    else if (position.column == 7) {
+                        if (fieldOccupancy[field + 7] >= 16 && fieldOccupancy[field + 7] < 32 || fieldOccupancy[field + 7] >= 40 && fieldOccupancy[field + 7] < 48) rules.attackedFields.push(field + 7);
+                        if (fieldOccupancy[field + 8] == undefined || fieldOccupancy[field + 8] == -1) rules.attackedFields.push(field + 8);
+                    }
+                    else {
+                        if (fieldOccupancy[field + 7] >= 16 && fieldOccupancy[field + 7] < 32 || fieldOccupancy[field + 7] >= 40 && fieldOccupancy[field + 7] < 48) rules.attackedFields.push(field + 7);
+                        if (fieldOccupancy[field + 8] == undefined || fieldOccupancy[field + 8] == -1) rules.attackedFields.push(field + 8);
+                        if (fieldOccupancy[field + 9] >= 16 && fieldOccupancy[field + 9] < 32 || fieldOccupancy[field + 9] >= 40 && fieldOccupancy[field + 9] < 48) rules.attackedFields.push(field + 9);
+                    }
+                }
+                if (currentMove == player.BLACK) {
+                    if (position.column == 0) {
+                        if (fieldOccupancy[field - 8] == undefined || fieldOccupancy[field - 8] == -1) rules.attackedFields.push(field - 8);
+                        if (fieldOccupancy[field - 7] >= 0 && fieldOccupancy[field - 7] < 16 || fieldOccupancy[field - 7] >= 32 && fieldOccupancy[field - 7] < 40) rules.attackedFields.push(field - 7);
+                    }
+                    else if (position.column == 7) {
+                        if (fieldOccupancy[field - 9] >= 0 && fieldOccupancy[field - 9] < 16 || fieldOccupancy[field - 9] >= 32 && fieldOccupancy[field - 9] < 40) rules.attackedFields.push(field - 9);
+                        if (fieldOccupancy[field - 8] == undefined || fieldOccupancy[field - 8] == -1) rules.attackedFields.push(field - 8);
+                    }
+                    else {
+                        if (fieldOccupancy[field - 9] >= 0 && fieldOccupancy[field - 9] < 16 || fieldOccupancy[field - 9] >= 32 && fieldOccupancy[field - 9] < 40) rules.attackedFields.push(field - 9);
+                        if (fieldOccupancy[field - 8] == undefined || fieldOccupancy[field - 8] == -1) rules.attackedFields.push(field - 8);
+                        if (fieldOccupancy[field - 7] >= 0 && fieldOccupancy[field - 7] < 16 || fieldOccupancy[field - 7] >= 32 && fieldOccupancy[field - 7] < 40) rules.attackedFields.push(field - 7);
+                    }
+                }
+                rules.attackedFields.forEach(function(field) {
+                    const element = document.getElementById('field-' + field.toString());
+                    if (element) {
+                        element.classList.add('total');
+                    }
+                });
+            }
+            else {
+                rules.attackedFields = [];
+                rules.getAttackedFields(figure, true);
+                rules.attackedFields.forEach(function(field) {
+                    const element = document.getElementById('field-' + field.toString());
+                    if (element) {
+                        if (currentMove == player.WHITE) {
+                            if (!(fieldOccupancy[field] >= 0 && fieldOccupancy[field] < 16 || fieldOccupancy[field] >= 32 && fieldOccupancy[field] < 40)) {
+                                element.classList.add('total');
+                            }
+                        }
+                        if (currentMove == player.BLACK) {
+                            if (!(fieldOccupancy[field] >= 16 && fieldOccupancy[field] < 32 || fieldOccupancy[field] >= 40 && fieldOccupancy[field] < 48)) {
+                                element.classList.add('total');
+                            }
+                        }
+                    }
+                });
+            }
         }, delay);
     }
 
