@@ -520,7 +520,6 @@ window.onload = function() {
         setTimeout(function() {
             runForwardButton.disabled = false;
             runForwardButton.click();
-            buttonReset.click();
             updateColor();
             noteStep(sequenceId);
         }, delay);
@@ -540,7 +539,6 @@ window.onload = function() {
             markSelection('field-' + rules.castling.field, 'field');
             runForwardButton.disabled = false;
             runForwardButton.click();
-            buttonReset.click();
             noteStep(sequenceId);
         }, delay);
         const kingId = rules.checkIsKingAttacked(rules.castling.origin, rules.castling.field, null);
@@ -565,7 +563,6 @@ window.onload = function() {
             restoreFigure(rules.promotion.figure);
             runForwardButton.disabled = false;
             runForwardButton.click();
-            buttonReset.click();
             noteStep(sequenceId);
             fieldOccupancy[rules.promotion.field] = rules.promotion.figure;
         }, delay);
@@ -583,7 +580,6 @@ window.onload = function() {
         setTimeout(function() {
             runForwardButton.disabled = false;
             runForwardButton.click();
-            buttonReset.click();
         }, delay);
         const kingId = rules.checkIsKingAttacked(origin, field, rules.passant.figure);
         if (kingId) {
