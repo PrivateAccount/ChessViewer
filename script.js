@@ -307,10 +307,7 @@ window.onload = function() {
                     figureId.innerText = pieceId.replace('figure-', '');
                     originId.innerText = placeId.replace('field-', '');
                     if (rules.checkMoveOrder(parseInt(figureId.innerText))) {
-                        for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
-                            const cl = document.getElementById('field-' + i.toString()).classList;
-                            cl.remove('selected', 'failed', 'check', 'mate', 'free', 'total');
-                        }
+                        clearSelection();
                         document.getElementById(placeId).classList.add('selected');
                         selection.push(placeId);
                         const totalMoves = rules.getTotalMoves(fieldOccupancy);
@@ -371,6 +368,7 @@ window.onload = function() {
                     }
                     setTimeout(function() {
                         if (rules.checkIsMate()) {
+                            clearSelection();
                             const kingField = currentMove == player.WHITE ? rules.getFigureField(28) : rules.getFigureField(4);
                             document.getElementById('field-' + kingField).classList.add('mate');
                             msg.innerText = 'Check mate.';
@@ -788,8 +786,6 @@ window.onload = function() {
         fieldOccupancy = [];
         fieldPositions = [];
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
-            const cl = document.getElementById('field-' + i.toString()).classList;
-            cl.remove('selected', 'failed', 'check', 'mate', 'free', 'total');
             if (i < 2 * BOARD_SIZE) {
                 fieldOccupancy[i] = i;
             }
@@ -844,6 +840,7 @@ window.onload = function() {
         editPositionMode = false;
         deletePositionMode = false;
         rules.init();
+        clearSelection();
         updateColor();
     });
 
