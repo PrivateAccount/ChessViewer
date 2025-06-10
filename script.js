@@ -307,6 +307,10 @@ window.onload = function() {
                     figureId.innerText = pieceId.replace('figure-', '');
                     originId.innerText = placeId.replace('field-', '');
                     if (rules.checkMoveOrder(parseInt(figureId.innerText))) {
+                        for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
+                            const cl = document.getElementById('field-' + i.toString()).classList;
+                            cl.remove('selected', 'failed', 'check', 'mate', 'free', 'total');
+                        }
                         document.getElementById(placeId).classList.add('selected');
                         selection.push(placeId);
                         const totalMoves = rules.getTotalMoves(fieldOccupancy);
