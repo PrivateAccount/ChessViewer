@@ -1018,6 +1018,7 @@ window.onload = function() {
             const currentMove = rules.getCurrentMove(moveSequence, sequenceId);
             if (sequenceId && currentMove == lastMove) {
                 rules.undoCastling(moveSequence[sequenceId - 1].figure, moveSequence[sequenceId - 1].origin, moveSequence[sequenceId - 1].field);
+                promotions[sequenceId - 1] = null;
                 buttonUndo.click();
             }
         }, delay);
