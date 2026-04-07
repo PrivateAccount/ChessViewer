@@ -58,6 +58,9 @@ body {
 .field.light.total, .field.dark.total {
     background-color: lightblue;
 }
+.field.light.last, .field.dark.last {
+    background-color: lightskyblue;
+}
 #labels-top {
     position: relative;
     width: auto;

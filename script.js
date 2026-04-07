@@ -479,7 +479,7 @@ window.onload = function() {
     function clearSelection() {
         for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             const field = 'field-' + i.toString();
-            document.getElementById(field).classList.remove('selected', 'failed', 'check', 'mate', 'free', 'total');
+            document.getElementById(field).classList.remove('selected', 'failed', 'check', 'mate', 'free', 'total', 'last');
         }
         selection = [];
     }
@@ -672,9 +672,11 @@ window.onload = function() {
     function markTotals() {
         const delay = 1500;
         for (var idx = 0; idx < BOARD_SIZE * BOARD_SIZE; idx++) {
-            document.getElementById('field-' + idx.toString()).classList.remove('total');
+            document.getElementById('field-' + idx.toString()).classList.remove('total', 'last');
         }
         setTimeout(function() {
+            const field = document.getElementById('field-id').innerText;
+            document.getElementById('field-' + field.toString()).classList.add('last');
             const figure = document.getElementById('figure-id').innerText;
             if (figure == 4 || figure == 28) {
                 rules.attackedFields = [];
