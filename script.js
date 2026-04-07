@@ -683,12 +683,12 @@ window.onload = function() {
                 for (var i = 0; i < fieldOccupancy.length; i++) {
                     if (currentMove == player.WHITE) {
                         if ((fieldOccupancy[i] >= 16 && fieldOccupancy[i] < 32 || fieldOccupancy[i] >= 40 && fieldOccupancy[i] < 48) && fieldOccupancy[i] != -1) {
-                            rules.getAttackedFields(fieldOccupancy[i], false);
+                            rules.getAttackedFields(fieldOccupancy[i], true);
                         }
                     }
                     if (currentMove == player.BLACK) {
                         if ((fieldOccupancy[i] >= 0 && fieldOccupancy[i] < 16 || fieldOccupancy[i] >= 32 && fieldOccupancy[i] < 40) && fieldOccupancy[i] != -1) {
-                            rules.getAttackedFields(fieldOccupancy[i], false);
+                            rules.getAttackedFields(fieldOccupancy[i], true);
                         }
                     }
                 }
