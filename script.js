@@ -358,7 +358,7 @@ window.onload = function() {
                             document.getElementById(selection[i]).classList.add('failed');
                         }
                         const kingId = rules.checkMyKing(originId.innerText, fieldId.innerText, figureId.innerText);
-                        if (kingId) {
+                        if (kingId !== null) {
                             document.getElementById('field-' + kingId.toString()).classList.add('check');
                         }
                         msg.innerText = 'Illegal move.';
@@ -525,7 +525,7 @@ window.onload = function() {
         }, delay);
         rules.registerCastling(moveParams.figure);
         const kingId = rules.checkIsKingAttacked(origin, field, null);
-        if (kingId) {
+        if (kingId !== null) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
         }
     }
@@ -542,7 +542,7 @@ window.onload = function() {
             noteStep(sequenceId);
         }, delay);
         const kingId = rules.checkIsKingAttacked(rules.castling.origin, rules.castling.field, null);
-        if (kingId) {
+        if (kingId !== null) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
         }
     }
@@ -567,7 +567,7 @@ window.onload = function() {
             fieldOccupancy[rules.promotion.field] = rules.promotion.figure;
         }, delay);
         const kingId = rules.checkIsKingAttacked(origin, field, rules.promotion.figure);
-        if (kingId) {
+        if (kingId !== null) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
         }
     }
@@ -582,7 +582,7 @@ window.onload = function() {
             runForwardButton.click();
         }, delay);
         const kingId = rules.checkIsKingAttacked(origin, field, rules.passant.figure);
-        if (kingId) {
+        if (kingId !== null) {
             document.getElementById('field-' + kingId.toString()).classList.add('check');
         }
     }
@@ -1121,7 +1121,7 @@ window.onload = function() {
                     if (possibleMoves.length) {
                         for (var i = 0; i < possibleMoves.length; i++) {
                             const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
-                            if (kingId) {
+                            if (kingId !== null) {
                                 checkMoves.push({ source: preferredSource, figure: preferredFigure, destination: possibleMoves[i], kill: fieldOccupancy[possibleMoves[i]] });
                                 const distance = rules.getDistance(rules.getFigureField(28), possibleMoves[i]);
                                 if (distance > checkDistance) {
@@ -1173,7 +1173,7 @@ window.onload = function() {
                     if (possibleMoves.length) {
                         for (var i = 0; i < possibleMoves.length; i++) {
                             const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
-                            if (kingId) {
+                            if (kingId !== null) {
                                 checkMoves.push({ source: preferredSource, figure: preferredFigure, destination: possibleMoves[i], kill: fieldOccupancy[possibleMoves[i]] });
                                 const distance = rules.getDistance(rules.getFigureField(4), possibleMoves[i]);
                                 if (distance > checkDistance) {
@@ -1299,7 +1299,7 @@ window.onload = function() {
                     if (possibleMoves.length) {
                         for (var i = 0; i < possibleMoves.length; i++) {
                             const kingId = rules.checkIsKingAttacked(preferredSource, possibleMoves[i], null);
-                            if (kingId) {
+                            if (kingId !== null) {
                                 checkMoves.push({ source: preferredSource, figure: preferredFigure, destination: possibleMoves[i], kill: fieldOccupancy[possibleMoves[i]] });
                                 const distance = rules.getDistance(rules.getFigureField(28), possibleMoves[i]);
                                 if (distance > checkDistance) {
