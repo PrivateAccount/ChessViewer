@@ -919,14 +919,16 @@ const rules = {
             { row: position.row + 2, column: position.column + 1 },
         ];
         for (var i = 0; i < places.length; i++) {
-            const field = this.getField(places[i].row, places[i].column);
-            if (color == 'B' && (this.fieldOccupancy[field] == 25 || this.fieldOccupancy[field] == 30)) { // white knight
-                this.attackedFields.push(figure);
-                break;
-            }
-            if (color == 'W' && (this.fieldOccupancy[field] == 1 || this.fieldOccupancy[field] == 6)) { // black knight
-                this.attackedFields.push(figure);
-                break;
+            if (places[i].row >= 0 && places[i].row < 8 && places[i].column >= 0 && places[i].column < 8) {
+                const field = this.getField(places[i].row, places[i].column);
+                if (color == 'B' && (this.fieldOccupancy[field] == 25 || this.fieldOccupancy[field] == 30)) { // white knight
+                    this.attackedFields.push(figure);
+                    break;
+                }
+                if (color == 'W' && (this.fieldOccupancy[field] == 1 || this.fieldOccupancy[field] == 6)) { // black knight
+                    this.attackedFields.push(figure);
+                    break;
+                }
             }
         }
         const pawns = [
