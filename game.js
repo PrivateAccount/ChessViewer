@@ -938,14 +938,16 @@ const rules = {
             { row: position.row - 1, column: position.column + 1 },
         ];
         for (var i = 0; i < pawns.length; i++) {
-            const field = this.getField(pawns[i].row, pawns[i].column);
-            if (color == 'B' && i < 2 && this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 24) { // white pawn
-                this.attackedFields.push(figure);
-                break;
-            }
-            if (color == 'W' && i >= 2 && this.fieldOccupancy[field] >= 8 && this.fieldOccupancy[field] < 16) { // black pawn
-                this.attackedFields.push(figure);
-                break;
+            if (pawns[i].row >= 0 && pawns[i].row < 8 && pawns[i].column >= 0 && pawns[i].column < 8) {
+                const field = this.getField(pawns[i].row, pawns[i].column);
+                if (color == 'B' && i < 2 && this.fieldOccupancy[field] >= 16 && this.fieldOccupancy[field] < 24) { // white pawn
+                    this.attackedFields.push(figure);
+                    break;
+                }
+                if (color == 'W' && i >= 2 && this.fieldOccupancy[field] >= 8 && this.fieldOccupancy[field] < 16) { // black pawn
+                    this.attackedFields.push(figure);
+                    break;
+                }
             }
         }
     },
